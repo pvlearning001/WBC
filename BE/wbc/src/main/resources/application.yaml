@@ -1,0 +1,14 @@
+spring.application.name: wbc_api
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost:3306/wbc"
+    username: sa
+    password: b123456?B
+  jpa:
+    show-sql: true
+
+jwt:
+  signerKey: "1TjXchw5FloESb63Kc+DFhTARvpWL4jUGCwfGWxuG5SIf/1y/LgJxHnMqaF6A/ij"
