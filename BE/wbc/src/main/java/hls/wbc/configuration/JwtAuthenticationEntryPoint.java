@@ -1,7 +1,6 @@
 package hls.wbc.configuration;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hls.wbc.dto.requests.ApiResponse;
-import hls.wbc.exceptions.ErrorCode;
+import hls.wbc.dto.responses.ApiResponse;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

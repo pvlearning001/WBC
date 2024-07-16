@@ -2,7 +2,7 @@
 -- Host:                         127.0.0.1
 -- Server version:               10.4.32-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
--- HeidiSQL Version:             12.7.0.6850
+-- HeidiSQL Version:             12.8.0.6908
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -80,6 +80,24 @@ CREATE TABLE IF NOT EXISTS `introduce` (
   `InsAt` datetime DEFAULT utc_timestamp(),
   `InsBy` int(11) DEFAULT 1,
   `UpdAt` datetime DEFAULT utc_timestamp(),
+  `UpdBy` int(11) DEFAULT 1,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table wbc.invalidatedtoken
+CREATE TABLE IF NOT EXISTS `invalidatedtoken` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `ModuleId` int(11) NOT NULL DEFAULT 0,
+  `DateFrom` date DEFAULT NULL,
+  `TimeTo` time DEFAULT NULL,
+  `Duration` varchar(255) DEFAULT NULL,
+  `Remark` varchar(1028) DEFAULT NULL,
+  `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `InsAt` datetime DEFAULT utc_timestamp(),
+  `InsBy` int(11) DEFAULT 1,
+  `UpdAt` datetime DEFAULT utc_timestamp() ON UPDATE current_timestamp(),
   `UpdBy` int(11) DEFAULT 1,
   PRIMARY KEY (`Id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
@@ -187,6 +205,22 @@ CREATE TABLE IF NOT EXISTS `news` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table wbc.permission
+CREATE TABLE IF NOT EXISTS `permission` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) DEFAULT NULL,
+  `Description` varchar(1028) DEFAULT NULL,
+  `Remark` varchar(1028) DEFAULT NULL,
+  `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `InsAt` datetime DEFAULT utc_timestamp(),
+  `InsBy` int(11) DEFAULT 1,
+  `UpdAt` datetime DEFAULT utc_timestamp(),
+  `UpdBy` int(11) DEFAULT 1,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table wbc.registerform
 CREATE TABLE IF NOT EXISTS `registerform` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -216,9 +250,25 @@ CREATE TABLE IF NOT EXISTS `registerform` (
 -- Dumping structure for table wbc.role
 CREATE TABLE IF NOT EXISTS `role` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(255) DEFAULT NULL,
-  `NameLowerCases` varchar(255) DEFAULT NULL,
-  `Description` varchar(512) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `name_lower_cases` varchar(255) DEFAULT NULL,
+  `description` varchar(512) DEFAULT NULL,
+  `Remark` varchar(1028) DEFAULT NULL,
+  `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `InsAt` datetime DEFAULT utc_timestamp(),
+  `InsBy` int(11) DEFAULT 1,
+  `UpdAt` datetime DEFAULT utc_timestamp(),
+  `UpdBy` int(11) DEFAULT 1,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+
+-- Data exporting was unselected.
+
+-- Dumping structure for table wbc.rolepermission
+CREATE TABLE IF NOT EXISTS `rolepermission` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `RoleId` int(11) DEFAULT NULL,
+  `PermissionId` int(11) DEFAULT NULL,
   `Remark` varchar(1028) DEFAULT NULL,
   `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
   `InsAt` datetime DEFAULT utc_timestamp(),
@@ -242,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `UpdAt` datetime NOT NULL DEFAULT utc_timestamp(),
   `UpdBy` int(11) DEFAULT 1,
   PRIMARY KEY (`Id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 -- Data exporting was unselected.
 
@@ -270,23 +320,23 @@ CREATE TABLE IF NOT EXISTS `userext` (
 
 -- Data exporting was unselected.
 
--- Dumping structure for table wbc.userrole
-CREATE TABLE IF NOT EXISTS `userrole` (
+-- Dumping structure for table wbc.user_roles
+CREATE TABLE IF NOT EXISTS `user_roles` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
-  `UserId` int(11) NOT NULL,
-  `RoleId` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `roles_id` int(11) NOT NULL,
   `Remark` varchar(1028) DEFAULT NULL,
   `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
   `InsAt` datetime DEFAULT utc_timestamp(),
   `InsBy` int(11) DEFAULT 1,
   `UpdAt` datetime DEFAULT utc_timestamp(),
   `UpdBy` int(11) DEFAULT 1,
-  PRIMARY KEY (`Id`),
-  KEY `FK_userrole_user` (`UserId`),
-  KEY `FK_userrole_role` (`RoleId`),
-  CONSTRAINT `FK_userrole_role` FOREIGN KEY (`RoleId`) REFERENCES `role` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `FK_userrole_user` FOREIGN KEY (`UserId`) REFERENCES `user` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+  PRIMARY KEY (`Id`) USING BTREE,
+  KEY `FK_userrole_user` (`user_id`) USING BTREE,
+  KEY `FK_userrole_role` (`roles_id`) USING BTREE,
+  CONSTRAINT `user_roles_ibfk_1` FOREIGN KEY (`roles_id`) REFERENCES `role` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `user_roles_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `user` (`Id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 -- Data exporting was unselected.
 

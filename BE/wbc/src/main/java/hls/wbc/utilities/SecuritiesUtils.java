@@ -18,7 +18,6 @@ import java.text.ParseException;
 import java.util.Date;
 
 public class SecuritiesUtils {
-
     public static String toEncodeMD5(String text) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance(AppContants.SecuritiesValues.MD5);
         byte[] digest = md.digest();
@@ -28,20 +27,15 @@ public class SecuritiesUtils {
     }
 
     public static String toEncodeBCrypt(String text) {
-
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(AppContants.SecuritiesValues.StrengBCrypt);
         String result = passwordEncoder.encode(text);
-
         //String result = text;
         return  result;
     }
 
     public static boolean isMatchesBCrypt(String plainText, String enryptText){
-
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(AppContants.SecuritiesValues.StrengBCrypt);
         return passwordEncoder.matches(plainText, enryptText);
-
-
     }
 
     public static SignedJWT verifyToken(String token, String signerKey) throws JOSEException, ParseException {
@@ -62,5 +56,4 @@ public class SecuritiesUtils {
         */
         return signedJWT;
     }
-
 }
