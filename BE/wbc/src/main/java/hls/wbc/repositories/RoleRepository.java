@@ -10,5 +10,5 @@ import java.util.Set;
 
 @Repository
 public interface RoleRepository extends JpaRepository<Role, Integer> {
-    //Optional<Set<Role>> findByIsDeleted(boolean isDeleted);
+    Set<Role> findByIsDeleted(boolean isDeleted);
 }

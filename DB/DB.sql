@@ -104,6 +104,23 @@ CREATE TABLE IF NOT EXISTS `invalidatedtoken` (
 
 -- Data exporting was unselected.
 
+-- Dumping structure for table wbc.invalidated_token
+CREATE TABLE IF NOT EXISTS `invalidated_token` (
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
+  `tokenguid` varchar(255) DEFAULT NULL,
+  `ExpiryTime` datetime DEFAULT NULL,
+  `Remark` varchar(1028) DEFAULT NULL,
+  `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
+  `InsAt` datetime DEFAULT utc_timestamp(),
+  `InsBy` int(11) DEFAULT 1,
+  `UpdAt` datetime DEFAULT utc_timestamp() ON UPDATE current_timestamp(),
+  `UpdBy` int(11) DEFAULT 1,
+  `expiry_time` datetime(6) DEFAULT NULL,
+  PRIMARY KEY (`Id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+
+-- Data exporting was unselected.
+
 -- Dumping structure for table wbc.markresult
 CREATE TABLE IF NOT EXISTS `markresult` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
@@ -209,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `news` (
 CREATE TABLE IF NOT EXISTS `permission` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `Name` varchar(255) DEFAULT NULL,
-  `Description` varchar(1028) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
   `Remark` varchar(1028) DEFAULT NULL,
   `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
   `InsAt` datetime DEFAULT utc_timestamp(),
@@ -252,13 +269,14 @@ CREATE TABLE IF NOT EXISTS `role` (
   `Id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   `name_lower_cases` varchar(255) DEFAULT NULL,
-  `description` varchar(512) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
   `Remark` varchar(1028) DEFAULT NULL,
   `IsDeleted` bit(1) NOT NULL DEFAULT b'0',
   `InsAt` datetime DEFAULT utc_timestamp(),
   `InsBy` int(11) DEFAULT 1,
   `UpdAt` datetime DEFAULT utc_timestamp(),
   `UpdBy` int(11) DEFAULT 1,
+  `is_deleted` bit(1) DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
@@ -291,6 +309,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `InsBy` int(11) NOT NULL DEFAULT 1,
   `UpdAt` datetime NOT NULL DEFAULT utc_timestamp(),
   `UpdBy` int(11) DEFAULT 1,
+  `user_name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`Id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 

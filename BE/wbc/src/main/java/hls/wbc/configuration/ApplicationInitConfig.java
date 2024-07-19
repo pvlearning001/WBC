@@ -35,18 +35,23 @@ public class ApplicationInitConfig {
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepos, RoleRepository roleRepo){
         return args -> {
-            if (userRepos.findByUsername("admin").isEmpty()){
-                Set<Role> roleList = roleRepo.findAll().stream().collect(Collectors.toSet());
+            if (userRepos.findByUserName("admin").isEmpty()){
+                Set<Role> roleList = roleRepo.findByIsDeleted(false)
+                        .stream().collect(Collectors.toSet());
 
 
                 User user = User.builder()
-                        .username("admin")
+                        .userName("admin")
                         .Password(passwordEncoder.encode("P@ssword1"))
                         .Roles(roleList)
                         .build();
 
                 userRepos.save(user);
                 log.warn("admin user has been created with default password: admin, please change it");
+            }
+
+            if (userRepos.existsByUserName("admin")){
+                log.info("Admin user is exists");
             }
         };
     }

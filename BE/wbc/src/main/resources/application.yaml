@@ -10,5 +10,13 @@ spring:
   jpa:
     show-sql: true
 
+
+    properties:
+      javax:
+        persistence:
+          schema-generation:
+            database:
+              action: update
 jwt:
   signerKey: "1TjXchw5FloESb63Kc+DFhTARvpWL4jUGCwfGWxuG5SIf/1y/LgJxHnMqaF6A/ij"
+

@@ -15,13 +15,21 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+@Table(name = "User")
 public class User extends BaseEntity {
     @Id
+    @Column(name = "Id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int Id;
-    String username;
+
+    @Column(name = "UserName")
+    String userName;
+
+    @Column(name = "Password")
     String Password;
 
-    @ManyToMany
+    @ManyToMany()
+    @JoinTable(name = "UserRole", joinColumns = @JoinColumn(name = "UserId"),
+            inverseJoinColumns = @JoinColumn(name = "RoleId"))
     Set<Role> Roles;
 }

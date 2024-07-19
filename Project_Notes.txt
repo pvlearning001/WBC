@@ -1,1 +1,27 @@
 https://github.com/pvlearning001/WBC.git
+
+SELECT * FROM user;
+
+DELETE FROM user WHERE Id > 1;
+
+ALTER TABLE user AUTO_INCREMENT = 1;
+
+INSERT INTO user(UserName, PASSWORD) VALUES('admin', 'admin');
+
+INSERT INTO role(Name, NameLowerCases, Description) VALUES('User', 'user', 'User Role');
+
+INSERT INTO role(Name, NameLowerCases, Description) VALUES('Admin', 'admin', 'Admin Role');
+
+http://localhost:8080/welcome
+
+
+SELECT * FROM role
+SELECT * FROM user;
+SELECT * FROM user_role;
+
+DELETE FROM user_role;
+DELETE FROM user;
+
+
+ALTER TABLE user_role AUTO_INCREMENT = 1;
+ALTER TABLE user AUTO_INCREMENT = 1
