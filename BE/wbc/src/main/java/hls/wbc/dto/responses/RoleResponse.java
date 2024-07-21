@@ -10,8 +10,8 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RoleResponse extends BaseResponse {
-    String Name;
-    String NameLowerCases;
-    String Description;
-    Set<Permission> Permissions;
+    String name;
+    String nameLowerCases;
+    String description;
+    Set<Permission> permissions;
 }

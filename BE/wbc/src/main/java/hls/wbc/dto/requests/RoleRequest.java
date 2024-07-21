@@ -9,8 +9,8 @@ import java.util.Set;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RoleRequest extends BaseRequest {
-    String Name;
-    String NameLowerCases;
-    String Description;
-    Set<Integer> Permissions;
+    String name;
+    String nameLowerCases;
+    String description;
+    Set<Integer> permissions;
 }

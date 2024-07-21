@@ -1,5 +1,6 @@
 package hls.wbc.configuration;
 
+import hls.wbc.constants.AppContants;
 import hls.wbc.entities.Role;
 import hls.wbc.entities.User;
 import hls.wbc.exceptions.AppException;
@@ -31,19 +32,34 @@ import java.util.stream.Collectors;
 public class ApplicationInitConfig {
     PasswordEncoder passwordEncoder;
 
+    private void createNewRole(RoleRepository roleRepo, String roleName){
+        String roleNameLower = AppContants.StringValues.Empty;
+        String roleDesriptions = AppContants.StringValues.Empty;
+        if (!roleRepo.existsByName(roleName)){
+            roleNameLower = roleName.toLowerCase();
+            roleDesriptions = roleName + " Role";
+            Role adminRole = Role.builder()
+                    .name(roleName)
+                    .nameLowerCases(roleNameLower)
+                    .descriptions(roleDesriptions)
+                    .build();
+            roleRepo.save(adminRole);
+        }
+    }
 
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepos, RoleRepository roleRepo){
         return args -> {
+            createNewRole(roleRepo, "User");
+            createNewRole(roleRepo, "Admin");
+
             if (userRepos.findByUserName("admin").isEmpty()){
                 Set<Role> roleList = roleRepo.findByIsDeleted(false)
                         .stream().collect(Collectors.toSet());
-
-
                 User user = User.builder()
                         .userName("admin")
-                        .Password(passwordEncoder.encode("P@ssword1"))
-                        .Roles(roleList)
+                        .password(passwordEncoder.encode("P@ssword1"))
+                        .roles(roleList)
                         .build();
 
                 userRepos.save(user);

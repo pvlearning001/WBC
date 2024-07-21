@@ -1,11 +1,7 @@
 package hls.wbc.dto.requests;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,5 +14,5 @@ public class UserCreationRequest extends BaseRequest {
     String userName;
 
     @Size(min = 6, message = "INVALID_PASSWORD")
-    String Password;
+    String password;
 }

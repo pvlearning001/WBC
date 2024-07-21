@@ -9,11 +9,11 @@ import java.time.LocalDate;
 //@Builder
 @FieldDefaults(level = AccessLevel.PROTECTED)
 public class BaseRequest {
-    int Id;
-    String Remark;
+    int id;
+    String remark;
     boolean isDeleted;
-    LocalDate InsAt;
-    int InsBy;
-    LocalDate UpdAt;
-    int UpdBy;
+    LocalDate insAt;
+    int insBy;
+    LocalDate updAt;
+    int updBy;
 }

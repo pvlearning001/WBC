@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -14,27 +13,42 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "Role")
-public class Role extends BaseEntity {
+@Table(name = "role")
+public class Role {
     @Id
-    @Column(name = "Id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int Id;
+    int id;
 
-    @Column(name = "Name")
-    String Name;
+    @Column(name = "name")
+    String name;
 
-    @Column(name = "NameLowerCases")
-    String NameLowerCases;
+    @Column(name = "name_lower_cases")
+    String nameLowerCases;
 
-    @Column(name = "Description")
-    String Description;
+    @Column(name = "descriptions")
+    String descriptions;
+
+    @Column(name = "remark")
+    String remark;
 
     @Column(name = "is_deleted")
     boolean isDeleted;
 
+    @Column(name = "ins_at")
+    LocalDate insAt;
+
+    @Column(name = "ins_by")
+    int insBy;
+
+    @Column(name = "upd_at")
+    LocalDate updAt;
+
+    @Column(name = "upd_by")
+    int updBy;
+
     @ManyToMany
-    @JoinTable(name = "RolePermission", joinColumns = @JoinColumn(name = "RoleId"),
-            inverseJoinColumns = @JoinColumn(name = "PermissionId"))
-    Set<Permission> Permissions;
+    @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    Set<Permission> permissions;
 }

@@ -12,21 +12,21 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PUBLIC)
 
 public class BaseEntity {
-    @Column(name = "Remark")
-    String Remark;
+    @Column(name = "remark")
+    String remark;
 
     @Column(name = "is_deleted")
     boolean isDeleted;
 
-    @Column(name = "InsAt")
-    LocalDate InsAt;
+    @Column(name = "ins_at")
+    LocalDate insAt;
 
-    @Column(name = "InsBy")
-    int InsBy;
+    @Column(name = "ins_by")
+    int insBy;
 
-    @Column(name = "UpdAt")
-    LocalDate UpdAt;
+    @Column(name = "upd_at")
+    LocalDate updAt;
 
-    @Column(name = "UpdBy")
-    int UpdBy;
+    @Column(name = "upd_by")
+    int updBy;
 }

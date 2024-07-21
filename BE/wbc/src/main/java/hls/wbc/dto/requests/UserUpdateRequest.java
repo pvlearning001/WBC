@@ -1,10 +1,7 @@
 package hls.wbc.dto.requests;
-import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
@@ -16,6 +13,6 @@ import java.util.Set;
 
 public class UserUpdateRequest extends BaseRequest {
     String userName;
-    String Password;
-    Set<Integer> Roles;
+    String password;
+    Set<Integer> roles;
 }

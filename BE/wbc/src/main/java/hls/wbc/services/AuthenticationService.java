@@ -57,13 +57,13 @@ public class AuthenticationService {
         }
 
         return IntrospectResponse.builder()
-                .IsValid(isValid)
+                .isValid(isValid)
                 .build();
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        var user = userRepository.findByUserName(request.getUsername())
+        var user = userRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
 
         boolean authenticated = passwordEncoder.matches(request.getPassword(),
@@ -75,8 +75,8 @@ public class AuthenticationService {
         var token = generateToken(user);
 
         return AuthenticationResponse.builder()
-                .Token(token)
-                .IsAuthenticated(true)
+                .token(token)
+                .isAuthenticated(true)
                 .build();
     }
 
@@ -87,8 +87,8 @@ public class AuthenticationService {
         Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
 
         InvalidatedToken invalidatedToken = InvalidatedToken.builder()
-                .TokenGUID(jit)
-                .ExpiryTime(expiryTime)
+                .tokenGUID(jit)
+                .expiryTime(expiryTime)
                 .build();
 
         invalidatedTokenRepository.save(invalidatedToken);
@@ -102,8 +102,8 @@ public class AuthenticationService {
         var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
         InvalidatedToken invalidatedToken = InvalidatedToken.builder()
-                .TokenGUID(jit)
-                .ExpiryTime(expiryTime)
+                .tokenGUID(jit)
+                .expiryTime(expiryTime)
                 .build();
 
         invalidatedTokenRepository.save(invalidatedToken);
@@ -117,8 +117,8 @@ public class AuthenticationService {
         var token = generateToken(user);
 
         return AuthenticationResponse.builder()
-                .Token(token)
-                .IsAuthenticated(true)
+                .token(token)
+                .isAuthenticated(true)
                 .build();
     }
 

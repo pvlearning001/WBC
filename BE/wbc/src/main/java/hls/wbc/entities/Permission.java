@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 @Builder
@@ -11,16 +13,34 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "Permission")
-public class Permission extends BaseEntity {
+@Table(name = "permission")
+public class Permission {
     @Id
-    @Column(name = "Id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int Id;
+    int id;
 
-    @Column(name = "Name")
-    String Name;
+    @Column(name = "name")
+    String name;
 
-    @Column(name = "Description")
-    String Description;
+    @Column(name = "description")
+    String description;
+
+    @Column(name = "remark")
+    String remark;
+
+    @Column(name = "is_deleted")
+    boolean isDeleted;
+
+    @Column(name = "ins_at")
+    LocalDate insAt;
+
+    @Column(name = "ins_by")
+    int insBy;
+
+    @Column(name = "upd_at")
+    LocalDate updAt;
+
+    @Column(name = "upd_by")
+    int updBy;
 }

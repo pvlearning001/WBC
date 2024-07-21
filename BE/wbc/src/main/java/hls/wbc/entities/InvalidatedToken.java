@@ -14,16 +14,34 @@ import java.util.Date;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "InvalidatedToken")
-public class InvalidatedToken extends BaseEntity {
+@Table(name = "invalidated_token")
+public class InvalidatedToken {
     @Id
-    @Column(name = "Id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int Id;
+    int id;
 
-    @Column(name = "TokenGUID")
-    String TokenGUID;
+    @Column(name = "token_guid")
+    String tokenGUID;
 
-    @Column(name = "ExpiryTime")
-    Date ExpiryTime;
+    @Column(name = "expiry_time")
+    Date expiryTime;
+
+    @Column(name = "remark")
+    String remark;
+
+    @Column(name = "is_deleted")
+    boolean isDeleted;
+
+    @Column(name = "ins_at")
+    LocalDate insAt;
+
+    @Column(name = "ins_by")
+    int insBy;
+
+    @Column(name = "upd_at")
+    LocalDate updAt;
+
+    @Column(name = "upd_by")
+    int updBy;
 }

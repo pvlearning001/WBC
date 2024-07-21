@@ -15,21 +15,39 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-@Table(name = "User")
-public class User extends BaseEntity {
+@Table(name = "user")
+public class User {
     @Id
-    @Column(name = "Id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int Id;
+    int id;
 
-    @Column(name = "UserName")
+    @Column(name = "user_name")
     String userName;
 
-    @Column(name = "Password")
-    String Password;
+    @Column(name = "password")
+    String password;
+
+    @Column(name = "remark")
+    String remark;
+
+    @Column(name = "is_deleted")
+    boolean isDeleted;
+
+    @Column(name = "ins_at")
+    LocalDate insAt;
+
+    @Column(name = "ins_by")
+    int insBy;
+
+    @Column(name = "upd_at")
+    LocalDate updAt;
+
+    @Column(name = "upd_by")
+    int updBy;
 
     @ManyToMany()
-    @JoinTable(name = "UserRole", joinColumns = @JoinColumn(name = "UserId"),
-            inverseJoinColumns = @JoinColumn(name = "RoleId"))
-    Set<Role> Roles;
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    Set<Role> roles;
 }
