@@ -11,5 +11,6 @@ public class AppContants {
     public static class SecuritiesValues {
         public static final int StrengBCrypt = 10;
         public static final String MD5 = "MD5";
+        public static  final int AdminId = 1;
     }
 }

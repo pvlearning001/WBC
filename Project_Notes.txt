@@ -15,13 +15,14 @@ INSERT INTO role(Name, NameLowerCases, Description) VALUES('Admin', 'admin', 'Ad
 http://localhost:8080/welcome
 
 
-SELECT * FROM role
+SELECT * FROM role;
 SELECT * FROM user;
 SELECT * FROM user_role;
 
 DELETE FROM user_role;
+DELETE FROM role;
 DELETE FROM user;
 
-
 ALTER TABLE user_role AUTO_INCREMENT = 1;
-ALTER TABLE user AUTO_INCREMENT = 1
+ALTER TABLE role AUTO_INCREMENT = 1;
+ALTER TABLE user AUTO_INCREMENT = 1;

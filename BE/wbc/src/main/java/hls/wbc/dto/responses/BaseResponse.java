@@ -1,6 +1,8 @@
 package hls.wbc.dto.responses;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Data
@@ -12,8 +14,8 @@ public class BaseResponse {
     int id;
     String remark;
     boolean isDeleted;
-    LocalDate insAt;
+    Instant insAt;
     int insBy;
-    LocalDate updAt;
+    Instant updAt;
     int updBy;
 }
