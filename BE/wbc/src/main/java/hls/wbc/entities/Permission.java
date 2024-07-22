@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,60 +17,18 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "permission")
-public class Permission {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+public class Permission extends BaseEntity {
 
     @Column(name = "name")
     String name;
 
-    @Column(name = "description")
-    String description;
+    @Column(name = "descriptions")
+    String descriptions;
 
-    @Column(name = "remark")
-    String remark;
-
-    @Column(name = "is_deleted")
-    boolean isDeleted;
-
-    @Column(name = "ins_at")
-    Instant insAt;
-
-    @Column(name = "ins_by")
-    int insBy;
-
-    @Column(name = "upd_at")
-    Instant updAt;
-
-    @Column(name = "upd_by")
-    int updBy;
-
-    int getUserId(Integer userId){
-        if (userId == null){
-            userId = AppContants.SecuritiesValues.AdminId;
-        }
-        return userId;
-    }
-
-    private void setTraceAddNew(Integer userId, String remark){
-        isDeleted = false;
-        this.remark = remark;
-        insAt = Instant.now();
-        userId = getUserId(userId);
-        insBy = userId;
-    }
-
-    public void setTraceUpdate(Integer userId, String remark){
-        this.remark = remark;
-        updAt = Instant.now();
-        userId = getUserId(userId);
-        updBy = userId;
-    }
-
-    public void setTraceNew(Integer userId, String remark){
-        setTraceAddNew(userId, remark);
-        setTraceUpdate(userId, remark);
+    @Builder
+    public Permission(int id, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String name, String nameLowerCases, String descriptions, Set<Permission> permissions){
+        super(id, remark, isDeleted, insAt, insBy, updAt, updBy);
+        this.name = name;
+        this.descriptions = descriptions;
     }
 }

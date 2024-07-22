@@ -16,11 +16,7 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "role")
-public class Role {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int id;
+public class Role extends BaseEntity {
 
     @Column(name = "name")
     String name;
@@ -31,53 +27,17 @@ public class Role {
     @Column(name = "descriptions")
     String descriptions;
 
-    @Column(name = "remark")
-    String remark;
-
-    @Column(name = "is_deleted")
-    boolean isDeleted;
-
-    @Column(name = "ins_at")
-    Instant insAt;
-
-    @Column(name = "ins_by")
-    int insBy;
-
-    @Column(name = "upd_at")
-    Instant updAt;
-
-    @Column(name = "upd_by")
-    int updBy;
-
     @ManyToMany
     @JoinTable(name = "role_permission", joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "permission_id"))
     Set<Permission> permissions;
 
-    int getUserId(Integer userId){
-        if (userId == null){
-            userId = AppContants.SecuritiesValues.AdminId;
-        }
-        return userId;
-    }
-
-    private void setTraceAddNew(Integer userId, String remark){
-        isDeleted = false;
-        this.remark = remark;
-        insAt = Instant.now();
-        userId = getUserId(userId);
-        insBy = userId;
-    }
-
-    public void setTraceUpdate(Integer userId, String remark){
-        this.remark = remark;
-        updAt = Instant.now();
-        userId = getUserId(userId);
-        updBy = userId;
-    }
-
-    public void setTraceNew(Integer userId, String remark){
-        setTraceAddNew(userId, remark);
-        setTraceUpdate(userId, remark);
+    @Builder
+    public Role(int id, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String name, String nameLowerCases, String descriptions, Set<Permission> permissions){
+        super(id, remark, isDeleted, insAt, insBy, updAt, updBy);
+        this.name = name;
+        this.nameLowerCases = nameLowerCases;
+        this.descriptions = descriptions;
+        this.permissions = permissions;
     }
 }

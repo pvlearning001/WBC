@@ -12,9 +12,15 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PUBLIC)
 
-public abstract class BaseEntity {
+@MappedSuperclass
+public class BaseEntity {
+
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+
     @Column(name = "remark")
     String remark;
 
@@ -57,6 +63,11 @@ public abstract class BaseEntity {
 
     public void setTraceNew(Integer userId, String remark){
         setTraceAddNew(userId, remark);
+        setTraceUpdate(userId, remark);
+    }
+
+    public void setDeleted(boolean isDeleted, Integer userId, String remark){
+        this.isDeleted = isDeleted;
         setTraceUpdate(userId, remark);
     }
 }

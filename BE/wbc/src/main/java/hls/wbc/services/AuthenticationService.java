@@ -88,7 +88,7 @@ public class AuthenticationService {
 
         InvalidatedToken invalidatedToken = InvalidatedToken.builder()
                 .tokenGUID(jit)
-                .expiryTime(expiryTime)
+                .expiryTime(expiryTime.toInstant())
                 .build();
 
         invalidatedTokenRepository.save(invalidatedToken);
@@ -103,7 +103,7 @@ public class AuthenticationService {
 
         InvalidatedToken invalidatedToken = InvalidatedToken.builder()
                 .tokenGUID(jit)
-                .expiryTime(expiryTime)
+                .expiryTime(expiryTime.toInstant())
                 .build();
 
         invalidatedTokenRepository.save(invalidatedToken);
