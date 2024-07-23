@@ -17,12 +17,15 @@ http://localhost:8080/welcome
 
 SELECT * FROM role;
 SELECT * FROM user;
+SELECT * FROM user_ext;
 SELECT * FROM user_role;
 
 DELETE FROM user_role;
 DELETE FROM role;
+DELETE FROM user_ext;
 DELETE FROM user;
 
 ALTER TABLE user_role AUTO_INCREMENT = 1;
 ALTER TABLE role AUTO_INCREMENT = 1;
+ALTER TABLE user_ext AUTO_INCREMENT = 1;
 ALTER TABLE user AUTO_INCREMENT = 1;

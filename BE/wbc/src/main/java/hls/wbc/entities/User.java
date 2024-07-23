@@ -1,13 +1,9 @@
 package hls.wbc.entities;
 
-import hls.wbc.constants.AppContants;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Getter
