@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>, UserCustomRepository {
 
-    @Query(value = "select u from User u where isDeleted = false")
+    @Query(value = "select u from User u where isDeleted = false order by u.id DESC")
     Page<User> getAllDataPaging(Pageable pageable);
 
     @Query(value = "select u from User u where (u.userName like %:text%) and (u.isDeleted = false)")

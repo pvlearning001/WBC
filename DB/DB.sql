@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `course` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.course: ~1 rows (approximately)
+-- Dumping data for table wbc.course: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.exam
 CREATE TABLE IF NOT EXISTS `exam` (
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `introduce` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.introduce: ~1 rows (approximately)
+-- Dumping data for table wbc.introduce: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.invalidated_token
 CREATE TABLE IF NOT EXISTS `invalidated_token` (
@@ -105,7 +105,7 @@ CREATE TABLE IF NOT EXISTS `invalidated_token` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.invalidated_token: ~1 rows (approximately)
+-- Dumping data for table wbc.invalidated_token: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.mark_result
 CREATE TABLE IF NOT EXISTS `mark_result` (
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `mark_result` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.mark_result: ~1 rows (approximately)
+-- Dumping data for table wbc.mark_result: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.mark_result_sum
 CREATE TABLE IF NOT EXISTS `mark_result_sum` (
@@ -276,8 +276,8 @@ CREATE TABLE IF NOT EXISTS `role` (
 
 -- Dumping data for table wbc.role: ~2 rows (approximately)
 REPLACE INTO `role` (`id`, `guid`, `name`, `name_lower_cases`, `descriptions`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, NULL, 'User', 'user', 'User Role', 'Init User Role', b'0', '2024-07-24 05:49:15.000000', 1, '2024-07-24 05:49:15.000000', 1),
-	(2, NULL, 'Admin', 'admin', 'Admin Role', 'Init Admin Role', b'0', '2024-07-24 05:49:16.000000', 1, '2024-07-24 05:49:16.000000', 1);
+	(1, NULL, 'User', 'user', 'User Role', 'Init User Role', b'0', '2024-07-24 08:03:50.000000', 1, '2024-07-24 08:03:50.000000', 1),
+	(2, NULL, 'Admin', 'admin', 'Admin Role', 'Init Admin Role', b'0', '2024-07-24 08:03:50.000000', 1, '2024-07-24 08:03:50.000000', 1);
 
 -- Dumping structure for table wbc.role_permission
 CREATE TABLE IF NOT EXISTS `role_permission` (
@@ -316,9 +316,21 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user: ~99 rows (approximately)
+-- Dumping data for table wbc.user: ~1 rows (approximately)
 REPLACE INTO `user` (`id`, `guid`, `user_name`, `password`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, '8dd02114-f76f-4ef4-9622-2af6ffd7bd57', 'admin', '$2a$10$y1bAUrJkZggKBfH54QFK8.LwUuPjJxlGCRvUpMCRwKhurJ3yb1sN2', 'Init User', b'0', '2024-07-24 05:49:16.000000', 1, '2024-07-24 05:49:16.000000', 1);
+	(1, '65db0682-94aa-4d9f-9b27-631d106ca3c7', 'admin', '$2a$10$73Rlz.7ybm3CblPZaM1j8eNktqjHTXluhLwkqd6yAqg6DY9WSZVe.', 'Init User', b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
+	(2, '43af90ca-4993-11ef-aa02-509a4cb5cc32', 'user02', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
+	(3, '43c04c35-4993-11ef-aa02-509a4cb5cc32', 'user03', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
+	(4, '43cfc20b-4993-11ef-aa02-509a4cb5cc32', 'user04', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
+	(5, '43deb532-4993-11ef-aa02-509a4cb5cc32', 'user05', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
+	(6, '43ee3579-4993-11ef-aa02-509a4cb5cc32', 'user06', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
+	(7, '43fd1461-4993-11ef-aa02-509a4cb5cc32', 'user07', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
+	(8, '440ccaec-4993-11ef-aa02-509a4cb5cc32', 'user08', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
+	(9, '441b5926-4993-11ef-aa02-509a4cb5cc32', 'user09', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
+	(10, '443f0bca-4993-11ef-aa02-509a4cb5cc32', 'user10', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
+	(11, '444b14e1-4993-11ef-aa02-509a4cb5cc32', 'user11', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
+	(12, '4459852f-4993-11ef-aa02-509a4cb5cc32', 'user12', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
+	(13, '4465e9ed-4993-11ef-aa02-509a4cb5cc32', 'user13', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1);
 
 -- Dumping structure for table wbc.user_ext
 CREATE TABLE IF NOT EXISTS `user_ext` (
@@ -344,7 +356,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
 
 -- Dumping data for table wbc.user_ext: ~1 rows (approximately)
 REPLACE INTO `user_ext` (`id`, `guid`, `user_id`, `f_name`, `m_name`, `l_name`, `email`, `addr`, `phone01`, `phone02`, `phone03`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, NULL, 1, 'WBC', NULL, 'Admin', 'admin@wbc.com', NULL, '0903.123456', NULL, NULL, NULL, b'0', '2024-07-24 05:49:16', 1, '2024-07-24 05:49:16', 1);
+	(1, NULL, 1, 'WBC', NULL, 'Admin', 'admin@wbc.com', NULL, '0903.123456', NULL, NULL, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1);
 
 -- Dumping structure for table wbc.user_role
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -365,10 +377,22 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_role: ~51 rows (approximately)
+-- Dumping data for table wbc.user_role: ~2 rows (approximately)
 REPLACE INTO `user_role` (`id`, `guid`, `user_id`, `role_id`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, NULL, 1, 2, NULL, b'0', '2024-07-24 05:49:16', 1, '2024-07-24 05:49:16', 1),
-	(2, NULL, 1, 1, NULL, b'0', '2024-07-24 05:49:16', 1, '2024-07-24 05:49:16', 1);
+	(1, NULL, 1, 1, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
+	(2, NULL, 1, 2, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
+	(3, NULL, 2, 1, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
+	(4, NULL, 3, 1, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
+	(5, NULL, 4, 1, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
+	(6, NULL, 5, 1, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
+	(7, NULL, 6, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
+	(8, NULL, 7, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
+	(9, NULL, 8, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
+	(10, NULL, 9, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
+	(11, NULL, 10, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
+	(12, NULL, 11, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
+	(13, NULL, 12, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
+	(14, NULL, 13, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

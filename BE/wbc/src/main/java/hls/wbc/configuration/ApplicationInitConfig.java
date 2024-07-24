@@ -89,14 +89,15 @@ public class ApplicationInitConfig {
                 ? userRole.get().getId()
                 : AppContants.SecuritiesValues.UserRoleId;
         String roleIdString = String.valueOf(roleId);
-        for(int i = 1; i < 99; i++) {
+        String pw = passwordEncoder.encode("pw1");
+        for(int i = 1; i < 13; i++) {
             int maxId = userRepos.customGetMaxId();
             maxId = maxId + 1;
             String userName = "user" +
                     ((maxId < 10)
                             ? "0" + String.valueOf(maxId)
                             : String.valueOf(maxId));
-            String sql = "INSERT INTO User(user_name, password) VALUES('" + userName + "', 'password1')";
+            String sql = "INSERT INTO User(user_name, password) VALUES('" + userName + "', '" + pw + "')";
             userRepos.customExecQuery(sql);
             maxId = userRepos.customGetMaxId();
             sql = "INSERT INTO User_Role(user_id, role_id) VALUES(" + String.valueOf(maxId) + ", " + roleIdString + ")";
