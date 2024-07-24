@@ -23,8 +23,8 @@ public class User extends BaseEntity {
     String password;
 
     @Builder
-    public User(int id, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String userName, String password, Set<Role> roles){
-        super(id, remark, isDeleted, insAt, insBy, updAt, updBy);
+    public User(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String userName, String password, Set<Role> roles){
+        super(id, guid, remark, isDeleted, insAt, insBy, updAt, updBy);
         this.userName = userName;
         this.password = password;
         this.roles = roles;

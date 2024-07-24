@@ -59,6 +59,7 @@ public class ApplicationInitConfig {
                 Set<Role> roleList = roleRepos.findByIsDeleted(false)
                         .stream().collect(Collectors.toSet());
                 User user = User.builder()
+                        .guid(java.util.UUID.randomUUID().toString())
                         .userName(userName)
                         .password(passwordEncoder.encode("P@ssword1"))
                         .roles(roleList)
@@ -115,7 +116,7 @@ public class ApplicationInitConfig {
                 log.info("Admin user is exists");
             }
 
-            initUserList(userRepos, roleRepos);
+            //initUserList(userRepos, roleRepos);
         };
     }
 }

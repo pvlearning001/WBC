@@ -31,8 +31,8 @@ public class Role extends BaseEntity {
     Set<Permission> permissions;
 
     @Builder
-    public Role(int id, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String name, String nameLowerCases, String descriptions, Set<Permission> permissions){
-        super(id, remark, isDeleted, insAt, insBy, updAt, updBy);
+    public Role(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String name, String nameLowerCases, String descriptions, Set<Permission> permissions){
+        super(id, guid, remark, isDeleted, insAt, insBy, updAt, updBy);
         this.name = name;
         this.nameLowerCases = nameLowerCases;
         this.descriptions = descriptions;

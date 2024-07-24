@@ -21,6 +21,9 @@ public class BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
+    @Column(name = "guid")
+    String guid;
+
     @Column(name = "remark")
     String remark;
 

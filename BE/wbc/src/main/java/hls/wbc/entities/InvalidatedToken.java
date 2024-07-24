@@ -22,8 +22,8 @@ public class InvalidatedToken extends BaseEntity {
     Instant expiryTime;
 
     @Builder
-    public InvalidatedToken(int id, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String tokenGUID, Instant expiryTime){
-        super(id, remark, isDeleted, insAt, insBy, updAt, updBy);
+    public InvalidatedToken(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String tokenGUID, Instant expiryTime){
+        super(id, guid, remark, isDeleted, insAt, insBy, updAt, updBy);
         this.tokenGUID = tokenGUID;
         this.expiryTime = expiryTime;
     }

@@ -45,8 +45,8 @@ public class UserExt extends BaseEntity {
     String phone03;
 
     @Builder
-    public UserExt(int id, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, int userId, String fName, String mName, String lName, String email, String addr, String phone01, String phone02, String phone03){
-        super(id, remark, isDeleted, insAt, insBy, updAt, updBy);
+    public UserExt(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, int userId, String fName, String mName, String lName, String email, String addr, String phone01, String phone02, String phone03){
+        super(id, guid, remark, isDeleted, insAt, insBy, updAt, updBy);
         this.userId = userId;
         this.fName = fName;
         this.mName = mName;

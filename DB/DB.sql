@@ -22,6 +22,7 @@ USE `wbc`;
 -- Dumping structure for table wbc.category
 CREATE TABLE IF NOT EXISTS `category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `name` varchar(255) DEFAULT NULL,
   `remark` varchar(1028) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
@@ -37,6 +38,7 @@ CREATE TABLE IF NOT EXISTS `category` (
 -- Dumping structure for table wbc.course
 CREATE TABLE IF NOT EXISTS `course` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT NULL,
   `module_id` int(11) NOT NULL DEFAULT 0,
   `date_from` date DEFAULT NULL,
   `date_to` date DEFAULT NULL,
@@ -50,11 +52,12 @@ CREATE TABLE IF NOT EXISTS `course` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.course: ~0 rows (approximately)
+-- Dumping data for table wbc.course: ~1 rows (approximately)
 
 -- Dumping structure for table wbc.exam
 CREATE TABLE IF NOT EXISTS `exam` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `module_id` int(11) NOT NULL DEFAULT 0,
   `date_from` date DEFAULT NULL,
   `time_to` time DEFAULT NULL,
@@ -73,6 +76,7 @@ CREATE TABLE IF NOT EXISTS `exam` (
 -- Dumping structure for table wbc.introduce
 CREATE TABLE IF NOT EXISTS `introduce` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT NULL,
   `history` varchar(2056) DEFAULT NULL,
   `hierarchy_map` varchar(255) DEFAULT NULL,
   `remark` varchar(1028) DEFAULT NULL,
@@ -84,11 +88,12 @@ CREATE TABLE IF NOT EXISTS `introduce` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.introduce: ~0 rows (approximately)
+-- Dumping data for table wbc.introduce: ~1 rows (approximately)
 
 -- Dumping structure for table wbc.invalidated_token
 CREATE TABLE IF NOT EXISTS `invalidated_token` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT NULL,
   `token_guid` varchar(255) DEFAULT NULL,
   `expiry_time` datetime DEFAULT NULL,
   `remark` varchar(255) DEFAULT NULL,
@@ -100,11 +105,12 @@ CREATE TABLE IF NOT EXISTS `invalidated_token` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.invalidated_token: ~0 rows (approximately)
+-- Dumping data for table wbc.invalidated_token: ~1 rows (approximately)
 
 -- Dumping structure for table wbc.mark_result
 CREATE TABLE IF NOT EXISTS `mark_result` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `exam_id` int(11) DEFAULT NULL,
   `mark_type_id` int(11) DEFAULT NULL,
@@ -118,11 +124,12 @@ CREATE TABLE IF NOT EXISTS `mark_result` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.mark_result: ~0 rows (approximately)
+-- Dumping data for table wbc.mark_result: ~1 rows (approximately)
 
 -- Dumping structure for table wbc.mark_result_sum
 CREATE TABLE IF NOT EXISTS `mark_result_sum` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `user_id` int(11) DEFAULT NULL,
   `mark` float DEFAULT NULL,
   `remark` varchar(1028) DEFAULT NULL,
@@ -139,6 +146,7 @@ CREATE TABLE IF NOT EXISTS `mark_result_sum` (
 -- Dumping structure for table wbc.mark_type
 CREATE TABLE IF NOT EXISTS `mark_type` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `name` varchar(255) DEFAULT NULL,
   `remark` varchar(1028) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
@@ -154,6 +162,7 @@ CREATE TABLE IF NOT EXISTS `mark_type` (
 -- Dumping structure for table wbc.mark_type_history
 CREATE TABLE IF NOT EXISTS `mark_type_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `name` varchar(255) DEFAULT NULL,
   `remark` varchar(1028) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
@@ -169,6 +178,7 @@ CREATE TABLE IF NOT EXISTS `mark_type_history` (
 -- Dumping structure for table wbc.module
 CREATE TABLE IF NOT EXISTS `module` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `name` varchar(255) DEFAULT NULL,
   `remark` varchar(1028) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
@@ -184,6 +194,7 @@ CREATE TABLE IF NOT EXISTS `module` (
 -- Dumping structure for table wbc.news
 CREATE TABLE IF NOT EXISTS `news` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `cate_id` int(11) NOT NULL DEFAULT 0,
   `subject` varchar(512) DEFAULT NULL,
   `Content` varchar(1028) DEFAULT NULL,
@@ -206,6 +217,7 @@ CREATE TABLE IF NOT EXISTS `news` (
 -- Dumping structure for table wbc.permission
 CREATE TABLE IF NOT EXISTS `permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `name` varchar(255) DEFAULT NULL,
   `descriptions` varchar(255) DEFAULT NULL,
   `remark` varchar(255) DEFAULT NULL,
@@ -222,6 +234,7 @@ CREATE TABLE IF NOT EXISTS `permission` (
 -- Dumping structure for table wbc.register_form
 CREATE TABLE IF NOT EXISTS `register_form` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `info_01` varchar(255) DEFAULT NULL,
   `info_02` varchar(255) DEFAULT NULL,
   `info_03` varchar(255) DEFAULT NULL,
@@ -248,6 +261,7 @@ CREATE TABLE IF NOT EXISTS `register_form` (
 -- Dumping structure for table wbc.role
 CREATE TABLE IF NOT EXISTS `role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `name` varchar(255) DEFAULT NULL,
   `name_lower_cases` varchar(255) DEFAULT NULL,
   `descriptions` varchar(255) DEFAULT NULL,
@@ -260,14 +274,15 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.role: ~0 rows (approximately)
-REPLACE INTO `role` (`id`, `name`, `name_lower_cases`, `descriptions`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, 'User', 'user', 'User Role', 'Init User Role', b'0', '2024-07-23 08:52:42.000000', 1, '2024-07-23 08:52:42.000000', 1),
-	(2, 'Admin', 'admin', 'Admin Role', 'Init Admin Role', b'0', '2024-07-23 08:52:43.000000', 1, '2024-07-23 08:52:43.000000', 1);
+-- Dumping data for table wbc.role: ~2 rows (approximately)
+REPLACE INTO `role` (`id`, `guid`, `name`, `name_lower_cases`, `descriptions`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
+	(1, NULL, 'User', 'user', 'User Role', 'Init User Role', b'0', '2024-07-24 05:49:15.000000', 1, '2024-07-24 05:49:15.000000', 1),
+	(2, NULL, 'Admin', 'admin', 'Admin Role', 'Init Admin Role', b'0', '2024-07-24 05:49:16.000000', 1, '2024-07-24 05:49:16.000000', 1);
 
 -- Dumping structure for table wbc.role_permission
 CREATE TABLE IF NOT EXISTS `role_permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `role_id` int(11) DEFAULT NULL,
   `permision_id` int(11) DEFAULT NULL,
   `remark` varchar(1028) DEFAULT NULL,
@@ -289,6 +304,7 @@ CREATE TABLE IF NOT EXISTS `role_permission` (
 -- Dumping structure for table wbc.user
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `user_name` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `remark` varchar(255) DEFAULT NULL,
@@ -300,13 +316,14 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user: ~0 rows (approximately)
-REPLACE INTO `user` (`id`, `user_name`, `password`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, 'admin', '$2a$10$YVPMDMiAeBYqbSrk.3HIjePfeUKCilYMtOBoLvf0.IgYkL7BW6VHa', 'Init User', b'0', '2024-07-23 08:52:43.000000', 1, '2024-07-23 08:52:43.000000', 1);
+-- Dumping data for table wbc.user: ~99 rows (approximately)
+REPLACE INTO `user` (`id`, `guid`, `user_name`, `password`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
+	(1, '8dd02114-f76f-4ef4-9622-2af6ffd7bd57', 'admin', '$2a$10$y1bAUrJkZggKBfH54QFK8.LwUuPjJxlGCRvUpMCRwKhurJ3yb1sN2', 'Init User', b'0', '2024-07-24 05:49:16.000000', 1, '2024-07-24 05:49:16.000000', 1);
 
 -- Dumping structure for table wbc.user_ext
 CREATE TABLE IF NOT EXISTS `user_ext` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
   `user_id` int(11) DEFAULT NULL,
   `f_name` varchar(255) DEFAULT NULL,
   `m_name` varchar(255) DEFAULT NULL,
@@ -326,12 +343,13 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 -- Dumping data for table wbc.user_ext: ~1 rows (approximately)
-REPLACE INTO `user_ext` (`id`, `user_id`, `f_name`, `m_name`, `l_name`, `email`, `addr`, `phone01`, `phone02`, `phone03`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, 1, 'WBC', NULL, 'Admin', 'admin@wbc.com', NULL, '0903.123456', NULL, NULL, NULL, b'0', '2024-07-23 08:52:43', 1, '2024-07-23 08:52:43', 1);
+REPLACE INTO `user_ext` (`id`, `guid`, `user_id`, `f_name`, `m_name`, `l_name`, `email`, `addr`, `phone01`, `phone02`, `phone03`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
+	(1, NULL, 1, 'WBC', NULL, 'Admin', 'admin@wbc.com', NULL, '0903.123456', NULL, NULL, NULL, b'0', '2024-07-24 05:49:16', 1, '2024-07-24 05:49:16', 1);
 
 -- Dumping structure for table wbc.user_role
 CREATE TABLE IF NOT EXISTS `user_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT NULL,
   `user_id` int(11) DEFAULT NULL,
   `role_id` int(11) DEFAULT NULL,
   `remark` varchar(1028) DEFAULT NULL,
@@ -347,10 +365,10 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_role: ~0 rows (approximately)
-REPLACE INTO `user_role` (`id`, `user_id`, `role_id`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, 1, 1, NULL, b'0', '2024-07-23 08:52:43', 1, '2024-07-23 08:52:43', 1),
-	(2, 1, 2, NULL, b'0', '2024-07-23 08:52:43', 1, '2024-07-23 08:52:43', 1);
+-- Dumping data for table wbc.user_role: ~51 rows (approximately)
+REPLACE INTO `user_role` (`id`, `guid`, `user_id`, `role_id`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
+	(1, NULL, 1, 2, NULL, b'0', '2024-07-24 05:49:16', 1, '2024-07-24 05:49:16', 1),
+	(2, NULL, 1, 1, NULL, b'0', '2024-07-24 05:49:16', 1, '2024-07-24 05:49:16', 1);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
