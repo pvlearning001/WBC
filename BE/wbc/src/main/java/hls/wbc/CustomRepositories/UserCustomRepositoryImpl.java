@@ -1,65 +1,69 @@
 package hls.wbc.CustomRepositories;
 import hls.wbc.entities.User;
-import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository
+//@Repository
 public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implements UserCustomRepository {
 
-    private List<User> toUserList(List<Object> objList){
+    private  static final String tableName = "User";
+
+    private List<User> toEntityList(List<Object> objList){
         return objList.stream()
                 .map(element->(User) element)
                 .toList();
     }
 
-    private User toUser(Object obj){
+    private User toEntity(Object obj){
         return (User) obj;
     }
 
-    public List<User> getDataBySql(String sql) {
-        List<Object> objList = super.getDataBySqlBase(sql);
-        return toUserList(objList);
+    public List<User> customGetDataBySql(String sql) {
+        List<Object> objList = super.baseCustomGetDataBySql(sql);
+        return toEntityList(objList);
+    }
+
+    public List<User> customGetAllData() {
+        List<Object> objList = super.baseCustomGetDataByTableName(tableName);
+        return toEntityList(objList);
+    }
+
+    public int customGetMaxId(){
+        return baseCustomGetMaxId(tableName);
+    }
+
+    public List<User> customGetActiveData(boolean isDeleted) {
+        List<Object> objList = super.baseCustomGetDataByTableName(tableName);
+        return toEntityList(objList);
+    }
+
+    @Transactional
+    public int customExecQuery(String sql) {
+        return super.baseCustomExecQuery(sql);
     }
 
 
-    public List<User> getDataByTableName(String tableName) {
-        List<Object> objList = super.getDataByTableNameBase(tableName);
-        return toUserList(objList);
+    public User customFindByIdCustom(int id) {
+        Object obj = super.baseCustomFindById(id);
+        return toEntity(obj);
     }
 
-
-    public List<User> getActiveDataByTableName(String tableName, boolean isDeleted) {
-        List<Object> objList = super.getDataByTableNameBase(tableName);
-        return toUserList(objList);
+    @Transactional
+    public User customSave(Object object) {
+        Object obj = super.baseCustomSave(object);
+        return toEntity(obj);
     }
 
-
-    public int execQuery(String sql) {
-        return super.execQueryBase(sql);
+    @Transactional
+    public User customUpdate(Object object) {
+        Object obj = super.baseCustomSave(object);
+        return toEntity(obj);
     }
 
-
-    public User findByIdCustom(int id) {
-        Object obj = super.findByIdCustomBase(id);
-        return toUser(obj);
-    }
-
-
-    public User saveCustom(Object object) {
-        Object obj = super.saveCustomBase(object);
-        return toUser(obj);
-    }
-
-
-    public User updateCustom(Object object) {
-        Object obj = super.saveCustomBase(object);
-        return toUser(obj);
-    }
-
-
-    public User deleteCustom(int id) {
-        Object obj = super.deleteCustomBase(id);
-        return toUser(obj);
+    @Transactional
+    public User customDelete(int id) {
+        Object obj = super.baseCustomDelete(id);
+        return toEntity(obj);
     }
 }

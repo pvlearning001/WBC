@@ -44,8 +44,7 @@ public class ApplicationInitConfig {
         }
     }
 
-    private void initAdminUser(String userName, UserRepository userRepos, RoleRepository roleRepo, UserExtRepository userExtRepos, String remark){
-
+    private void initAdminUser(String userName, UserRepository userRepos, RoleRepository roleRepos, UserExtRepository userExtRepos, String remark){
         Optional<User> initUser = userRepos.findByUserName(userName);
         if (initUser.isEmpty()){
             if (userRepos.existsByUserNameDeleted(userName)){
@@ -57,7 +56,7 @@ public class ApplicationInitConfig {
                 }
             }
             else {
-                Set<Role> roleList = roleRepo.findByIsDeleted(false)
+                Set<Role> roleList = roleRepos.findByIsDeleted(false)
                         .stream().collect(Collectors.toSet());
                 User user = User.builder()
                         .userName(userName)
@@ -81,6 +80,30 @@ public class ApplicationInitConfig {
         }
     }
 
+    private void initUserList(UserRepository userRepos, RoleRepository roleRepos){
+        Set<Role> roleList = roleRepos.findByName("User")
+                .stream().collect(Collectors.toSet());
+        Optional<Role> userRole= roleList.stream().findFirst();
+        int roleId = userRole.isPresent()
+                ? userRole.get().getId()
+                : AppContants.SecuritiesValues.UserRoleId;
+        String roleIdString = String.valueOf(roleId);
+        for(int i = 1; i < 99; i++) {
+            int maxId = userRepos.customGetMaxId();
+            maxId = maxId + 1;
+            String userName = "user" +
+                    ((maxId < 10)
+                            ? "0" + String.valueOf(maxId)
+                            : String.valueOf(maxId));
+            String sql = "INSERT INTO User(user_name, password) VALUES('" + userName + "', 'password1')";
+            userRepos.customExecQuery(sql);
+            maxId = userRepos.customGetMaxId();
+            sql = "INSERT INTO User_Role(user_id, role_id) VALUES(" + String.valueOf(maxId) + ", " + roleIdString + ")";
+            userRepos.customExecQuery(sql);
+        }
+        log.info("Test insert user");
+    }
+
     @Bean
     ApplicationRunner applicationRunner(UserRepository userRepos, RoleRepository roleRepos,  UserExtRepository userExtRepos){
         return args -> {
@@ -91,19 +114,8 @@ public class ApplicationInitConfig {
             if (userRepos.existsByUserName("admin")){
                 log.info("Admin user is exists");
             }
-            /*
-            User u = userRepos.customFindMethod(1);
-            log.info(u.getUserName());
 
-
-            List<User> userList = userRepos.queryUserList();
-
-            userList.forEach((u) -> {
-                log.info(u.getUserName());
-            });
-
-             */
-
+            initUserList(userRepos, roleRepos);
         };
     }
 }

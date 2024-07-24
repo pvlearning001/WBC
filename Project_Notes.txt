@@ -29,3 +29,9 @@ ALTER TABLE user_role AUTO_INCREMENT = 1;
 ALTER TABLE role AUTO_INCREMENT = 1;
 ALTER TABLE user_ext AUTO_INCREMENT = 1;
 ALTER TABLE user AUTO_INCREMENT = 1;
+
+List<User> userList = userRepos.queryUserList();
+
+userList.forEach((u) -> {
+	log.info(u.getUserName());
+});
