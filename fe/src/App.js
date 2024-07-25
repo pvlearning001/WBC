@@ -1,25 +1,39 @@
-import logo from './logo.svg';
+import axios from 'axios';
+import React, { Component } from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+class App extends Component {
+  state = {
+    message: '',
+    news: []
+  };
+
+  componentDidMount() {
+    axios.get('/test01/api01')
+         .then(result => this.setState({ message: result.data.itemName }));
+
+    axios.get('/test01/api02')
+         .then(result => this.setState({ news: result.data }));
+    
+  };
+
+  render() {
+    return(
+      <div className="App">
+        <header className="App-header">          
+          
+          <h1>{ this.state.message }</h1>
+          <ul>
+            {this.state.news.map(item => (
+              <li key={item.id}>
+                <h2>{item.itemName}</h2>
+              </li>
+            ))}
+          </ul>
+        </header>
+      </div>
+    )
+  };
+};
 
 export default App;

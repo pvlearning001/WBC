@@ -19,7 +19,7 @@ public class WbcApplication {
 	}
 	@GetMapping("/welcome")
 	public String hello() {
-		return "Greetings from Spring Boot!";
+		return "Welcome to HLS";
 	}
 
 }
