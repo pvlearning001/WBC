@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Route, HashRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
 import Layout from './Layout';
-import TestHomePage01 from './pages/TestHomePage01';
+import ContactUsPage from './pages/ContactUsPage';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
 import TestPage01 from './pages/TestPage01';
 import TestPage02 from './pages/TestPage02';
 import TestPage03 from './pages/TestPage03';
@@ -13,7 +15,9 @@ class App extends Component {
       <Router>
         <Routes>
           <Route element={<Layout/>}>
-            <Route path="/" element={<TestHomePage01 />} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/contactus" element={<ContactUsPage />} />
+            <Route path="/login" element={<LoginPage />} />
             <Route path="/page01" element={<TestPage01 />} />
             <Route path="/page02" element={<TestPage02 />} />
             <Route path="/page03" element={<TestPage03 />} />

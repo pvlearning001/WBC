@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Outlet } from 'react-router-dom';
-import Navbar from './components/Navbar';
+import NavbarComponent from './components/NavbarComponent';
 
 class Layout extends Component {
   render() {
     return(
       <>
-        <Navbar />
+        <NavbarComponent />
         <main>
             <Outlet />
         </main>
