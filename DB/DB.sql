@@ -314,9 +314,9 @@ CREATE TABLE IF NOT EXISTS `user` (
   `upd_at` datetime(6) DEFAULT utc_timestamp(),
   `upd_by` int(11) DEFAULT 1,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user: ~1 rows (approximately)
+-- Dumping data for table wbc.user: ~13 rows (approximately)
 REPLACE INTO `user` (`id`, `guid`, `user_name`, `password`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
 	(1, '65db0682-94aa-4d9f-9b27-631d106ca3c7', 'admin', '$2a$10$73Rlz.7ybm3CblPZaM1j8eNktqjHTXluhLwkqd6yAqg6DY9WSZVe.', 'Init User', b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
 	(2, '43af90ca-4993-11ef-aa02-509a4cb5cc32', 'user02', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
@@ -354,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_ext: ~1 rows (approximately)
+-- Dumping data for table wbc.user_ext: ~0 rows (approximately)
 REPLACE INTO `user_ext` (`id`, `guid`, `user_id`, `f_name`, `m_name`, `l_name`, `email`, `addr`, `phone01`, `phone02`, `phone03`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
 	(1, NULL, 1, 'WBC', NULL, 'Admin', 'admin@wbc.com', NULL, '0903.123456', NULL, NULL, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1);
 
@@ -375,9 +375,9 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   KEY `FK859n2jvi8ivhui0rl0esws6o` (`user_id`),
   CONSTRAINT `FK859n2jvi8ivhui0rl0esws6o` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`),
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_role: ~2 rows (approximately)
+-- Dumping data for table wbc.user_role: ~14 rows (approximately)
 REPLACE INTO `user_role` (`id`, `guid`, `user_id`, `role_id`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
 	(1, NULL, 1, 1, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
 	(2, NULL, 1, 2, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
