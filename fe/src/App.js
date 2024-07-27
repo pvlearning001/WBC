@@ -1,39 +1,26 @@
-import axios from 'axios';
 import React, { Component } from 'react';
+import { Route, HashRouter as Router, Routes } from 'react-router-dom';
 import './App.css';
+import Layout from './Layout';
+import TestHomePage01 from './pages/TestHomePage01';
+import TestPage01 from './pages/TestPage01';
+import TestPage02 from './pages/TestPage02';
+import TestPage03 from './pages/TestPage03';
 
 class App extends Component {
-  state = {
-    message: '',
-    news: []
-  };
-
-  componentDidMount() {
-    axios.get('/test01/api01')
-         .then(result => this.setState({ message: result.data.itemName }));
-
-    axios.get('/test01/api02')
-         .then(result => this.setState({ news: result.data }));
-    
-  };
-
   render() {
     return(
-      <div className="App">
-        <header className="App-header">          
-          
-          <h1>{ this.state.message }</h1>
-          <ul>
-            {this.state.news.map(item => (
-              <li key={item.id}>
-                <h2>{item.itemName}</h2>
-              </li>
-            ))}
-          </ul>
-        </header>
-      </div>
+      <Router>
+        <Routes>
+          <Route element={<Layout/>}>
+            <Route path="/" element={<TestHomePage01 />} />
+            <Route path="/page01" element={<TestPage01 />} />
+            <Route path="/page02" element={<TestPage02 />} />
+            <Route path="/page03" element={<TestPage03 />} />
+          </Route>          
+        </Routes>
+      </Router>
     )
   };
 };
-
 export default App;

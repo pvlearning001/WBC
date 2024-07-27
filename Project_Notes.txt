@@ -37,3 +37,5 @@ List<User> userList = userRepos.queryUserList();
 userList.forEach((u) -> {
 	log.info(u.getUserName());
 });
+
+https://stackoverflow.com/questions/77209264/how-to-build-a-react-application-with-multiple-html-files#:~:text=In%20React%20you%20only%20need,html%20file.&text=In%20order%20to%20make%20multiple,called%20react%2Drouter%2Ddom%20.&text=src%2Findex.js-,import%20React%2C%20%7B%20StrictMode%20%7D%20from%20%22react%22%3B%20import,%3B%20import%20%22.%2Fstyles.
