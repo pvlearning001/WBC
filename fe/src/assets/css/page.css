@@ -30,6 +30,7 @@ body {
   font-weight: bold;
   font-size: 32px;
   color: white;
+  margin-top: 50px;
 }
 
 .form-control {
@@ -48,10 +49,6 @@ body {
   width: 18rem;
   height: 3rem;
   border-radius: 5px;
-}
-
-.btn-login{
-    margin-left: 65px;
 }
 
 .btn:hover {
