@@ -1,28 +1,24 @@
-import React, { Component } from 'react';
+import React, { useContext } from 'react';
 import '../assets/css/main.css';
+import { IntroduceContext } from "../ParentPage";
 
-class ContactUsComponent extends Component {
-    render() {
-        return(  
+export default function ContactUsComponent() {
+  const introduceInfo = useContext(IntroduceContext); 
+  return(  
 <main className="main">
     <section id="hero" className="hero section dark-background">
       <div className="container">
         <div className="row">
-            TRƯỜNG NGHIỆP VỤ CẤP NƯỚC
+            Địa chỉ: {introduceInfo.info04}
         </div>
         <div className="row">
-            Địa chỉ: Quận Tân Bình - TP.HCM
+            Số điện thoại: {introduceInfo.info05}
         </div>
         <div className="row">
-            Số điện thoại: 0909.111.111            
-        </div>
-        <div className="row">
-            Email: wbc@hcm.uit.com            
+            Email: {introduceInfo.info06}
         </div>
       </div>
     </section>
   </main>
-        )
-      };
-    };
-  export default ContactUsComponent;
+  )
+}

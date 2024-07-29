@@ -8,11 +8,11 @@ import java.util.Set;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
+
 @Table(name = "introduce")
 public class Introduce extends BaseEntity {
     @Column(name = "name")

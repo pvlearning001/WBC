@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React, { useContext } from "react";
 import { Link } from 'react-router-dom';
 import '../assets/css/main.css';
+import { IntroduceContext } from "../ParentPage";
 
-class NavbarComponent extends Component {
-    render() {
-        return(  
+export default function NavbarComponent() { 
+    const introduceInfo = useContext(IntroduceContext);   
+    return(  
 <header id="header" className="header d-flex align-items-center fixed-top">
     <div className="container-fluid container-xl position-relative d-flex align-items-center">
         <Link to="/" className="logo d-flex align-items-center me-auto">
-        <h1 className="sitename">TRƯỜNG NGHIỆP VỤ CẤP NƯỚC</h1>
+        <h1 className="sitename">{introduceInfo.info01}</h1>
         </Link>
 
         <nav id="navmenu" className="navmenu">
@@ -25,7 +26,5 @@ class NavbarComponent extends Component {
         <Link to="/login" className="btn-getstarted">Login</Link>
     </div>
 </header>
-        )
-      };
-    };
-  export default NavbarComponent;
+    )
+}

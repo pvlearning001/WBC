@@ -79,30 +79,31 @@ CREATE TABLE IF NOT EXISTS `introduce` (
   `guid` varchar(255) DEFAULT uuid(),
   `history` varchar(2056) DEFAULT NULL,
   `hierarchy_map` varchar(255) DEFAULT NULL,
-  `info_01` varchar(1024) DEFAULT NULL,
-  `info_02` varchar(1024) DEFAULT NULL,
+  `info_01` varchar(255) DEFAULT NULL,
+  `info_02` varchar(255) DEFAULT NULL,
   `info_03` varchar(1024) DEFAULT NULL,
-  `info_04` varchar(1024) DEFAULT NULL,
-  `info_05` varchar(1024) DEFAULT NULL,
-  `info_06` varchar(1024) DEFAULT NULL,
-  `info_07` varchar(1024) DEFAULT NULL,
-  `info_08` varchar(1024) DEFAULT NULL,
-  `info_09` varchar(1024) DEFAULT NULL,
-  `info_10` varchar(1024) DEFAULT NULL,
-  `info_11` varchar(1024) DEFAULT NULL,
-  `info_12` varchar(1024) DEFAULT NULL,
-  `remark` varchar(1028) DEFAULT NULL,
+  `info_04` varchar(255) DEFAULT NULL,
+  `info_05` varchar(255) DEFAULT NULL,
+  `info_06` varchar(255) DEFAULT NULL,
+  `info_07` varchar(255) DEFAULT NULL,
+  `info_08` varchar(255) DEFAULT NULL,
+  `info_09` varchar(255) DEFAULT NULL,
+  `info_10` varchar(255) DEFAULT NULL,
+  `info_11` varchar(255) DEFAULT NULL,
+  `info_12` varchar(255) DEFAULT NULL,
+  `remark` varchar(255) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
   `ins_at` datetime DEFAULT utc_timestamp(),
   `ins_by` int(11) DEFAULT 1,
   `upd_at` datetime DEFAULT utc_timestamp(),
   `upd_by` int(11) DEFAULT 1,
+  `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 -- Dumping data for table wbc.introduce: ~0 rows (approximately)
-REPLACE INTO `introduce` (`id`, `guid`, `history`, `hierarchy_map`, `info_01`, `info_02`, `info_03`, `info_04`, `info_05`, `info_06`, `info_07`, `info_08`, `info_09`, `info_10`, `info_11`, `info_12`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, '607d9ef3-4ce1-11ef-b622-509a4cb5cc32', NULL, NULL, 'TRUNG TÂM BỒI DƯỠNG NGHIỆP VỤ CẤP NƯỚC', 'Tháng 02/2002, Trung tâm bồi dưỡng cán bộ Thuế (tiền thân của Trường Nghiệp vụ Thuế) được thành lập theo Quyết định số 36/2002/QĐ-BTC ngày 20/03/2002 của Bộ trưởng Bộ Tài chính.', 'Hiện nay, chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trường Nghiệp vụ Thuế được quy định tại Quyết định số 2157/QĐ-BTC ngày 15/11/2018 của Bộ trưởng Bộ Tài chính. Theo đó, Trường Nghiệp vụ Thuế là đơn vị thuộc Tổng cục thuế, Bộ Tài chính, có trụ sở tại Hà Nội và 01 Phân hiệu tại Thừa Thiên - Huế. Trường Nghiệp vụ Thuế có tư cách pháp nhân, con dấu riêng, được mở tài khoản tại Kho bạc Nhà nước và Ngân hàng theo quy định của pháp luật.', 'Quận Tân Bình - TP.HCM', '0909.111.111', 'wbc@hcm.uit.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0', '2024-07-28 13:00:34', 1, '2024-07-28 13:00:34', 1);
+REPLACE INTO `introduce` (`id`, `guid`, `history`, `hierarchy_map`, `info_01`, `info_02`, `info_03`, `info_04`, `info_05`, `info_06`, `info_07`, `info_08`, `info_09`, `info_10`, `info_11`, `info_12`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`, `name`) VALUES
+	(1, '607d9ef3-4ce1-11ef-b622-509a4cb5cc32', NULL, NULL, 'TRUNG TÂM BỒI DƯỠNG NGHIỆP VỤ CẤP NƯỚC', 'Tháng 02/2002, Trung tâm bồi dưỡng cán bộ Thuế (tiền thân của Trường Nghiệp vụ Thuế) được thành lập theo Quyết định số 36/2002/QĐ-BTC ngày 20/03/2002 của Bộ trưởng Bộ Tài chính.', 'Hiện nay, chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trường Nghiệp vụ Thuế được quy định tại Quyết định số 2157/QĐ-BTC ngày 15/11/2018 của Bộ trưởng Bộ Tài chính. Theo đó, Trường Nghiệp vụ Thuế là đơn vị thuộc Tổng cục thuế, Bộ Tài chính, có trụ sở tại Hà Nội và 01 Phân hiệu tại Thừa Thiên - Huế. Trường Nghiệp vụ Thuế có tư cách pháp nhân, con dấu riêng, được mở tài khoản tại Kho bạc Nhà nước và Ngân hàng theo quy định của pháp luật.', 'Quận Tân Bình - TP.HCM', '0909.111.111', 'wbc@hcm.uit.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0', '2024-07-28 13:00:34', 1, '2024-07-28 13:00:34', 1, NULL);
 
 -- Dumping structure for table wbc.invalidated_token
 CREATE TABLE IF NOT EXISTS `invalidated_token` (

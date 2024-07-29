@@ -17,7 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINTS_GET = {"/", "/welcome", "/test01/api01", "/test01/api02"};
+    private final String[] PUBLIC_ENDPOINTS_GET = {"/", "/welcome", "/introduce", "/test01/api01", "/test01/api02"};
 
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
