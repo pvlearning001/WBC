@@ -19,6 +19,10 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_GET = {"/", "/welcome", "/introduce", "/test01/api01", "/test01/api02"};
 
+    private final String[] PUBLIC_ENDPOINTS_POST = {"/users",
+            "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh"
+    };
+
     @Autowired
     private CustomJwtDecoder customJwtDecoder;
 
@@ -26,7 +30,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request ->
                 request
-                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET).permitAll()
+                        .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
+                        .permitAll()
+                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST)
+                        .permitAll()
                         .anyRequest()
                         .authenticated()
 
