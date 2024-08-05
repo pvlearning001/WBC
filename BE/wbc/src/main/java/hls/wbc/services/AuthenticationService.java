@@ -1,4 +1,5 @@
 package hls.wbc.services;
+import hls.wbc.constants.AppContants;
 import hls.wbc.dto.requests.*;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
@@ -130,7 +131,7 @@ public class AuthenticationService {
                 .issuer("hls.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
+                        Instant.now().plus(AppContants.SecuritiesValues.TokenDuration, ChronoUnit.DAYS).toEpochMilli()
                 ))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
@@ -169,7 +170,7 @@ public class AuthenticationService {
     }
 
     private String buildScope(User user){
-        StringJoiner stringJoiner = new StringJoiner(" ");
+        StringJoiner stringJoiner = new StringJoiner(AppContants.StringValues.Space);
 
         if (!CollectionUtils.isEmpty(user.getRoles()))
             user.getRoles().forEach(role -> {

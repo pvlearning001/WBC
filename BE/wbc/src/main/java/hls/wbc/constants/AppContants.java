@@ -15,6 +15,7 @@ public class AppContants {
         public static final String MD5 = "MD5";
         public static  final int AdminId = 1;
         public static  final int UserRoleId = 1;
+        public static final int TokenDuration = 1; //DAY
     }
 
     public static class UtilitiesValues {
