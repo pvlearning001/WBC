@@ -9,7 +9,7 @@ export default function NavbarComponent() {
 <header id="header" className="header d-flex align-items-center fixed-top">
     <div className="container-fluid container-xl position-relative d-flex align-items-center">
         <Link to="/" className="logo d-flex align-items-center me-auto">
-        <h1 className="sitename">{introduceInfo.info01}</h1>
+        <h6 className="sitename">{introduceInfo.info01}</h6>
         </Link>
 
         <nav id="navmenu" className="navmenu">
@@ -20,6 +20,9 @@ export default function NavbarComponent() {
                 <li>
                     <Link to="/contactus">Contact</Link>
                 </li>
+                {/* <li>
+                    <Link to="/testhomepage01">Test Home</Link>
+                </li> */}
             </ul>
             <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>

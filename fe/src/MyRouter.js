@@ -7,9 +7,11 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 
+import TestHomePage01 from "./pages/TestHomePage01";
 import TestPage01 from './pages/TestPage01';
 import TestPage02 from './pages/TestPage02';
 import TestPage03 from './pages/TestPage03';
+
 
 class MyRouter extends Component {
   render() {
@@ -24,6 +26,7 @@ class MyRouter extends Component {
             <Route path="/page01" element={<TestPage01 />} />
             <Route path="/page02" element={<TestPage02 />} />
             <Route path="/page03" element={<TestPage03 />} />
+            <Route path="/testhomepage01" element={<TestHomePage01 />} />
           </Route>          
         </Routes>
       </Router>

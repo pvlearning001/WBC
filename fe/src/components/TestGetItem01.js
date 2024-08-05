@@ -12,11 +12,15 @@ class TestGetItem01 extends Component {
     };
 
     render() {
+        const mystyle01 = {
+            color: "red",
+        };
+
         return(
         <div>
             <hr />
             <h2>This is TestGetItem01</h2>
-            <h3>{ this.state.message }</h3>
+            <h3 style={mystyle01}>{ this.state.message }</h3>
         </div>
         )
   };

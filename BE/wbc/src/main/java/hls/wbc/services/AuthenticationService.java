@@ -135,6 +135,9 @@ public class AuthenticationService {
                 ))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
+                .claim("customClaim01", "Custom Claim01")
+                .claim("customClaim02", "Custom Claim02")
+                .claim("customClaim03", "Custom Claim03")
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());

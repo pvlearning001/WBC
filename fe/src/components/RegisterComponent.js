@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
-import '../assets/css/page.css';
+import React from 'react';
 
-class RegisterComponent extends Component {
-    render() {
-        return(
-
+export default function RegisterComponent() {
+    const boxheader = {
+        marginTop: 40,
+    };
+    
+    return(
 <div className="container">
     <div className="row">
         <div className="col-sm-12 col-md-12 col-lg-12">
             <div className="card login-content shadow-lg border-0">
-                <div className="card-body text-center">
+                <div style={boxheader} className="card-body text-center">
                     <h3 className="text-logo">Register</h3>
                     <br />
                     <input className="form-control border-0" type="" name="fullName" placeholder="Ho va Ten" />
@@ -27,7 +28,5 @@ class RegisterComponent extends Component {
         </div>
     </div>
 </div>
-        )
-      };
-    };
-  export default RegisterComponent;
+    )
+}
