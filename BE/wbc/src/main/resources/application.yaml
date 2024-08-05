@@ -9,14 +9,17 @@ spring:
     password: b123456?B
   jpa:
     show-sql: true
-
-
     properties:
       javax:
         persistence:
           schema-generation:
             database:
               action: update
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
 jwt:
   signerKey: "1TjXchw5FloESb63Kc+DFhTARvpWL4jUGCwfGWxuG5SIf/1y/LgJxHnMqaF6A/ij"
 

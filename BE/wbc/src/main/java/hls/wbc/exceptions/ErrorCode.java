@@ -16,7 +16,10 @@ public enum ErrorCode  {
     UNAUTHORIZED(1007, "You do not have permission", HttpStatus.FORBIDDEN),
     INVALID_DOB(1008, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
     NO_ROLE(1009, "Role is not exists", HttpStatus.BAD_REQUEST),
-    NO_INTRODUCE(1010, "Introduce is not exists", HttpStatus.BAD_REQUEST)
+    NO_INTRODUCE(1010, "Introduce is not exists", HttpStatus.BAD_REQUEST),
+    FILE_OVER_SIZE(1011, "File size is over", HttpStatus.BAD_REQUEST),
+    INVALID_FILE_TYPE(1012, "File type is invalid", HttpStatus.BAD_REQUEST),
+    NOT_IMAGE_FILE(1013, "File is not image", HttpStatus.BAD_REQUEST)
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

@@ -5,9 +5,10 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.time.LocalDate;
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@FieldDefaults(level = AccessLevel.PROTECTED)
 @MappedSuperclass
 public class BaseResponse {
     int id;

@@ -12,7 +12,6 @@ import java.util.Set;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
-
 @Table(name = "introduce")
 public class Introduce extends BaseEntity {
     @Column(name = "name")

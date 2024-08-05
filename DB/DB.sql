@@ -73,6 +73,35 @@ CREATE TABLE IF NOT EXISTS `exam` (
 
 -- Dumping data for table wbc.exam: ~0 rows (approximately)
 
+-- Dumping structure for table wbc.file_upload
+CREATE TABLE IF NOT EXISTS `file_upload` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `guid` varchar(255) DEFAULT uuid(),
+  `name` varchar(255) DEFAULT NULL,
+  `path` varchar(255) DEFAULT NULL,
+  `ext_name` varchar(255) DEFAULT NULL,
+  `unique_name` varchar(255) DEFAULT NULL,
+  `content_type` varchar(255) DEFAULT NULL,
+  `hash_content` varchar(255) DEFAULT NULL,
+  `descriptions` varchar(255) DEFAULT NULL,
+  `remark` varchar(255) DEFAULT NULL,
+  `is_deleted` bit(1) NOT NULL DEFAULT b'0',
+  `ins_at` datetime DEFAULT utc_timestamp(),
+  `ins_by` int(11) DEFAULT 1,
+  `upd_at` datetime DEFAULT utc_timestamp(),
+  `upd_by` int(11) DEFAULT 1,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+
+-- Dumping data for table wbc.file_upload: ~6 rows (approximately)
+REPLACE INTO `file_upload` (`id`, `guid`, `name`, `path`, `ext_name`, `unique_name`, `content_type`, `hash_content`, `descriptions`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
+	(1, NULL, 'PhuongVu02.png', 'uploads\\images\\users', 'png', '7ae60592-5028-418c-bd23-e2a246565696.png', 'image/png', 'D41D8CD98F00B204E9800998ECF8427E', NULL, NULL, b'0', NULL, 0, NULL, 0),
+	(2, NULL, 'FoxImage02.jpg', 'uploads\\images\\users', 'jpg', '7ae60592-5028-418c-bd23-e2a246565696.png.jpg', 'image/jpeg', 'D41D8CD98F00B204E9800998ECF8427E', NULL, NULL, b'0', NULL, 0, NULL, 0),
+	(3, NULL, 'tin-nhE1BAAFn-blogtin-2.jpg', 'uploads\\images\\users', 'jpg', '7ae60592-5028-418c-bd23-e2a246565696.png.jpg', 'image/jpeg', 'D41D8CD98F00B204E9800998ECF8427E', NULL, NULL, b'0', NULL, 0, NULL, 0),
+	(4, NULL, 'PhuongVu02.png', 'uploads\\images\\users', 'png', '2e8da0b5-ac8e-49d2-93f2-21c666e6f428.png', 'image/png', 'D41D8CD98F00B204E9800998ECF8427E', NULL, '', b'0', '2024-08-05 07:10:37', 1, '2024-08-05 07:10:37', 1),
+	(5, NULL, 'FoxImage02.jpg', 'uploads\\images\\users', 'jpg', '2e8da0b5-ac8e-49d2-93f2-21c666e6f428.png.jpg', 'image/jpeg', 'D41D8CD98F00B204E9800998ECF8427E', NULL, '', b'0', '2024-08-05 07:10:37', 1, '2024-08-05 07:10:37', 1),
+	(6, NULL, 'tin-nhE1BAAFn-blogtin-2.jpg', 'uploads\\images\\users', 'jpg', '2e8da0b5-ac8e-49d2-93f2-21c666e6f428.png.jpg', 'image/jpeg', 'D41D8CD98F00B204E9800998ECF8427E', NULL, '', b'0', '2024-08-05 07:10:37', 1, '2024-08-05 07:10:37', 1);
+
 -- Dumping structure for table wbc.introduce
 CREATE TABLE IF NOT EXISTS `introduce` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
