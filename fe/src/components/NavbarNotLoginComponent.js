@@ -4,11 +4,11 @@ import '../assets/css/main.css';
 import * as constants from "../jscode/constants";
 import { IntroduceContext } from "../ParentPage";
 
-export default function NavbarNotLoginComponent() { 
+export default function NavbarNotLoginComponent() {
     const introduceInfo = useContext(IntroduceContext);   
     return(  
 <header id="header" className="header d-flex align-items-center fixed-top">
-    <div className="container-fluid container-xl position-relative d-flex align-items-center">
+    <div  className="container-fluid container-xl position-relative d-flex align-items-center">
         <Link to={constants.page_home} className="logo d-flex align-items-center me-auto">
         <h6 className="sitename">{introduceInfo.info01}</h6>
         </Link>

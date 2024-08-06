@@ -15,8 +15,8 @@ export default function LoginComponent() {
 
     const [un, setUn] = useState(""); 
     const [pw, setPw] = useState("");
-    let navigate = useNavigate();
-    let to = constants.page_home; 
+    const navigate = useNavigate();
+
     const login = async () => {
         if ((un !== "") 
             && (pw !== "")){
@@ -33,13 +33,13 @@ export default function LoginComponent() {
                     localStorage.setItem(constants.token_string, res.data.result.token);
                     localStorage.setItem(constants.token_userName, decoded.sub);
                     localStorage.setItem(constants.token_role, decoded.scope);
-                    localStorage.setItem(constants.token_expTime, decoded.exp);                   
-                    navigate(to, { replace: true });
+                    localStorage.setItem(constants.token_expTime, decoded.exp);
+                    navigate(constants.page_home); 
                 }
             })
             .catch(error => console.log("Error: ", error));
         }
-      };
+    };
     useEffect(() => { login();}, []);
 
     return(
@@ -57,6 +57,7 @@ export default function LoginComponent() {
                     <input className="form-control border-0" type="password" name="password" placeholder="Nhap vao Password" onChange={(e) => setPw(e.target.value)} />
                     <br />
                     <button className="btn btn-primary btn-sm border-0 btn-login" type="submit" name="submit" onClick={login}>Sign In</button>
+                    
                     <div className="nomember">
                         <p className="text-center">
                             Not a member?

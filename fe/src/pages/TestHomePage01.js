@@ -1,19 +1,20 @@
-import React, { Component } from 'react';
+import React from 'react';
+import CheckLoginedComponent from '../components/CheckLoginedComponent';
+import NavbarComponent from '../components/NavbarComponent';
 import TestGetItem01 from '../components/TestGetItem01';
 import TestGetItemList01 from '../components/TestGetItemList01';
 
 
-class TestHomePage01 extends Component {
-    render() {
-        return(
-          <div className="App">
-            <h1>Hello World</h1>
-            <TestGetItem01 />
-            <TestGetItemList01 />
-          </div>
-        )
-      };
-    };
-  export default TestHomePage01;
+export default function TestHomePage01() {
+    return(
+      <div className="App">
+        <CheckLoginedComponent />
+        <NavbarComponent />
+        <h1>Hello World</h1>
+        <TestGetItem01 />
+        <TestGetItemList01 />
+      </div>
+    )
+}
 
 
