@@ -39,3 +39,16 @@ userList.forEach((u) -> {
 });
 
 https://stackoverflow.com/questions/77209264/how-to-build-a-react-application-with-multiple-html-files#:~:text=In%20React%20you%20only%20need,html%20file.&text=In%20order%20to%20make%20multiple,called%20react%2Drouter%2Ddom%20.&text=src%2Findex.js-,import%20React%2C%20%7B%20StrictMode%20%7D%20from%20%22react%22%3B%20import,%3B%20import%20%22.%2Fstyles.
+
+https://niemvuilaptrinh.medium.com/19-examples-bootstrap-5-for-website-32c8023e195e
+
+/*
+import { jwtDecode } from "jwt-decode"
+
+console.log(res.data.result.token);
+console.log(isLogined);
+const decoded = jwtDecode(res.data.result.token);
+console.log(decoded);
+console.log(`IAT: ${new Date(decoded.iat * 1000)}`);
+console.log(`EXP: ${new Date(decoded.exp * 1000)}`);
+*/

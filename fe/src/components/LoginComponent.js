@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../assets/css/page.css';
+import * as constants from "../jscode/constants";
 /*********************************
  * https://github.com/auth0/jwt-decode
  */
@@ -14,29 +15,26 @@ export default function LoginComponent() {
 
     const [un, setUn] = useState(""); 
     const [pw, setPw] = useState("");
-    const [isLogined, setIsLogined] = useState(false); 
-
+    let navigate = useNavigate();
+    let to = constants.page_home; 
     const login = async () => {
         if ((un !== "") 
             && (pw !== "")){
-            console.log(un);
-            console.log(pw);
             const loginUser = {
                 userName: un,
                 password: pw
             };
-
+            
             await axios.post('/auth/token', loginUser)
-            .then(res => {
-                console.log(res.data.code);
+            .then(res => {                
                 if (res.data.code === 1000){
-                    setIsLogined(true);
-                    console.log(res.data.result.token);
-                    console.log(isLogined);
-                    const decoded = jwtDecode(res.data.result.token);
-                    console.log(decoded);
-                    console.log(`IAT: ${new Date(decoded.iat * 1000)}`);
-                    console.log(`EXP: ${new Date(decoded.exp * 1000)}`);
+                    const decoded = jwtDecode(res.data.result.token);                    
+                    localStorage.setItem(constants.token_isAuthenticated, true);
+                    localStorage.setItem(constants.token_string, res.data.result.token);
+                    localStorage.setItem(constants.token_userName, decoded.sub);
+                    localStorage.setItem(constants.token_role, decoded.scope);
+                    localStorage.setItem(constants.token_expTime, decoded.exp);                   
+                    navigate(to, { replace: true });
                 }
             })
             .catch(error => console.log("Error: ", error));
@@ -45,7 +43,6 @@ export default function LoginComponent() {
     useEffect(() => { login();}, []);
 
     return(
-
 <div className="container">
     <div className="row">
         <div className="col-sm-12 col-md-12 col-lg-12">
@@ -75,3 +72,4 @@ export default function LoginComponent() {
 </div>
     )
 }
+
