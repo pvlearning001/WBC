@@ -61,7 +61,7 @@ public class ApplicationInitConfig {
                 User user = User.builder()
                         .guid(java.util.UUID.randomUUID().toString())
                         .userName(userName)
-                        .password(passwordEncoder.encode("P@ssword1"))
+                        .password(passwordEncoder.encode("pw1"))
                         .roles(roleList)
                         .build();
                 user.setTraceNew(null, remark);

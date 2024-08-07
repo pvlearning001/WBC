@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `introduce` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.introduce: ~1 rows (approximately)
+-- Dumping data for table wbc.introduce: ~0 rows (approximately)
 REPLACE INTO `introduce` (`id`, `guid`, `history`, `hierarchy_map`, `info_01`, `info_02`, `info_03`, `info_04`, `info_05`, `info_06`, `info_07`, `info_08`, `info_09`, `info_10`, `info_11`, `info_12`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`, `name`) VALUES
 	(1, '607d9ef3-4ce1-11ef-b622-509a4cb5cc32', NULL, NULL, 'TRUNG TÂM BỒI DƯỠNG NGHIỆP VỤ CẤP NƯỚC', 'Tháng 02/2002, Trung tâm bồi dưỡng cán bộ Thuế (tiền thân của Trường Nghiệp vụ Thuế) được thành lập theo Quyết định số 36/2002/QĐ-BTC ngày 20/03/2002 của Bộ trưởng Bộ Tài chính.', 'Hiện nay, chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trường Nghiệp vụ Thuế được quy định tại Quyết định số 2157/QĐ-BTC ngày 15/11/2018 của Bộ trưởng Bộ Tài chính. Theo đó, Trường Nghiệp vụ Thuế là đơn vị thuộc Tổng cục thuế, Bộ Tài chính, có trụ sở tại Hà Nội và 01 Phân hiệu tại Thừa Thiên - Huế. Trường Nghiệp vụ Thuế có tư cách pháp nhân, con dấu riêng, được mở tài khoản tại Kho bạc Nhà nước và Ngân hàng theo quy định của pháp luật.', 'Quận Tân Bình - TP.HCM', '0909.111.111', 'wbc@hcm.uit.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0', '2024-07-28 13:00:34', 1, '2024-07-28 13:00:34', 1, NULL);
 
@@ -320,8 +320,8 @@ CREATE TABLE IF NOT EXISTS `role` (
 
 -- Dumping data for table wbc.role: ~2 rows (approximately)
 REPLACE INTO `role` (`id`, `guid`, `name`, `name_lower_cases`, `descriptions`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, NULL, 'User', 'user', 'User Role', 'Init User Role', b'0', '2024-07-24 08:03:50.000000', 1, '2024-07-24 08:03:50.000000', 1),
-	(2, NULL, 'Admin', 'admin', 'Admin Role', 'Init Admin Role', b'0', '2024-07-24 08:03:50.000000', 1, '2024-07-24 08:03:50.000000', 1);
+	(1, NULL, 'User', 'user', 'User Role', 'Init User Role', b'0', '2024-08-07 02:13:17.000000', 1, '2024-08-07 02:13:17.000000', 1),
+	(2, NULL, 'Admin', 'admin', 'Admin Role', 'Init Admin Role', b'0', '2024-08-07 02:13:17.000000', 1, '2024-08-07 02:13:17.000000', 1);
 
 -- Dumping structure for table wbc.role_permission
 CREATE TABLE IF NOT EXISTS `role_permission` (
@@ -362,19 +362,19 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 -- Dumping data for table wbc.user: ~13 rows (approximately)
 REPLACE INTO `user` (`id`, `guid`, `user_name`, `password`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, '65db0682-94aa-4d9f-9b27-631d106ca3c7', 'admin', '$2a$10$73Rlz.7ybm3CblPZaM1j8eNktqjHTXluhLwkqd6yAqg6DY9WSZVe.', 'Init User', b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
-	(2, '43af90ca-4993-11ef-aa02-509a4cb5cc32', 'user02', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
-	(3, '43c04c35-4993-11ef-aa02-509a4cb5cc32', 'user03', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
-	(4, '43cfc20b-4993-11ef-aa02-509a4cb5cc32', 'user04', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
-	(5, '43deb532-4993-11ef-aa02-509a4cb5cc32', 'user05', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:51.000000', 1, '2024-07-24 08:03:51.000000', 1),
-	(6, '43ee3579-4993-11ef-aa02-509a4cb5cc32', 'user06', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
-	(7, '43fd1461-4993-11ef-aa02-509a4cb5cc32', 'user07', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
-	(8, '440ccaec-4993-11ef-aa02-509a4cb5cc32', 'user08', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
-	(9, '441b5926-4993-11ef-aa02-509a4cb5cc32', 'user09', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
-	(10, '443f0bca-4993-11ef-aa02-509a4cb5cc32', 'user10', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
-	(11, '444b14e1-4993-11ef-aa02-509a4cb5cc32', 'user11', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
-	(12, '4459852f-4993-11ef-aa02-509a4cb5cc32', 'user12', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1),
-	(13, '4465e9ed-4993-11ef-aa02-509a4cb5cc32', 'user13', '$2a$10$t2pvj2mXHsQFlGRnIRX9H.e5YK25xnbP8H15NhSlGx6d3OXMYZFgS', NULL, b'0', '2024-07-24 08:03:52.000000', 1, '2024-07-24 08:03:52.000000', 1);
+	(1, '38b704b3-b8c6-4354-a5ad-79da0af592e7', 'admin', '$2a$10$Wb.WmNJWx3Ea7rsoC3foluNX/ZnLWTfe0KofMjnCiz1Dn01LzNeeK', 'Init User', b'0', '2024-08-07 02:13:18.000000', 1, '2024-08-07 02:13:18.000000', 1),
+	(2, '9d5a6726-5462-11ef-9a2e-509a4cb5cc32', 'user02', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:19.000000', 1, '2024-08-07 02:13:19.000000', 1),
+	(3, '9d829e55-5462-11ef-9a2e-509a4cb5cc32', 'user03', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:19.000000', 1, '2024-08-07 02:13:19.000000', 1),
+	(4, '9d847cb6-5462-11ef-9a2e-509a4cb5cc32', 'user04', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:19.000000', 1, '2024-08-07 02:13:19.000000', 1),
+	(5, '9d86504b-5462-11ef-9a2e-509a4cb5cc32', 'user05', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:19.000000', 1, '2024-08-07 02:13:19.000000', 1),
+	(6, '9d881ef4-5462-11ef-9a2e-509a4cb5cc32', 'user06', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:19.000000', 1, '2024-08-07 02:13:19.000000', 1),
+	(7, '9d89eca2-5462-11ef-9a2e-509a4cb5cc32', 'user07', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:19.000000', 1, '2024-08-07 02:13:19.000000', 1),
+	(8, '9dbc8c41-5462-11ef-9a2e-509a4cb5cc32', 'user08', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:20.000000', 1, '2024-08-07 02:13:20.000000', 1),
+	(9, '9dbef992-5462-11ef-9a2e-509a4cb5cc32', 'user09', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:20.000000', 1, '2024-08-07 02:13:20.000000', 1),
+	(10, '9dc103f2-5462-11ef-9a2e-509a4cb5cc32', 'user10', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:20.000000', 1, '2024-08-07 02:13:20.000000', 1),
+	(11, '9dc2f7d5-5462-11ef-9a2e-509a4cb5cc32', 'user11', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:20.000000', 1, '2024-08-07 02:13:20.000000', 1),
+	(12, '9dc5230b-5462-11ef-9a2e-509a4cb5cc32', 'user12', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:20.000000', 1, '2024-08-07 02:13:20.000000', 1),
+	(13, '9dc70cbc-5462-11ef-9a2e-509a4cb5cc32', 'user13', '$2a$10$pC646jrlWQHBdYDKFc/qBu96SWhDCtE7QrmrmEFgz8msyExMpAA16', NULL, b'0', '2024-08-07 02:13:20.000000', 1, '2024-08-07 02:13:20.000000', 1);
 
 -- Dumping structure for table wbc.user_ext
 CREATE TABLE IF NOT EXISTS `user_ext` (
@@ -398,9 +398,9 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_ext: ~1 rows (approximately)
+-- Dumping data for table wbc.user_ext: ~0 rows (approximately)
 REPLACE INTO `user_ext` (`id`, `guid`, `user_id`, `f_name`, `m_name`, `l_name`, `email`, `addr`, `phone01`, `phone02`, `phone03`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, NULL, 1, 'WBC', NULL, 'Admin', 'admin@wbc.com', NULL, '0903.123456', NULL, NULL, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1);
+	(1, NULL, 1, 'WBC', NULL, 'Admin', 'admin@wbc.com', NULL, '0903.123456', NULL, NULL, NULL, b'0', '2024-08-07 02:13:18', 1, '2024-08-07 02:13:18', 1);
 
 -- Dumping structure for table wbc.user_role
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -423,20 +423,20 @@ CREATE TABLE IF NOT EXISTS `user_role` (
 
 -- Dumping data for table wbc.user_role: ~14 rows (approximately)
 REPLACE INTO `user_role` (`id`, `guid`, `user_id`, `role_id`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, NULL, 1, 1, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
-	(2, NULL, 1, 2, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
-	(3, NULL, 2, 1, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
-	(4, NULL, 3, 1, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
-	(5, NULL, 4, 1, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
-	(6, NULL, 5, 1, NULL, b'0', '2024-07-24 08:03:51', 1, '2024-07-24 08:03:51', 1),
-	(7, NULL, 6, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
-	(8, NULL, 7, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
-	(9, NULL, 8, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
-	(10, NULL, 9, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
-	(11, NULL, 10, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
-	(12, NULL, 11, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
-	(13, NULL, 12, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1),
-	(14, NULL, 13, 1, NULL, b'0', '2024-07-24 08:03:52', 1, '2024-07-24 08:03:52', 1);
+	(1, NULL, 1, 2, NULL, b'0', '2024-08-07 02:13:18', 1, '2024-08-07 02:13:18', 1),
+	(2, NULL, 1, 1, NULL, b'0', '2024-08-07 02:13:18', 1, '2024-08-07 02:13:18', 1),
+	(3, NULL, 2, 1, NULL, b'0', '2024-08-07 02:13:19', 1, '2024-08-07 02:13:19', 1),
+	(4, NULL, 3, 1, NULL, b'0', '2024-08-07 02:13:19', 1, '2024-08-07 02:13:19', 1),
+	(5, NULL, 4, 1, NULL, b'0', '2024-08-07 02:13:19', 1, '2024-08-07 02:13:19', 1),
+	(6, NULL, 5, 1, NULL, b'0', '2024-08-07 02:13:19', 1, '2024-08-07 02:13:19', 1),
+	(7, NULL, 6, 1, NULL, b'0', '2024-08-07 02:13:19', 1, '2024-08-07 02:13:19', 1),
+	(8, NULL, 7, 1, NULL, b'0', '2024-08-07 02:13:20', 1, '2024-08-07 02:13:20', 1),
+	(9, NULL, 8, 1, NULL, b'0', '2024-08-07 02:13:20', 1, '2024-08-07 02:13:20', 1),
+	(10, NULL, 9, 1, NULL, b'0', '2024-08-07 02:13:20', 1, '2024-08-07 02:13:20', 1),
+	(11, NULL, 10, 1, NULL, b'0', '2024-08-07 02:13:20', 1, '2024-08-07 02:13:20', 1),
+	(12, NULL, 11, 1, NULL, b'0', '2024-08-07 02:13:20', 1, '2024-08-07 02:13:20', 1),
+	(13, NULL, 12, 1, NULL, b'0', '2024-08-07 02:13:20', 1, '2024-08-07 02:13:20', 1),
+	(14, NULL, 13, 1, NULL, b'0', '2024-08-07 02:13:20', 1, '2024-08-07 02:13:20', 1);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
