@@ -1,4 +1,5 @@
 package hls.wbc.dto.responses;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -13,5 +14,10 @@ import java.util.Set;
 public class UserResponse {
     String id;
     String userName;
+    String firstName;
+    String middleName;
+    String lastName;
+    String email;
+    String phone;
     Set<RoleResponse> roles;
 }

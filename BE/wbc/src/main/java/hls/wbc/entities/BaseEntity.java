@@ -7,6 +7,7 @@ import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -50,6 +51,7 @@ public class BaseEntity {
     }
 
     private void setTraceAddNew(Integer userId, String remark){
+        guid = UUID.randomUUID().toString();
         isDeleted = false;
         this.remark = remark;
         insAt = Instant.now();
@@ -59,8 +61,15 @@ public class BaseEntity {
 
     public void setTraceUpdate(Integer userId, String remark){
         this.remark = remark;
-        updAt = Instant.now();
         userId = getUserId(userId);
+        updAt = Instant.now();
+        updBy = userId;
+    }
+
+    public void updateTraceUserAddNew(Integer userId, String remark){
+        this.remark = remark;
+        userId = getUserId(userId);
+        insBy = userId;
         updBy = userId;
     }
 

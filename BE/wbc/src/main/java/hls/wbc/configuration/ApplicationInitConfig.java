@@ -92,7 +92,7 @@ public class ApplicationInitConfig {
                     : AppContants.SecuritiesValues.UserRoleId;
             String roleIdString = String.valueOf(roleId);
             String pw = passwordEncoder.encode("pw1");
-            for (int i = 1; i < 13; i++) {
+            for (int i = 1; i < 15; i++) {
                 int maxId = userRepos.customGetMaxId();
                 maxId = maxId + 1;
                 String userName = "user" +

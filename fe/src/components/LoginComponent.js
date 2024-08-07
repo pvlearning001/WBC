@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../assets/css/page.css';
 import * as constants from "../jscode/constants";
+import { ErrMesComponent } from './ErrorMessageComponent';
 /*********************************
  * https://github.com/auth0/jwt-decode
  */
@@ -13,11 +14,13 @@ export default function LoginComponent() {
         marginTop: 40,
     };
 
-    const [un, setUn] = useState(""); 
-    const [pw, setPw] = useState("");
+    const [un, setUn] = useState(constants.string_empty); 
+    const [pw, setPw] = useState(constants.string_empty);
+    const [err, setErr] = useState(constants.string_empty);
     const navigate = useNavigate();
 
     const login = async () => {
+        setErr(constants.string_empty);
         if ((un !== "") 
             && (pw !== "")){
             const loginUser = {
@@ -34,10 +37,18 @@ export default function LoginComponent() {
                     localStorage.setItem(constants.token_userName, decoded.sub);
                     localStorage.setItem(constants.token_role, decoded.scope);
                     localStorage.setItem(constants.token_expTime, decoded.exp);
+                    
                     navigate(constants.page_home); 
                 }
+                else{
+                    setErr(res.data.message);
+                    console.log("Error: ", res.data.message);
+                }
             })
-            .catch(error => console.log("Error: ", error));
+            .catch(error => {
+                console.log("Error: ", error.response.data.message);
+                setErr(error.response.data.message);
+            });
         }
     };
     useEffect(() => { login();}, []);
@@ -57,14 +68,16 @@ export default function LoginComponent() {
                     <input className="form-control border-0" type="password" name="password" placeholder="Nhap vao Password" onChange={(e) => setPw(e.target.value)} />
                     <br />
                     <button className="btn btn-primary btn-sm border-0 btn-login" type="submit" name="submit" onClick={login}>Sign In</button>
+                    <br />
+                    <br />
+                    <ErrMesComponent show="true" text={err} />
                     
                     <div className="nomember">
                         <p className="text-center">
                             Not a member?
                             <Link to="/register">Create an Account</Link>
                         </p>
-                    </div>
-                                           
+                    </div>                                           
                 </div>
             </div>
 
