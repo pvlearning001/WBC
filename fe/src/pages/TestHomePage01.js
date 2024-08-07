@@ -7,7 +7,8 @@ import TestGetItemList01 from '../components/TestGetItemList01';
 
 export default function TestHomePage01() {
     return(
-      <div className="App">
+      <div>
+        <NavbarComponent />
         <CheckLoginedComponent />
         <NavbarComponent />
         <h1>Hello World</h1>
