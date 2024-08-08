@@ -81,7 +81,7 @@ public class ApplicationInitConfig {
         }
     }
 
-    private void initUserList(UserRepository userRepos, RoleRepository roleRepos){
+    private void initUserList(UserRepository userRepos, RoleRepository roleRepos, UserExtRepository userExtRepos){
         Optional<User> firstUser = userRepos.findByUserName("user02");
         if (firstUser.isEmpty()) {
             Set<Role> roleList = roleRepos.findByName("User")
@@ -95,15 +95,29 @@ public class ApplicationInitConfig {
             for (int i = 1; i < 15; i++) {
                 int maxId = userRepos.customGetMaxId();
                 maxId = maxId + 1;
-                String userName = "user" +
-                        ((maxId < 10)
-                                ? "0" + String.valueOf(maxId)
-                                : String.valueOf(maxId));
+                String nameIndex = ((maxId < 10)
+                        ? "0" + String.valueOf(maxId)
+                        : String.valueOf(maxId));
+
+                String userName = "user" + nameIndex;
                 String sql = "INSERT INTO User(user_name, password) VALUES('" + userName + "', '" + pw + "')";
                 userRepos.customExecQuery(sql);
                 maxId = userRepos.customGetMaxId();
                 sql = "INSERT INTO User_Role(user_id, role_id) VALUES(" + String.valueOf(maxId) + ", " + roleIdString + ")";
                 userRepos.customExecQuery(sql);
+
+                String lName = "User" + nameIndex;
+                String email = userName + "@wbc.com";
+
+                UserExt userExt = UserExt.builder()
+                        .userId(maxId)
+                        .fName("WBC")
+                        .lName(lName)
+                        .email(email)
+                        .phone01("0903.111111")
+                        .build();
+                userExt.setTraceNew(null, null);
+                userExtRepos.save(userExt);
             }
             log.info("init user list");
         }
@@ -123,7 +137,7 @@ public class ApplicationInitConfig {
                 log.info("Admin user is exists");
             }
 
-            initUserList(userRepos, roleRepos);
+            initUserList(userRepos, roleRepos, userExtRepos);
         };
     }
 }

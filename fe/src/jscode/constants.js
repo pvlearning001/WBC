@@ -38,6 +38,6 @@ export const linkText_page02 = "Page02";
 export const linkText_page03 = "Page03";
 export const linkText_testhomepage01 = "Test Page";
 
+export const page_list_public = [page_home, page_login, page_register, page_contactus];
 export const page_list_user = [page_page01, page_page02, page_page03];
-
 export const page_list_admin = [page_page01, page_page02, page_page03, page_testhomepage01];

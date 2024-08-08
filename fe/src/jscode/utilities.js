@@ -84,7 +84,9 @@ export function isAllowControl(rolesControl){
 
 };
 
-export function isAllowPage(pagePath){    
+export function isAllowPage(pagePath){
+    if (constants.page_list_public.indexOf(pagePath) > -1) 
+        return true;   
     const roleString = localStorage.getItem(constants.token_role);
     const roleArray = roleString.split(constants.string_space);
     let result = false;

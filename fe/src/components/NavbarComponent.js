@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect } from "react";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../assets/css/main.css';
 import * as constants from "../jscode/constants";
 import * as utils from "../jscode/utilities";
@@ -9,7 +9,19 @@ import { NavbarItemComponent } from "./NavbarItemComponent";
 
 export default function NavbarComponent() {
     const introduceInfo = useContext(IntroduceContext); 
-    const isLogined = utils.isLogined();  
+    const isLogined = utils.isLogined(); 
+    const location = useLocation();
+    const navigate = useNavigate(); 
+
+    const checkAllowPage = () => {
+        let isAllow = utils.isAllowPage(location.pathname);
+        if (!isAllow) {            
+            navigate(constants.page_home);
+        }                 
+    };
+
+    useEffect(() => { checkAllowPage();}, []);
+
     return(  
 <header id="header" className="header d-flex align-items-center fixed-top">
     <div  className="container-fluid container-xl position-relative d-flex align-items-center">
