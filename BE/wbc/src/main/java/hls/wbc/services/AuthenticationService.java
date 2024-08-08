@@ -12,9 +12,11 @@ import hls.wbc.dto.responses.AuthenticationResponse;
 import hls.wbc.dto.responses.IntrospectResponse;
 import hls.wbc.entities.InvalidatedToken;
 import hls.wbc.entities.User;
+import hls.wbc.entities.UserExt;
 import hls.wbc.exceptions.AppException;
 import hls.wbc.exceptions.ErrorCode;
 import hls.wbc.repositories.InvalidatedTokenRepository;
+import hls.wbc.repositories.UserExtRepository;
 import hls.wbc.repositories.UserRepository;
 import hls.wbc.utilities.SecuritiesUtils;
 import lombok.AccessLevel;
@@ -41,6 +43,7 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
     UserRepository userRepository;
+    UserExtRepository userExtRepository;
     InvalidatedTokenRepository invalidatedTokenRepository;
 
     @NonFinal
@@ -135,9 +138,8 @@ public class AuthenticationService {
                 ))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
-                .claim("customClaim01", "Custom Claim01")
-                .claim("customClaim02", "Custom Claim02")
-                .claim("customClaim03", "Custom Claim03")
+                .claim("fullName", buildFullname(user))
+                .claim("userId", user.getId())
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());
@@ -183,6 +185,20 @@ public class AuthenticationService {
                             .forEach(permission -> stringJoiner.add(permission.getName()));
             });
 
+        return stringJoiner.toString();
+    }
+
+    private String buildFullname(User user){
+        StringJoiner stringJoiner = new StringJoiner(AppContants.StringValues.Space);
+        UserExt userExt = userExtRepository.findByUserId(user.getId());
+        if (userExt != null){
+            if (userExt.getFName() != null)
+                stringJoiner.add(userExt.getFName());
+            if (userExt.getMName() != null)
+                stringJoiner.add(userExt.getMName());
+            if (userExt.getLName() != null)
+                stringJoiner.add(userExt.getLName());
+        }
         return stringJoiner.toString();
     }
 

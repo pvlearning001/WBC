@@ -8,9 +8,13 @@ export default function TestHomePage01() {
     return(
       <div>
         <NavbarComponent />
-        <h1>Hello World</h1>
-        <TestGetItem01 />
-        <TestGetItemList01 />
+        <div className="container-fluid">
+          <div className="row">
+            <h1>Hello World</h1>
+            <TestGetItem01 />
+            <TestGetItemList01 />
+          </div>
+        </div>
       </div>
     )
 }

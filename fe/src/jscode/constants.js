@@ -9,6 +9,8 @@ export const token_string = "token";
 export const token_userName = "userName";
 export const token_role = "role";
 export const token_expTime = "expTime";
+export const token_fullName = "fullName";
+export const token_userId = "userId";
 
 export const role_user = "ROLE_User";
 export const role_admin = "ROLE_Admin";

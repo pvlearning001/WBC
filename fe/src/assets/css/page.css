@@ -9,12 +9,9 @@ body {
   max-width: 450px;
   width: 100%;
   height: 550px;
-  z-index: 1;
   position: absolute;
-  top: 50%;
   left: 50%;
   margin-left: -200px;
-  margin-top: -286px;
   border-radius: 8px;
   background: #2f3242;
 }
@@ -30,7 +27,6 @@ body {
   font-weight: bold;
   font-size: 32px;
   color: white;
-  margin-top: 50px;
 }
 
 .form-control {
@@ -104,19 +100,16 @@ body {
   max-width: 650px;
   width: 100%;
   height: 650px;
-  z-index: 0;
   position: absolute;
-  top: 50%;
   left: 50%;
   margin-left: -300px;
-  margin-top: -286px;
   border-radius: 8px;
   background: #2f3242;
 }
 
 .register-form-control {
   width: 30rem;
-  height: 3rem;
+  height: 2.2rem;
   left: 65px;
   position: relative;
   border-radius: 5px;

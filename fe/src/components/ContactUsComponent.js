@@ -6,8 +6,7 @@ export default function HomeMainComponent() {
   const introduceInfo = useContext(IntroduceContext); 
 
   return (
-    <main className="main">
-    <section id="hero" className="hero section dark-background">
+    <main className="main hero section dark-background">
       <div className="container">
         <div className="row gy-4">
           <div className="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-top">
@@ -19,7 +18,6 @@ export default function HomeMainComponent() {
           </div>
         </div>
       </div>
-    </section>
-  </main>
+    </main>
   )
 }

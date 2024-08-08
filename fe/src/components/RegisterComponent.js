@@ -7,10 +7,6 @@ import { ErrMesComponent } from './ErrorMessageComponent';
 
 export default function RegisterComponent() {
 
-    const boxheader = {
-        marginTop: 40
-    };
-
     const [fullName, setFullName] = useState(constants.string_empty); 
     const [fName, setFName] = useState(constants.string_empty); 
     const [mName, setMName] = useState(constants.string_empty); 
@@ -73,7 +69,7 @@ export default function RegisterComponent() {
     <div className="row">
         <div className="col-sm-12 col-md-12 col-lg-12">
             <div className="card register-content shadow-lg border-0">
-                <div style={boxheader} className="card-body text-center">
+                <div className="card-body text-center">
                     <h3 className="text-logo">Register</h3>
                     <input className="register-form-control border-0" type="" name="fullName" placeholder="Ho va Ten"  onChange={(e) => parseName(e.target.value)} />
                     <br />

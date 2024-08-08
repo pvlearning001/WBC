@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 @Repository
 public interface UserExtRepository extends JpaRepository<UserExt, Integer> {
+    UserExt findByUserId(int userId);
 }

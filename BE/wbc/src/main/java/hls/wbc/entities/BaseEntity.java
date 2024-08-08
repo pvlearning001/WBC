@@ -3,10 +3,8 @@ package hls.wbc.entities;
 import hls.wbc.constants.AppContants;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.FieldDefaults;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -43,7 +41,7 @@ public class BaseEntity {
     @Column(name = "upd_by")
     int updBy;
 
-    public int getUserId(Integer userId){
+    public int getTraceUserId(Integer userId){
         if (userId == null){
             userId = AppContants.SecuritiesValues.AdminId;
         }
@@ -55,20 +53,20 @@ public class BaseEntity {
         isDeleted = false;
         this.remark = remark;
         insAt = Instant.now();
-        userId = getUserId(userId);
+        userId = getTraceUserId(userId);
         insBy = userId;
     }
 
     public void setTraceUpdate(Integer userId, String remark){
         this.remark = remark;
-        userId = getUserId(userId);
+        userId = getTraceUserId(userId);
         updAt = Instant.now();
         updBy = userId;
     }
 
     public void updateTraceUserAddNew(Integer userId, String remark){
         this.remark = remark;
-        userId = getUserId(userId);
+        userId = getTraceUserId(userId);
         insBy = userId;
         updBy = userId;
     }
