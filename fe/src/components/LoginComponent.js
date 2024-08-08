@@ -25,7 +25,7 @@ export default function LoginComponent() {
                 password: pw
             };
             
-            await axios.post('/auth/token', loginUser)
+            await axios.post(constants.api_auth_token, loginUser)
             .then(res => {                
                 if (res.data.code === 1000){
                     const decoded = jwtDecode(res.data.result.token);                    
@@ -58,21 +58,20 @@ export default function LoginComponent() {
         <div className="col-sm-12 col-md-12 col-lg-12">
             <div className="card login-content shadow-lg border-0">
                 <div className="card-body text-center">
-                    <h3 className="text-logo">Sign In</h3>
+                    <h3 className="text-logo">{constants.text_User_Signin}</h3>
                     <br />
                     <input className="form-control border-0" type="" name="userName" placeholder="Nhap vao Username" onChange={(e) => setUn(e.target.value)} />
                     <br />
                     <input className="form-control border-0" type="password" name="password" placeholder="Nhap vao Password" onChange={(e) => setPw(e.target.value)} />
                     <br />
-                    <button className="btn btn-primary btn-sm border-0 btn-login" type="submit" name="submit" onClick={login}>Sign In</button>
+                    <button className="btn btn-primary btn-sm border-0 btn-login" type="submit" name="submit" onClick={login}>{constants.text_User_Signin}</button>
                     <br />
                     <br />
                     <ErrMesComponent show="true" text={err} />
                     
                     <div className="nomember">
                         <p className="text-center">
-                            Not a member?
-                            <Link to="/register">Create an Account</Link>
+                            <Link to="/register">{constants.linkText_createAccount}</Link>
                         </p>
                     </div>                                           
                 </div>

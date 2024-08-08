@@ -41,7 +41,7 @@ export default function RegisterComponent() {
                 };
                 console.log(registerUser);
                 
-                await axios.post('/users', registerUser)
+                await axios.post(constants.api_register_user, registerUser)
                 .then(res => {                
                     if (res.data.code === 1000){                    
                         setErr("Register success...");
@@ -70,7 +70,7 @@ export default function RegisterComponent() {
         <div className="col-sm-12 col-md-12 col-lg-12">
             <div className="card register-content shadow-lg border-0">
                 <div className="card-body text-center">
-                    <h3 className="text-logo">Register</h3>
+                    <h3 className="text-logo">{constants.text_User_Register}</h3>
                     <input className="register-form-control border-0" type="" name="fullName" placeholder="Ho va Ten"  onChange={(e) => parseName(e.target.value)} />
                     <br />
                     <input className="register-form-control border-0" type="" name="userName" placeholder="Nhap vao Username"  onChange={(e) => setUn(e.target.value)} />
@@ -83,7 +83,7 @@ export default function RegisterComponent() {
                     <br />
                     <input className="register-form-control border-0" type="password" name="passwordReType" placeholder="Password xac nhan"  onChange={(e) => setPwRT(e.target.value)} />
                     <br />
-                    <button className="btn btn-primary btn-sm border-0 btn-login" type="submit" name="submit" onClick={register}>Register</button>
+                    <button className="btn btn-primary btn-sm border-0 btn-login" type="submit" name="submit" onClick={register}>{constants.text_User_Register}</button>
                     <br />
                     <ErrMesComponent show="true" text={err} />
                     

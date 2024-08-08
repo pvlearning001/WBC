@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from "react";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import '../assets/css/main.css';
 import * as constants from "../jscode/constants";
 import * as utils from "../jscode/utilities";
@@ -17,7 +17,7 @@ export default function NavbarComponent() {
     if (!utils.isNullOrEmptyOrSpace(fullName)){
         welcome = "Welcome " + fullName;
     }
-    
+
 
     const checkAllowPage = () => {
         let isAllow = utils.isAllowPage(location.pathname);
@@ -32,9 +32,9 @@ export default function NavbarComponent() {
 <div className="container-fluid header align-items-center navbar-header">
     <div className="row d-flex">
         <div className="container-xl position-relative d-flex align-items-center">
-            <Link to={constants.page_home} className="logo d-flex align-items-center me-auto">
-            <h6 className="sitename">{introduceInfo.info01}</h6>
-            </Link>
+            <div className="logo d-flex align-items-center me-auto">
+                <h6 className="navbar-company-name">{introduceInfo.info01}</h6>
+            </div>
 
             <nav id="navmenu" className="navmenu">
                 <ul>
@@ -42,9 +42,13 @@ export default function NavbarComponent() {
 
                     <NavbarItemComponent link={constants.page_contactus} css="active" text={constants.linkText_contactus} roles={constants.role_list_public} />
 
-                    <NavbarItemComponent link={constants.page_page01} css="active" text={constants.linkText_page01} roles={constants.role_user} />
+                    <NavbarItemComponent link={constants.page_page01} css="active" text={constants.linkText_page01} roles={constants.role_user} show={false} />
 
-                    <NavbarItemComponent link={constants.page_testhomepage01} css="active" text={constants.linkText_testhomepage01} roles={constants.role_admin} />
+                    <NavbarItemComponent link={constants.page_testhomepage01} css="active" text={constants.linkText_testhomepage01} roles={constants.role_admin}  show={false} />                    
+
+                    <NavbarItemComponent link={constants.page_home_user} css="active" text={constants.linkText_home_user} roles={constants.role_user} />
+
+                    <NavbarItemComponent link={constants.page_home_admin} css="active" text={constants.linkText_home_admin} roles={constants.role_admin} />
 
                 </ul>
                 <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>

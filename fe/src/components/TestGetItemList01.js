@@ -14,7 +14,7 @@ class TestGetItemList01 extends Component {
   
     render() {
       return(
-        <div  className="main hero section dark-background">
+        <div>
             <hr />
             <h2>This is TestGetItemList01</h2>
             <ul>
