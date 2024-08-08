@@ -14,13 +14,12 @@ public class UserCreationRequest extends BaseRequest {
     String userName;
     @Size(min = 1, message = "INVALID_PASSWORD")
     String password;
-    @Size(min = 1,message = "USERNAME_INVALID")
+    @Size(min = 1,message = "FIRSTNAME_INVALID")
     String firstName;
-    @Size(min = 1,message = "USERNAME_INVALID")
     String middleName;
     @Size(min = 1,message = "USERNAME_INVALID")
     String lastName;
-    @Size(min = 1,message = "USERNAME_INVALID")
+    @Size(min = 1,message = "LASTNAME_INVALID")
     String email;
     @Size(min = 1,message = "USERNAME_INVALID")
     String phone;

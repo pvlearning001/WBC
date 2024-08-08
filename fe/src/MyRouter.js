@@ -4,16 +4,13 @@ import './App.css';
 import * as constants from './jscode/constants';
 import Layout from './Layout';
 import ContactUsPage from './pages/ContactUsPage';
+import CoursesInfoPage from './pages/CoursesInfoPage';
 import HomeAdminPage from './pages/HomeAdminPage';
 import HomePage from './pages/HomePage';
 import HomeUserPage from './pages/HomeUserPage';
 import LoginPage from './pages/LoginPage';
 import LogoutPage from './pages/LogoutPage';
 import RegisterPage from './pages/RegisterPage';
-import TestHomePage01 from "./pages/TestHomePage01";
-import TestPage01 from './pages/TestPage01';
-import TestPage02 from './pages/TestPage02';
-import TestPage03 from './pages/TestPage03';
 
 
 class MyRouter extends Component {
@@ -29,11 +26,7 @@ class MyRouter extends Component {
             <Route path= {constants.page_register} element={<RegisterPage />} />
             <Route path= {constants.page_home_user} element={<HomeUserPage />} />
             <Route path= {constants.page_home_admin} element={<HomeAdminPage />} />
-
-            <Route path= {constants.page_page01} element={<TestPage01 />} />
-            <Route path= {constants.page_page02} element={<TestPage02 />} />
-            <Route path= {constants.page_page03} element={<TestPage03 />} />
-            <Route path= {constants.page_testhomepage01} element={<TestHomePage01 />} />
+            <Route path= {constants.page_courses_info} element={<CoursesInfoPage />} />
           </Route>          
         </Routes>
       </Router>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import '../assets/css/page.css';
 import * as constants from "../jscode/constants";
 import * as utils from "../jscode/utilities";
-import { ErrMesComponent } from './ErrorMessageComponent';
+import { MessageComponent } from './MessageComponent';
 
 export default function RegisterComponent() {
 
@@ -15,8 +15,9 @@ export default function RegisterComponent() {
     const [pw, setPw] = useState(constants.string_empty);
     const [pwRT, setPwRT] = useState(constants.string_empty);
     const [email, setEmail] = useState(constants.string_empty);
-    const [phone, setPhone] = useState(constants.string_empty);
-    const [err, setErr] = useState(constants.string_empty);
+    const [phone, setPhone] = useState(constants.string_empty);    
+    const [message, setMessage] = useState(constants.string_empty);
+    const [success, setSuccess] = useState(constants.bool_true);
 
     const parseName = (text) => {
         setFullName(text);
@@ -27,7 +28,8 @@ export default function RegisterComponent() {
     }
 
     const register = async () => {
-        setErr(constants.string_empty);
+        setMessage(constants.string_empty);
+        setSuccess(true);
         if ((un !== "")){
             if (utils.isPwMatch(pw, pwRT)){  
                 const registerUser = {
@@ -43,21 +45,18 @@ export default function RegisterComponent() {
                 
                 await axios.post(constants.api_register_user, registerUser)
                 .then(res => {                
-                    if (res.data.code === 1000){                    
-                        setErr("Register success...");
-                    }
-                    else{
-                        setErr(res.data.message);
-                        console.log("Error: ", res.data.message);
-                    }
+                    setMessage("Register success...");
+                    setSuccess(true);
                 })
                 .catch(error => {
                     console.log("Error: ", error.response.data.message);
-                    setErr(error.response.data.message);
+                    setMessage(error.response.data.message);
+                    setSuccess(false);
                 });
             }
             else{
-                setErr('Password and Password retype is NOT match');
+                setMessage('Password and Password retype is NOT match');
+                setSuccess(false);
             }
         }
     };
@@ -65,7 +64,7 @@ export default function RegisterComponent() {
     useEffect(() => { parseName(constants.string_empty); }, []);
     
     return(
-<div className="container">
+<div className="container-fluid">
     <div className="row">
         <div className="col-sm-12 col-md-12 col-lg-12">
             <div className="card register-content shadow-lg border-0">
@@ -85,9 +84,7 @@ export default function RegisterComponent() {
                     <br />
                     <button className="btn btn-primary btn-sm border-0 btn-login" type="submit" name="submit" onClick={register}>{constants.text_User_Register}</button>
                     <br />
-                    <ErrMesComponent show="true" text={err} />
-                    
-                                           
+                    <MessageComponent show={true} message={message} success={success} />
                 </div>
             </div>
 

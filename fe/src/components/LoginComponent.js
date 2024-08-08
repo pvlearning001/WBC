@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import '../assets/css/page.css';
 import * as constants from "../jscode/constants";
-import { ErrMesComponent } from './ErrorMessageComponent';
+import { MessageComponent } from './MessageComponent';
 /*********************************
  * https://github.com/auth0/jwt-decode
  */
@@ -13,11 +13,14 @@ export default function LoginComponent() {
 
     const [un, setUn] = useState(constants.string_empty); 
     const [pw, setPw] = useState(constants.string_empty);
-    const [err, setErr] = useState(constants.string_empty);
+    const [message, setMessage] = useState(constants.string_empty);
+    const [success, setSuccess] = useState(true);
     const navigate = useNavigate();
 
     const login = async () => {
-        setErr(constants.string_empty);
+        setSuccess(true);
+        setMessage(constants.string_empty);
+
         if ((un !== "") 
             && (pw !== "")){
             const loginUser = {
@@ -26,27 +29,24 @@ export default function LoginComponent() {
             };
             
             await axios.post(constants.api_auth_token, loginUser)
-            .then(res => {                
-                if (res.data.code === 1000){
-                    const decoded = jwtDecode(res.data.result.token);                    
-                    localStorage.setItem(constants.token_isAuthenticated, true);
-                    localStorage.setItem(constants.token_string, res.data.result.token);
-                    localStorage.setItem(constants.token_userName, decoded.sub);
-                    localStorage.setItem(constants.token_role, decoded.scope);
-                    localStorage.setItem(constants.token_expTime, decoded.exp);
-                    localStorage.setItem(constants.token_fullName, decoded.fullName);
-                    localStorage.setItem(constants.token_userId, decoded.userId);               
-                    navigate(constants.page_home); 
-                }
-                else{
-                    setErr(res.data.message);
-                    console.log("Error: ", res.data.message);
-                    navigate(constants.page_home); 
-                }
+            .then(res => {
+                const decoded = jwtDecode(res.data.result.token);                    
+                localStorage.setItem(constants.token_isAuthenticated, true);
+                localStorage.setItem(constants.token_string, res.data.result.token);
+                localStorage.setItem(constants.token_userName, decoded.sub);
+                localStorage.setItem(constants.token_role, decoded.scope);
+                localStorage.setItem(constants.token_expTime, decoded.exp);
+                localStorage.setItem(constants.token_fullName, decoded.fullName);
+                localStorage.setItem(constants.token_userId, decoded.userId);               
+                setMessage(res.data.message);
+                setSuccess(false);
+                console.log("Error: ", res.data.message);
+                navigate(constants.page_home);
             })
             .catch(error => {
                 console.log("Error: ", error.response.data.message);
-                setErr(error.response.data.message);
+                setMessage(error.response.data.message);
+                setSuccess(false);
             });
         }
     };
@@ -67,7 +67,7 @@ export default function LoginComponent() {
                     <button className="btn btn-primary btn-sm border-0 btn-login" type="submit" name="submit" onClick={login}>{constants.text_User_Signin}</button>
                     <br />
                     <br />
-                    <ErrMesComponent show="true" text={err} />
+                    <MessageComponent show={true} message={message} success={success} />
                     
                     <div className="nomember">
                         <p className="text-center">

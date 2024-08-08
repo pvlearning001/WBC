@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import HomeAdminComponent from '../components/HomeAdminComponent';
 import NavbarAdminComponent from '../components/NavbarAdminComponent';
+import { TempComponent } from '../components/TempComponent';
 
 
-class HomeAdminPage extends Component {
+class AdminMgmtMarks extends Component {
     render() {
         return(
           <div>
             <NavbarAdminComponent />
-            <HomeAdminComponent />
+            <TempComponent text="Management Marks Page" />
           </div>
         )
       };
     };
-  export default HomeAdminPage;
+  export default AdminMgmtMarks;

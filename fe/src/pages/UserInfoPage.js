@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import HomeUserComponent from '../components/HomeUserComponent';
 import NavbarUserComponent from '../components/NavbarUserComponent';
+import { TempComponent } from '../components/TempComponent';
 
 
-class HomeUserPage extends Component {
+class UserInfoPage extends Component {
     render() {
         return(
           <div>
             <NavbarUserComponent />
-            <HomeUserComponent />
+            <TempComponent text="User mngt personal info." />
           </div>
         )
       };
     };
-  export default HomeUserPage;
+  export default UserInfoPage;
