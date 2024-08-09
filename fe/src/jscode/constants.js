@@ -1,5 +1,6 @@
 export const string_empty = "";
 export const string_space = " ";
+export const string_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export const bool_true = true;
 export const bool_false = false;

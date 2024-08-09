@@ -70,6 +70,7 @@ export function isAllowControl(rolesControl){
         return true;
     }
     if (localStorage.getItem(constants.token_role == null)){
+        localStorage.setItem(constants.token_role, constants.string_alphabet);
         localStorage.setItem(constants.token_role, constants.string_empty);
     }    	    
     const rolesControlArray = rolesControl.split(constants.string_space);    
