@@ -18,7 +18,6 @@ export function getDetailsName(text){
     let tempTextItem = constants.string_empty;
 
     const textArray = text.split(constants.string_space); 
-    console.log(textArray);
     for (const textItem of textArray) {
         tempTextItem = textItem.trim();
         if (!isNullOrEmpty(tempTextItem)) 
@@ -72,9 +71,9 @@ export function isAllowControl(rolesControl){
 
     let role = localStorage.getItem(constants.token_role);
     if (role == null) {
-        localStorage.setItem(constants.token_role, constants.string_empty);
+        initStorage();
     }
-        	    
+
     const rolesControlArray = rolesControl.split(constants.string_space);    
     const roleUserString = localStorage.getItem(constants.token_role);
     const roleUserArray = roleUserString.split(constants.string_space);
@@ -113,3 +112,13 @@ export function isAllowPage(pagePath){
     return result;
 
 };
+
+export function initStorage(){
+    localStorage.setItem(constants.token_isAuthenticated, false);
+    localStorage.setItem(constants.token_string, constants.string_empty);
+    localStorage.setItem(constants.token_userName, constants.string_empty);
+    localStorage.setItem(constants.token_role, constants.string_empty);
+    localStorage.setItem(constants.token_expTime, 0); 
+    localStorage.setItem(constants.token_fullName, constants.string_empty);
+    localStorage.setItem(constants.token_userId, 0);
+}
