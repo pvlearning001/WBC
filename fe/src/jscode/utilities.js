@@ -69,10 +69,12 @@ export function isAllowControl(rolesControl){
     ){
         return true;
     }
-    if (localStorage.getItem(constants.token_role == null)){
-        localStorage.setItem(constants.token_role, constants.string_alphabet);
+
+    let role = localStorage.getItem(constants.token_role);
+    if (role == null) {
         localStorage.setItem(constants.token_role, constants.string_empty);
-    }    	    
+    }
+        	    
     const rolesControlArray = rolesControl.split(constants.string_space);    
     const roleUserString = localStorage.getItem(constants.token_role);
     const roleUserArray = roleUserString.split(constants.string_space);
