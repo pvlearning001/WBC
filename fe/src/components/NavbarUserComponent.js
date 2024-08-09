@@ -1,22 +1,20 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import '../assets/css/main.css';
 import * as constants from "../jscode/constants";
 import * as intro from "../jscode/introInfo";
 import * as utils from "../jscode/utilities";
-import { IntroduceContext } from "../ParentPage";
 import { NavbarItemComponent } from "./NavbarItemComponent";
 
 
 export default function NavbarUserComponent() {
-    const introduceInfo = useContext(IntroduceContext); 
     const isLogined = utils.isLogined(); 
     const location = useLocation();
     const navigate = useNavigate(); 
     const fullName = localStorage.getItem(constants.token_fullName);
     let welcome = "";
     if (!utils.isNullOrEmptyOrSpace(fullName)){
-        welcome = "Welcome " + fullName;
+        welcome = constants.text_Navbar_Welcome + constants.string_space + fullName;
     }
 
 
@@ -40,7 +38,11 @@ export default function NavbarUserComponent() {
             <nav id="navmenu" className="navmenu">
                 <ul>
                     <NavbarItemComponent link={constants.page_home} css="active" text={constants.linkText_home} roles={constants.role_list_public} />
-
+                    <NavbarItemComponent link={constants.page_user_changepw} css="active" text={constants.linkText_user_changepw} roles={constants.role_user} />
+                    <NavbarItemComponent link={constants.page_user_info} css="active" text={constants.linkText_user_info} roles={constants.role_user} />
+                    <NavbarItemComponent link={constants.page_user_courses} css="active" text={constants.linkText_user_courses} roles={constants.role_user} />
+                    <NavbarItemComponent link={constants.page_user_marks} css="active" text={constants.linkText_user_marks} roles={constants.role_user} />
+                    <NavbarItemComponent link={constants.page_user_messages} css="active" text={constants.linkText_user_message} roles={constants.role_user} />
                 </ul>
                 <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>

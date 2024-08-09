@@ -16,9 +16,8 @@ export default function NavbarAdminComponent() {
     const fullName = localStorage.getItem(constants.token_fullName);
     let welcome = "";
     if (!utils.isNullOrEmptyOrSpace(fullName)){
-        welcome = "Welcome " + fullName;
+        welcome = constants.text_Navbar_Welcome + constants.string_space + fullName;
     }
-
 
     const checkAllowPage = () => {
         let isAllow = utils.isAllowPage(location.pathname);
@@ -40,6 +39,14 @@ export default function NavbarAdminComponent() {
             <nav id="navmenu" className="navmenu">
                 <ul>
                     <NavbarItemComponent link={constants.page_home} css="active" text={constants.linkText_home} roles={constants.role_list_public} />
+
+                    <NavbarItemComponent link={constants.page_admin_courses} css="active" text={constants.linkText_admin_courses} roles={constants.role_admin} />
+
+                    <NavbarItemComponent link={constants.page_admin_marks} css="active" text={constants.linkText_admin_marks} roles={constants.role_admin} />
+
+                    <NavbarItemComponent link={constants.page_admin_messages} css="active" text={constants.linkText_admin_messages} roles={constants.role_admin} />
+                    
+                    <NavbarItemComponent link={constants.page_admin_users} css="active" text={constants.linkText_admin_users} roles={constants.role_admin} />
 
                 </ul>
                 <i className="mobile-nav-toggle d-xl-none bi bi-list"></i>

@@ -8,7 +8,7 @@ class UserViewMessages extends Component {
         return(
           <div>
             <NavbarUserComponent />
-            <TempComponent text="User mngt personal info." />
+            <TempComponent text="User mngt view message." />
           </div>
         )
       };

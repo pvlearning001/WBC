@@ -9,5 +9,5 @@ export const text_Intro_Contact_Addr = "Quận Tân Phú - TP.HCM";
 export const text_Intro_Contact_Phone = "0909.111.123";
 export const text_Intro_Contact_Email = "wbc@hcm.uit.com";
 
-export const text_header_user = "User personal information page";
-export const text_header_admin = "Admin management page";
+export const text_header_user = "Thông tin người dùng";
+export const text_header_admin = "Trang dành cho Admin";

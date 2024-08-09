@@ -15,7 +15,7 @@ export default function NavbarComponent() {
     const fullName = localStorage.getItem(constants.token_fullName);
     let welcome = "";
     if (!utils.isNullOrEmptyOrSpace(fullName)){
-        welcome = "Welcome " + fullName;
+        welcome = constants.text_Navbar_Welcome + constants.string_space + fullName;
     }
 
 

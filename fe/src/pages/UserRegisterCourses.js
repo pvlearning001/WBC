@@ -8,7 +8,7 @@ class UserRegisterCourses extends Component {
         return(
           <div>
             <NavbarUserComponent />
-            <TempComponent text="User mngt personal info." />
+            <TempComponent text="User mngt courses." />
           </div>
         )
       };

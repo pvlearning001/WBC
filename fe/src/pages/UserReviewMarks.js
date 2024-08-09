@@ -3,14 +3,14 @@ import NavbarUserComponent from '../components/NavbarUserComponent';
 import { TempComponent } from '../components/TempComponent';
 
 
-class UserReviewMark extends Component {
+class UserReviewMarks extends Component {
     render() {
         return(
           <div>
             <NavbarUserComponent />
-            <TempComponent text="User mngt personal info." />
+            <TempComponent text="User mngt course marks." />
           </div>
         )
       };
     };
-  export default UserReviewMark;
+  export default UserReviewMarks;
