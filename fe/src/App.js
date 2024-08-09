@@ -3,11 +3,11 @@ import ParentPage from './ParentPage';
 import { initStorage } from "./jscode/utilities";
 
 export default function App() {
-  function runInitApp(){
+  function runInitStorage(){
     initStorage();
   }
 
-  useEffect(() => { runInitApp();}, []);
+  useEffect(() => { runInitStorage();}, []);
   
   return(
       <ParentPage />

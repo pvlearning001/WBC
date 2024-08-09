@@ -8,6 +8,11 @@ import { NavbarItemComponent } from "./NavbarItemComponent";
 
 
 export default function NavbarComponent() {
+    function runInitStorage(){
+        utils.initStorage();
+      }
+    
+    useEffect(() => { runInitStorage();}, []);
     const introduceInfo = useContext(IntroduceContext); 
     const isLogined = utils.isLogined(); 
     const location = useLocation();
