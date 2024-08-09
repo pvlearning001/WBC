@@ -1,8 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ParentPage from './ParentPage';
+import { initStorage } from "./jscode/utilities";
 
 export default function App() {
-  return(      
+  function runInitApp(){
+    initStorage();
+  }
+
+  useEffect(() => { runInitApp();}, []);
+  
+  return(
       <ParentPage />
   )
 }

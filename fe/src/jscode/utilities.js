@@ -107,3 +107,20 @@ export function isAllowPage(pagePath){
     return result;
 
 };
+
+export function initStorage(){
+    if (localStorage.getItem(constants.token_isAuthenticated) == null)
+        localStorage.setItem(constants.token_isAuthenticated, false);
+    if (localStorage.getItem(constants.token_string) == null)
+        localStorage.setItem(constants.token_string, constants.string_empty);
+    if (localStorage.getItem(constants.token_userName) == null)
+        localStorage.setItem(constants.token_userName, constants.string_empty);
+    if (localStorage.getItem(constants.token_role) == null)
+        localStorage.setItem(constants.token_role, constants.string_empty);    
+    if (localStorage.getItem(constants.token_expTime) == null)
+        localStorage.setItem(constants.token_expTime, 0); 
+    if (localStorage.getItem(constants.token_fullName) == null)
+        localStorage.setItem(constants.token_fullName, constants.string_empty);
+    if (localStorage.getItem(constants.token_userId) == null)
+        localStorage.setItem(constants.token_userId, 0);
+}
