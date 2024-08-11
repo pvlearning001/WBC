@@ -60,7 +60,9 @@ public class FileUploadService {
         List<FileUploadResponse> result = new ArrayList<FileUploadResponse>();
 
         for(MultipartFile file : files){
-
+            FileUpload entity = new FileUpload();
+            entity.setTraceNew(AppContants.SecuritiesValues.AdminId, null);
+            entity.setGuid(UUID.randomUUID().toString());
             Path uploadDir = Paths.get(uploadDirPath);
 
             if (!Files.exists(uploadDir)) {
@@ -73,10 +75,7 @@ public class FileUploadService {
 
             String fileName = StringUtils.cleanPath(file.getOriginalFilename());
             String fileNameExt = FilenameUtils.getExtension(fileName);
-            if (AppUtils.isNullOrEmptyOrBlank(uniqueName))
-                uniqueName = UUID.randomUUID().toString() + AppContants.StringValues.Dot + fileNameExt;
-            if (!uniqueName.contains(fileNameExt))
-                uniqueName = uniqueName + AppContants.StringValues.Dot + fileNameExt;
+            uniqueName = entity.getGuid() + AppContants.StringValues.Dot + fileNameExt;
             String hashContent = SecuritiesUtils.toEncodeMD5(file.getBytes().toString());
 
             Path destination = Paths.get(uploadDirString, uniqueName);
@@ -91,14 +90,14 @@ public class FileUploadService {
                     .contentType(contentType)
                     .hashContent(hashContent)
                     .build();
-            FileUpload entity = new FileUpload();
+
             entity.setName(resultItem.getName());
             entity.setPath(resultItem.getPath());
             entity.setExtName(resultItem.getExtName());
             entity.setUniqueName(resultItem.getUniqueName());
             entity.setContentType(resultItem.getContentType());
             entity.setHashContent(resultItem.getHashContent());
-            entity.setTraceNew(AppContants.SecuritiesValues.AdminId, "");
+
             fileUploadRepository.save(entity);
             result.add(resultItem);
         }
@@ -109,6 +108,12 @@ public class FileUploadService {
     public List<FileUploadResponse> uploadFileImagesUser(FileUploadRequest request) throws IOException, NoSuchAlgorithmException {
         String uploadDirPath = "uploads/images/users/";
         List<String> fileTypes = List.of(AppContants.UtilitiesValues.FileContentTypeImage);
+        return uploadFiles(request, uploadDirPath, null, AppContants.UtilitiesValues.FileSizeMaxImage, fileTypes, ErrorCode.NOT_IMAGE_FILE);
+    }
+
+    public List<FileUploadResponse> uploadFilePdf(FileUploadRequest request) throws IOException, NoSuchAlgorithmException {
+        String uploadDirPath = "uploads/documents/messages/";
+        List<String> fileTypes = List.of(AppContants.UtilitiesValues.FileContentTypePdf);
         return uploadFiles(request, uploadDirPath, null, AppContants.UtilitiesValues.FileSizeMaxImage, fileTypes, ErrorCode.NOT_IMAGE_FILE);
     }
 }

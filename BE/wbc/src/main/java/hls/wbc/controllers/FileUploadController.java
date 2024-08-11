@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/upload")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -31,9 +32,16 @@ import java.util.Set;
 public class FileUploadController {
     FileUploadService fileUploadService;
     @PostMapping("/images")
-    ApiResponse<List<FileUploadResponse>> uploadFile(@ModelAttribute @Valid FileUploadRequest request) throws IOException, NoSuchAlgorithmException {
+    ApiResponse<List<FileUploadResponse>> uploadFileImages(@ModelAttribute @Valid FileUploadRequest request) throws IOException, NoSuchAlgorithmException {
         return ApiResponse.<List<FileUploadResponse>>builder()
                 .result(fileUploadService.uploadFileImagesUser(request))
+                .build();
+    }
+
+    @PostMapping("/documents")
+    ApiResponse<List<FileUploadResponse>> uploadFilePdf(@ModelAttribute @Valid FileUploadRequest request) throws IOException, NoSuchAlgorithmException {
+        return ApiResponse.<List<FileUploadResponse>>builder()
+                .result(fileUploadService.uploadFilePdf(request))
                 .build();
     }
 }

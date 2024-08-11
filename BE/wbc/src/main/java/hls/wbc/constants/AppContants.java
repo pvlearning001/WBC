@@ -1,5 +1,7 @@
 package hls.wbc.constants;
 
+import com.nimbusds.jwt.JWTClaimsSet;
+
 public class AppContants {
 
     public static class StringValues {
@@ -15,11 +17,38 @@ public class AppContants {
         public static final String MD5 = "MD5";
         public static  final int AdminId = 1;
         public static  final int UserRoleId = 1;
-        public static final int TokenDuration = 1; //DAY
+        public static final int TokenDuration = 12; //HOURS
+        public static final String HasRoleAdmin = "hasRole('Admin')";
+        public static final String JWTClaimsSetIssuer = "hls.com";
     }
 
     public static class UtilitiesValues {
         public static final int FileSizeMaxImage = 10485760; // 10 x 1024 x 1024
         public static final String FileContentTypeImage = "image/";
+        public static final String FileContentTypePdf = "application/pdf";
+
+    }
+
+    public static class KeysErrorCode {
+        public static final String UNCATEGORIZED_EXCEPTION = "UNCATEGORIZED_EXCEPTION";
+        public static final String INVALID_KEY = "INVALID_KEY";
+        public static final String USER_EXISTED = "USER_EXISTED";
+        public static final String INVALID_USERNAME = "USERNAME_INVALID";
+        public static final String INVALID_FIRSTNAME = "FIRSTNAME_INVALID";
+        public static final String INVALID_LASTNAME = "LASTNAME_INVALID";
+        public static final String INVALID_PASSWORD = "INVALID_PASSWORD";
+        public static final String USER_NOT_EXISTED = "USER_NOT_EXISTED";
+        public static final String UNAUTHENTICATED = "UNAUTHENTICATED";
+        public static final String UNAUTHORIZED = "UNAUTHORIZED";
+        public static final String INVALID_DOB = "INVALID_DOB";
+        public static final String NO_ROLE = "NO_ROLE";
+        public static final String NO_INTRODUCE = "NO_INTRODUCE";
+        public static final String FILE_OVER_SIZE = "FILE_OVER_SIZE";
+        public static final String INVALID_FILE_TYPE = "INVALID_FILE_TYPE";
+        public static final String NOT_IMAGE_FILE = "NOT_IMAGE_FILE";
+        public static final String WRONG_PW = "WRONG_PW";
+        public static final String EMAIL_INVALID = "EMAIL_INVALID";
+
+
     }
 }

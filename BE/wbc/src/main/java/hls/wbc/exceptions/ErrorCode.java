@@ -23,6 +23,7 @@ public enum ErrorCode  {
     INVALID_FILE_TYPE(1012, "File type is invalid", HttpStatus.BAD_REQUEST),
     NOT_IMAGE_FILE(1013, "File is not image", HttpStatus.BAD_REQUEST),
     WRONG_PW(1014, "Wrong login password", HttpStatus.UNAUTHORIZED),
+    EMAIL_INVALID(1015, "Email invalid", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

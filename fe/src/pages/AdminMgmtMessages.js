@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { AdminMgmtMessagesComponent } from '../components/AdminMgmtMessagesComponent';
 import NavbarAdminComponent from '../components/NavbarAdminComponent';
-import { TempComponent } from '../components/TempComponent';
 
 
 class AdminMgmtMessages extends Component {
@@ -8,7 +8,7 @@ class AdminMgmtMessages extends Component {
         return(
           <div>
             <NavbarAdminComponent />
-            <TempComponent text="Management Messages Page" />
+            <AdminMgmtMessagesComponent text="Management Messages Page" />
           </div>
         )
       };

@@ -3,6 +3,7 @@ package hls.wbc.utilities;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACVerifier;
+import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import hls.wbc.constants.AppContants;
 import hls.wbc.exceptions.AppException;
@@ -38,22 +39,17 @@ public class SecuritiesUtils {
         return passwordEncoder.matches(plainText, enryptText);
     }
 
-    public static SignedJWT verifyToken(String token, String signerKey) throws JOSEException, ParseException {
+    public static SignedJWT getSignedJWT(String token, String signerKey) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(signerKey.getBytes());
+        return SignedJWT.parse(token);
+    }
 
-        SignedJWT signedJWT = SignedJWT.parse(token);
-
-        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
-
-        var verified = signedJWT.verify(verifier);
-
-        if (!(verified && expiryTime.after(new Date())))
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
-        /*
-        if (invalidatedTokenRepository
-                .existsById(signedJWT.getJWTClaimsSet().getJWTID()))
-            throw new AppException(ErrorCode.UNAUTHENTICATED);
-        */
-        return signedJWT;
+    public static Object getClaimsValue(String token, String signerKey, String claimsKey) throws ParseException, JOSEException {
+        SignedJWT signedJWT = getSignedJWT(token, signerKey);
+        JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
+        if (jwtClaimsSet != null){
+            return signedJWT.getJWTClaimsSet().getClaim(claimsKey);
+        }
+        return null;
     }
 }

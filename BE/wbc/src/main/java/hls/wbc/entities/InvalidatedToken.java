@@ -14,16 +14,12 @@ import java.time.Instant;
 @Table(name = "invalidated_token")
 public class InvalidatedToken extends BaseEntity {
 
-    @Column(name = "token_guid")
-    String tokenGUID;
-
     @Column(name = "expiry_time")
     Instant expiryTime;
 
     @Builder
-    public InvalidatedToken(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String tokenGUID, Instant expiryTime){
+    public InvalidatedToken(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, Instant expiryTime){
         super(id, guid, remark, isDeleted, insAt, insBy, updAt, updBy);
-        this.tokenGUID = tokenGUID;
         this.expiryTime = expiryTime;
     }
 }

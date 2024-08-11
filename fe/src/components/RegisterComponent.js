@@ -41,7 +41,6 @@ export default function RegisterComponent() {
                     email: email,
                     phone: phone
                 };
-                console.log(registerUser);
                 
                 await axios.post(constants.api_register_user, registerUser)
                 .then(res => {                

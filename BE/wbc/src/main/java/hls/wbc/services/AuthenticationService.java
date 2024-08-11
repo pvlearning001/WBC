@@ -91,7 +91,7 @@ public class AuthenticationService {
         Date expiryTime = signToken.getJWTClaimsSet().getExpirationTime();
 
         InvalidatedToken invalidatedToken = InvalidatedToken.builder()
-                .tokenGUID(jit)
+                .guid(jit)
                 .expiryTime(expiryTime.toInstant())
                 .build();
 
@@ -106,7 +106,7 @@ public class AuthenticationService {
         var expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
         InvalidatedToken invalidatedToken = InvalidatedToken.builder()
-                .tokenGUID(jit)
+                .guid(jit)
                 .expiryTime(expiryTime.toInstant())
                 .build();
 
@@ -131,10 +131,10 @@ public class AuthenticationService {
 
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUserName())
-                .issuer("hls.com")
+                .issuer(AppContants.SecuritiesValues.JWTClaimsSetIssuer)
                 .issueTime(new Date())
                 .expirationTime(new Date(
-                        Instant.now().plus(AppContants.SecuritiesValues.TokenDuration, ChronoUnit.DAYS).toEpochMilli()
+                        Instant.now().plus(AppContants.SecuritiesValues.TokenDuration, ChronoUnit.HOURS).toEpochMilli()
                 ))
                 .jwtID(UUID.randomUUID().toString())
                 .claim("scope", buildScope(user))
@@ -155,7 +155,7 @@ public class AuthenticationService {
         }
     }
 
-    private SignedJWT verifyToken(String token) throws JOSEException, ParseException {
+    public SignedJWT verifyToken(String token) throws JOSEException, ParseException {
         JWSVerifier verifier = new MACVerifier(SIGNER_KEY.getBytes());
 
         SignedJWT signedJWT = SignedJWT.parse(token);
@@ -168,7 +168,7 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         if (invalidatedTokenRepository
-                .existsByTokenGUID(signedJWT.getJWTClaimsSet().getJWTID()))
+                .existsByGuid(signedJWT.getJWTClaimsSet().getJWTID()))
             throw new AppException(ErrorCode.UNAUTHENTICATED);
 
         return signedJWT;

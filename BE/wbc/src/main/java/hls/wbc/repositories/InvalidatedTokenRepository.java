@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InvalidatedTokenRepository extends JpaRepository<InvalidatedToken, Integer> {
-    boolean existsByTokenGUID(String token_guid);
+    boolean existsByGuid(String guid);
 }

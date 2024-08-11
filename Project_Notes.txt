@@ -52,3 +52,44 @@ console.log(decoded);
 console.log(`IAT: ${new Date(decoded.iat * 1000)}`);
 console.log(`EXP: ${new Date(decoded.exp * 1000)}`);
 */
+https://codesandbox.io/s/billowing-glade-sl5fql?file=/src/index.js:0-121
+const p = require("../package.json");
+console.log("version:", p.version);
+console.log("scripts start:", p.scripts.start);
+
+********************************************************************************
+
+Pagination
+
+https://www.w3schools.com/react/react_usecallback.asp
+
+<Pagination>
+ <Pagination.Item key={1} onClick={(event) => this.paginationClicked(event)}>
+   {1}
+ </Pagination.Item>
+ <Pagination.Item key={2} onClick={(event) => this.paginationClicked(event)}>
+   {2}
+ </Pagination.Item>
+ <Pagination.Item key={3} onClick={(event) => this.paginationClicked(event)}>
+   {3}
+ </Pagination.Item>
+</Pagination>
+
+paginationClicked = (event) => {
+  var itemClicked = event.target.text;
+}
+
+----------------------------------------
+
+constructor(props){
+      super(props)
+      this.pageChanged = this.pageChanged.bind(this);
+   }
+
+   pageChanged(e){
+        console.log(e.target.text)
+   }
+
+    <Pagination onClick={this.pageChanged}>
+              {this.paginationOptions()}
+    </Pagination>
