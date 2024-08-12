@@ -137,9 +137,9 @@ public class AuthenticationService {
                         Instant.now().plus(AppContants.SecuritiesValues.TokenDuration, ChronoUnit.HOURS).toEpochMilli()
                 ))
                 .jwtID(UUID.randomUUID().toString())
-                .claim("scope", buildScope(user))
-                .claim("fullName", buildFullname(user))
-                .claim("userId", user.getId())
+                .claim(AppContants.TokenKeyClaim.scope, buildScope(user))
+                .claim(AppContants.TokenKeyClaim.fullName, buildFullname(user))
+                .claim(AppContants.TokenKeyClaim.userId, user.getId())
                 .build();
 
         Payload payload = new Payload(jwtClaimsSet.toJSONObject());

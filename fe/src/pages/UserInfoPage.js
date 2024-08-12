@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import NavbarUserComponent from '../components/NavbarUserComponent';
-import { TempComponent } from '../components/TempComponent';
+import { UserInfoComponent } from '../components/UserInfoComponent';
 
 
 class UserInfoPage extends Component {
@@ -8,7 +8,7 @@ class UserInfoPage extends Component {
         return(
           <div>
             <NavbarUserComponent />
-            <TempComponent text="User mngt personal info." />
+            <UserInfoComponent />
           </div>
         )
       };

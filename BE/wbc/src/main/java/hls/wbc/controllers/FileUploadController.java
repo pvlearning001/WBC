@@ -1,5 +1,6 @@
 package hls.wbc.controllers;
 
+import com.nimbusds.jose.JOSEException;
 import hls.wbc.dto.requests.FileUploadRequest;
 import hls.wbc.dto.requests.UserCreationRequest;
 import hls.wbc.dto.responses.ApiResponse;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,14 +34,14 @@ import java.util.Set;
 public class FileUploadController {
     FileUploadService fileUploadService;
     @PostMapping("/images")
-    ApiResponse<List<FileUploadResponse>> uploadFileImages(@ModelAttribute @Valid FileUploadRequest request) throws IOException, NoSuchAlgorithmException {
+    ApiResponse<List<FileUploadResponse>> uploadFileImages(@ModelAttribute @Valid FileUploadRequest request) throws IOException, NoSuchAlgorithmException, ParseException, JOSEException {
         return ApiResponse.<List<FileUploadResponse>>builder()
                 .result(fileUploadService.uploadFileImagesUser(request))
                 .build();
     }
 
     @PostMapping("/documents")
-    ApiResponse<List<FileUploadResponse>> uploadFilePdf(@ModelAttribute @Valid FileUploadRequest request) throws IOException, NoSuchAlgorithmException {
+    ApiResponse<List<FileUploadResponse>> uploadFilePdf(@ModelAttribute @Valid FileUploadRequest request) throws IOException, NoSuchAlgorithmException, ParseException, JOSEException {
         return ApiResponse.<List<FileUploadResponse>>builder()
                 .result(fileUploadService.uploadFilePdf(request))
                 .build();

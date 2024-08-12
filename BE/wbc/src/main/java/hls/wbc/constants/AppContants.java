@@ -29,6 +29,14 @@ public class AppContants {
 
     }
 
+    public static class TokenKeyClaim {
+        public static final String UNCATEGORIZED_EXCEPTION = "UNCATEGORIZED_EXCEPTION";
+        public static final String scope = "scope";
+        public static final String fullName = "fullName";
+        public static final String userId = "userId";
+
+    }
+
     public static class KeysErrorCode {
         public static final String UNCATEGORIZED_EXCEPTION = "UNCATEGORIZED_EXCEPTION";
         public static final String INVALID_KEY = "INVALID_KEY";
@@ -48,7 +56,5 @@ public class AppContants {
         public static final String NOT_IMAGE_FILE = "NOT_IMAGE_FILE";
         public static final String WRONG_PW = "WRONG_PW";
         public static final String EMAIL_INVALID = "EMAIL_INVALID";
-
-
     }
 }

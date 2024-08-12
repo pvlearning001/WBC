@@ -1,5 +1,6 @@
 package hls.wbc.dto.responses;
 
+import jakarta.persistence.Column;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 

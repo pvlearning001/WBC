@@ -45,13 +45,10 @@ public class UserController {
                 .build();
     }
 
-
-
     @GetMapping
     ApiResponse<List<UserResponse>> getUsers() throws ParseException, JOSEException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtAuthenticationToken oauthToken = (JwtAuthenticationToken) authentication;
-        String token = oauthToken.getToken().getTokenValue();
+        String token = SecuritiesUtils.getToken();
         SignedJWT signedJWT = authenticationService.verifyToken(token);
         log.info("Username: {}", authentication.getName());
         authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));

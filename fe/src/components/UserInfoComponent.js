@@ -4,7 +4,7 @@ import '../assets/css/page.css';
 import * as constants from '../jscode/constants';
 
 
-export function AdminMgmtMessagesComponent(props){
+export function UserInfoComponent(props){
     const [files, setFiles] = useState(null); 
     const token = localStorage.getItem(constants.token_string);
     function handleFile(event) {
