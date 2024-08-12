@@ -9,7 +9,6 @@ export function AdminMgmtMessagesComponent(props){
     const token = localStorage.getItem(constants.token_string);
     function handleFile(event) {
         let files = event.target.files;
-        console.log(files);
         setFiles(files); 
     }
 
@@ -24,7 +23,7 @@ export function AdminMgmtMessagesComponent(props){
         // make a POST request to the File Upload API with the FormData object and Rapid API headers
         axios({ 
             // Endpoint to send files 
-            url: "/upload/images", 
+            url: "/upload/documents", 
             method: "POST", 
             headers: {
                 "Authorization" : `Bearer ${token}`,

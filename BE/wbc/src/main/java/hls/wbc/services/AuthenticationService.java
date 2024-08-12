@@ -18,6 +18,7 @@ import hls.wbc.exceptions.ErrorCode;
 import hls.wbc.repositories.InvalidatedTokenRepository;
 import hls.wbc.repositories.UserExtRepository;
 import hls.wbc.repositories.UserRepository;
+import hls.wbc.utilities.AppUtils;
 import hls.wbc.utilities.SecuritiesUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -94,7 +95,8 @@ public class AuthenticationService {
                 .guid(jit)
                 .expiryTime(expiryTime.toInstant())
                 .build();
-
+        int userId = SecuritiesUtils.getClaimsUserId(request.getToken(), SIGNER_KEY);
+        invalidatedToken.setTraceNew(userId, null);
         invalidatedTokenRepository.save(invalidatedToken);
     }
 

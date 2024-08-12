@@ -3,7 +3,7 @@ import HomeMainComponent from '../components/HomeMainComponent';
 import NavbarComponent from '../components/NavbarComponent';
 
 
-class HomePage extends Component {
+class HomePage extends Component {  
     render() {
         return(
           <div>

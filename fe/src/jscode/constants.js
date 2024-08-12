@@ -70,6 +70,7 @@ export const text_Navbar_Welcome = "Xin chào";
 
 export const api_introduce = "/introduce";
 export const api_auth_token = "/auth/token";
+export const api_auth_logout = "/auth/logout";
 export const api_register_user = "/users";
 export const api_code_success = "1000";
 

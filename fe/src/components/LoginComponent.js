@@ -40,7 +40,6 @@ export default function LoginComponent() {
                 localStorage.setItem(constants.token_userId, decoded.userId);               
                 setMessage(res.data.message);
                 setSuccess(false);
-                console.log("Error: ", res.data.message);
                 navigate(constants.page_home);
             })
             .catch(error => {

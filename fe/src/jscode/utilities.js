@@ -91,7 +91,11 @@ export function isAllowControl(rolesControl){
 
 export function isAllowPage(pagePath){
     if (constants.page_list_public.indexOf(pagePath) > -1) 
-        return true;   
+        return true;
+    if (isTokenTimeoutExpired()){
+        initStorage();
+        return false;   
+    }        
     const roleString = localStorage.getItem(constants.token_role);
     const roleArray = roleString.split(constants.string_space);
     let result = false;
@@ -122,3 +126,15 @@ export function initStorage(){
     localStorage.setItem(constants.token_fullName, constants.string_empty);
     localStorage.setItem(constants.token_userId, 0);
 }
+
+export function isTokenTimeoutExpired() {
+    let role = localStorage.getItem(constants.token_role);
+    if (role == null) {
+        initStorage();
+    }
+    let token_expTime_string = localStorage.getItem(constants.token_expTime);
+    let token_expTime = Number(token_expTime_string);
+    token_expTime = token_expTime * 1000;
+    let currentTime = new Date().getTime();    
+    return (currentTime > token_expTime);
+  };

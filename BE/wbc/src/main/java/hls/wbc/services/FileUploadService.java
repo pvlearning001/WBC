@@ -105,28 +105,6 @@ public class FileUploadService {
 
             FileUpload saveItem = fileUploadRepository.save(entity);
             FileUploadResponse resultItem = mapper.toFileUploadResponse(saveItem);
-            /*
-            FileUploadResponse resultItem = FileUploadResponse.builder()
-                    .name(fileName)
-                    .uniqueName(uniqueName)
-                    .extName(fileNameExt)
-                    .path(filePath)
-                    .contentType(contentType)
-                    .hashContent(hashContent)
-                    .build();
-
-            entity.setId(resultItem.getId());
-            entity.setGuid(resultItem.getGuid());
-            entity.setName(resultItem.getName());
-            entity.setPath(resultItem.getPath());
-            entity.setExtName(resultItem.getExtName());
-            entity.setUniqueName(resultItem.getUniqueName());
-            entity.setContentType(resultItem.getContentType());
-            entity.setHashContent(resultItem.getHashContent());
-
-             */
-
-
             result.add(resultItem);
         }
 
