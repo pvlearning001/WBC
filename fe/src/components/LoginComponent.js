@@ -30,12 +30,13 @@ export default function LoginComponent() {
             
             await axios.post(constants.api_auth_token, loginUser)
             .then(res => {
-                const decoded = jwtDecode(res.data.result.token);                    
+                const decoded = jwtDecode(res.data.result.token);                
+
                 localStorage.setItem(constants.token_isAuthenticated, true);
                 localStorage.setItem(constants.token_string, res.data.result.token);
                 localStorage.setItem(constants.token_userName, decoded.sub);
                 localStorage.setItem(constants.token_role, decoded.scope);
-                localStorage.setItem(constants.token_expTime, decoded.exp);
+                localStorage.setItem(constants.token_expTime, decoded.exp*1000);
                 localStorage.setItem(constants.token_fullName, decoded.fullName);
                 localStorage.setItem(constants.token_userId, decoded.userId);               
                 setMessage(res.data.message);

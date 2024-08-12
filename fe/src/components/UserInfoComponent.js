@@ -9,7 +9,6 @@ export function UserInfoComponent(props){
     const token = localStorage.getItem(constants.token_string);
     function handleFile(event) {
         let files = event.target.files;
-        console.log(files);
         setFiles(files); 
     }
 

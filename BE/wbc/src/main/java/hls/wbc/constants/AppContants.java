@@ -29,6 +29,10 @@ public class AppContants {
 
     }
 
+    public static class Categories{
+        public static final String Announcement = "Announcement";
+    }
+
     public static class TokenKeyClaim {
         public static final String UNCATEGORIZED_EXCEPTION = "UNCATEGORIZED_EXCEPTION";
         public static final String scope = "scope";

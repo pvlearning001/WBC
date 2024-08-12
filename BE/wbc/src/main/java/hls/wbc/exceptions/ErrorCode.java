@@ -24,7 +24,11 @@ public enum ErrorCode  {
     NOT_IMAGE_FILE(1013, "File is not image", HttpStatus.BAD_REQUEST),
     WRONG_PW(1014, "Wrong login password", HttpStatus.UNAUTHORIZED),
     EMAIL_INVALID(1015, "Email invalid", HttpStatus.BAD_REQUEST),
+    CATEGORY_EXISTED(1016, "Category is existed", HttpStatus.BAD_REQUEST),
+    CATEGORY_NOT_EXISTED(1017, "Category is not existed", HttpStatus.BAD_REQUEST),
     ;
+    ;
+
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

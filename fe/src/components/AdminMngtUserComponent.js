@@ -5,7 +5,6 @@ export default function AdminMngtUserComponent(props){
     const [curPage, setCurPage] = useState(0); 
     const paginationClicked = useCallback((e) => {
         setCurPage(e);
-        console.log(e);        
     }, [curPage]);
     return(
         <main className="main hero section dark-background">

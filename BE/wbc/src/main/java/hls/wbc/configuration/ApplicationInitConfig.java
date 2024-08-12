@@ -1,9 +1,11 @@
 package hls.wbc.configuration;
 
 import hls.wbc.constants.AppContants;
+import hls.wbc.entities.Category;
 import hls.wbc.entities.Role;
 import hls.wbc.entities.User;
 import hls.wbc.entities.UserExt;
+import hls.wbc.repositories.CategoryRepository;
 import hls.wbc.repositories.RoleRepository;
 import hls.wbc.repositories.UserExtRepository;
 import hls.wbc.repositories.UserRepository;
@@ -126,9 +128,21 @@ public class ApplicationInitConfig {
         }
     }
 
+    private void initCategory(CategoryRepository cateRepos, String cateName){
+        if (!cateRepos.existsByName(cateName)){
+            Category entity = Category.builder()
+                    .name(cateName)
+                    .build();
+            entity.setTraceNew(AppContants.SecuritiesValues.AdminId, null);
+            cateRepos.save(entity);
+        }
+        log.info("new category created");
+    }
+
     @Bean
-    ApplicationRunner applicationRunner(UserRepository userRepos, RoleRepository roleRepos,  UserExtRepository userExtRepos){
+    ApplicationRunner applicationRunner(UserRepository userRepos, RoleRepository roleRepos,  UserExtRepository userExtRepos, CategoryRepository cateRepos){
         return args -> {
+            initCategory(cateRepos, AppContants.Categories.Announcement);
             initRoles(roleRepos, "User", "Init User Role");
             initRoles(roleRepos, "Admin", "Init Admin Role");
             String userName = "admin";

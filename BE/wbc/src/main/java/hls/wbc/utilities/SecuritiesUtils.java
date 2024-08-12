@@ -60,6 +60,11 @@ public class SecuritiesUtils {
         return SignedJWT.parse(token);
     }
 
+    public static SignedJWT getSignedJWT(String signerKey) throws JOSEException, ParseException {
+        String token = getToken();
+        return getSignedJWT(token, signerKey);
+    }
+
     public static Object getClaimsValue(String token, String signerKey, String claimsKey) throws ParseException, JOSEException {
         if (!AppUtils.isNullOrEmptyString(token)) {
             SignedJWT signedJWT = getSignedJWT(token, signerKey);
@@ -71,11 +76,21 @@ public class SecuritiesUtils {
         return null;
     }
 
+    public static Object getClaimsValue(String signerKey, String claimsKey) throws ParseException, JOSEException {
+        String token = getToken();
+        return getClaimsValue(token, signerKey, claimsKey);
+    }
+
     public static int getClaimsUserId(String token, String signerKey) throws ParseException, JOSEException {
         String claimsKey = AppContants.TokenKeyClaim.userId;
         Object userIdObj = getClaimsValue(token, signerKey, claimsKey);
         if (userIdObj != null)
             return Integer.parseInt(userIdObj.toString());
         return AppContants.SecuritiesValues.AdminId;
+    }
+
+    public static int getClaimsUserId(String signerKey) throws ParseException, JOSEException {
+        String token = getToken();
+        return getClaimsUserId(token, signerKey);
     }
 }

@@ -134,7 +134,6 @@ export function isTokenTimeoutExpired() {
     }
     let token_expTime_string = localStorage.getItem(constants.token_expTime);
     let token_expTime = Number(token_expTime_string);
-    token_expTime = token_expTime * 1000;
     let currentTime = new Date().getTime();    
     return (currentTime > token_expTime);
   };

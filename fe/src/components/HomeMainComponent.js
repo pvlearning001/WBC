@@ -4,8 +4,7 @@ import imgOrgChart from "../assets/img/hero-img.png";
 import { IntroduceContext } from "../ParentPage";
 
 export default function HomeMainComponent() { 
-  const introduceInfo = useContext(IntroduceContext);
-
+  const introduceInfo = useContext(IntroduceContext); 
   return (
   <main className="main hero section dark-background">
     <div className="container-fluid">
