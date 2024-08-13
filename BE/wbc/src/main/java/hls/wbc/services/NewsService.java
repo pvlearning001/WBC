@@ -53,7 +53,7 @@ public class NewsService {
 
     public NewsResponse createEntity(NewsRequest request) throws ParseException, JOSEException, IOException, NoSuchAlgorithmException {
         News entity = News.builder()
-                .cateId(Categories.Announcement.getId())
+                .cateId(request.getCateId())
                 .subject(request.getSubject())
                 .content(request.getContent())
                 .build();
@@ -61,6 +61,8 @@ public class NewsService {
         entity.setTraceNew(userId, null);
         News saveEntity = repository.save(entity);
         NewsResponse result = mapper.toResponse(saveEntity);
+        MapToResponse(saveEntity, result);
+        result.setId(saveEntity.getId());
         if (!request.getFiles().isEmpty()){
             FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
                     .files(request.getFiles())
@@ -83,6 +85,7 @@ public class NewsService {
         entity.setTraceUpdate(userId, request.getRemark());
         News saveEntity = repository.save(entity);
         NewsResponse result = mapper.toResponse(saveEntity);
+        MapToResponse(saveEntity, result);
         if (!request.getFiles().isEmpty()){
             newsFileUploadService.DeleteByNewsId(request.getId());
             FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
@@ -128,11 +131,24 @@ public class NewsService {
         Optional<News> entityOptinal = repository.findById(id);
         if (entityOptinal.isPresent()){
             result = mapper.toResponse(entityOptinal.get());
+            MapToResponse(entityOptinal.get(), result);
             List<FileUploadResponse> files = getFileList(id);
             result.setFiles(files);
         }
         return result;
 
+    }
+
+    public void MapToResponse(News entity, NewsResponse response){
+        response.setId(entity.getId());
+        response.setGuid(entity.getGuid());
+        response.setCateId(entity.getCateId());
+        response.setRemark(entity.getRemark());
+        response.setDeleted(entity.isDeleted());
+        response.setInsAt(entity.getInsAt());
+        response.setInsBy(entity.getInsBy());
+        response.setUpdAt(entity.getUpdAt());
+        response.setUpdBy(entity.getUpdBy());
     }
 
 }

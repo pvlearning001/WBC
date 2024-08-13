@@ -68,4 +68,9 @@ public class AppContants {
         public static final String RoleAdmin = "ROLE_Admin";
         public static final String RoleUser = "ROLE_User";
     }
+
+    public static class FilePaths{
+        public static final String DocumentsMessage = "uploads/documents/messages/";
+        public static final String ImageUser = "uploads/images/users/";
+    }
 }

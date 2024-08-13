@@ -57,8 +57,13 @@ public class NewsFileUploadService {
         return mapper.toResponse(saveEntity);
     }
 
-    public void DeleteByNewsId(int newId){
+    public void DeleteByNewsId(int newId) throws IOException {
+        List<Integer> fileIdList = new ArrayList<Integer>();
         List<NewsFileUpload> list = repository.findAllByNewsId(newId);
+        for(NewsFileUpload item: list){
+            fileIdList.add(item.getFileUploadId());
+        }
         repository.deleteAll(list);
+        fileUploadService.deleteFileList(fileIdList);
     }
 }

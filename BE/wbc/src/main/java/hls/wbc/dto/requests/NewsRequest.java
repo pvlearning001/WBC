@@ -15,6 +15,7 @@ import java.util.List;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class NewsRequest extends BaseRequest {
+    int cateId;
     String subject;
     String content;
     String contentEx01;

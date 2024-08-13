@@ -18,19 +18,33 @@ http://localhost:8080/welcome
 SELECT * FROM role;
 CREATE USER 'sa'@'%' IDENTIFIED VIA mysql_native_password USING '***';GRANT ALL PRIVILEGES ON *.* TO 'sa'@'%' REQUIRE NONE WITH GRANT OPTION MAX_QUERIES_PER_HOUR 0 MAX_CONNECTIONS_PER_HOUR 0 MAX_UPDATES_PER_HOUR 0 MAX_USER_CONNECTIONS 0;CREATE DATABASE IF NOT EXISTS `sa`;GRANT ALL PRIVILEGES ON `sa`.* TO 'sa'@'%';GRANT ALL PRIVILEGES ON `sa\_%`.* TO 'sa'@'%';
 
-SELECT * FROM user;
-SELECT * FROM user_ext;
-SELECT * FROM user_role;
 
 DELETE FROM user_role;
 DELETE FROM role;
 DELETE FROM user_ext;
 DELETE FROM user;
+DELETE FROM file_upload;
+DELETE FROM invalidated_token;
+DELETE FROM category;
+DELETE FROM news_file_upload;
+DELETE FROM news;
 
 ALTER TABLE user_role AUTO_INCREMENT = 1;
 ALTER TABLE role AUTO_INCREMENT = 1;
 ALTER TABLE user_ext AUTO_INCREMENT = 1;
 ALTER TABLE user AUTO_INCREMENT = 1;
+ALTER TABLE file_upload AUTO_INCREMENT = 1;
+ALTER TABLE invalidated_token AUTO_INCREMENT = 1;
+ALTER TABLE category AUTO_INCREMENT = 1;
+ALTER TABLE news_file_upload AUTO_INCREMENT = 1;
+ALTER TABLE news AUTO_INCREMENT = 1;
+
+
+SELECT * FROM role;
+SELECT * FROM user;
+SELECT * FROM user_ext;
+SELECT * FROM user_role;
+
 
 List<User> userList = userRepos.queryUserList();
 
@@ -93,3 +107,7 @@ constructor(props){
     <Pagination onClick={this.pageChanged}>
               {this.paginationOptions()}
     </Pagination>
+	
+https://stackoverflow.com/questions/41610811/react-js-how-to-send-a-multipart-form-data-to-server
+
+application/pdf

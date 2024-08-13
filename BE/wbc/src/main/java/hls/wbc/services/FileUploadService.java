@@ -4,6 +4,7 @@ import hls.wbc.constants.AppContants;
 import hls.wbc.dto.requests.FileUploadRequest;
 import hls.wbc.dto.responses.FileUploadResponse;
 import hls.wbc.entities.FileUpload;
+import hls.wbc.entities.NewsFileUpload;
 import hls.wbc.exceptions.AppException;
 import hls.wbc.exceptions.ErrorCode;
 import hls.wbc.mappers.FileUploadMapper;
@@ -108,13 +109,13 @@ public class FileUploadService {
     }
 
     public List<FileUploadResponse> uploadFileImagesUser(FileUploadRequest request) throws IOException, NoSuchAlgorithmException, ParseException, JOSEException {
-        String uploadDirPath = "uploads/images/users/";
+        String uploadDirPath = AppContants.FilePaths.ImageUser;
         List<String> fileTypes = List.of(AppContants.UtilitiesValues.FileContentTypeImage);
         return uploadFiles(request, uploadDirPath, AppContants.UtilitiesValues.FileSizeMaxImage, fileTypes, ErrorCode.NOT_IMAGE_FILE);
     }
 
     public List<FileUploadResponse> uploadFilePdf(FileUploadRequest request) throws IOException, NoSuchAlgorithmException, ParseException, JOSEException {
-        String uploadDirPath = "uploads/documents/messages/";
+        String uploadDirPath = AppContants.FilePaths.DocumentsMessage;
         List<String> fileTypes = List.of(AppContants.UtilitiesValues.FileContentTypePdf);
         return uploadFiles(request, uploadDirPath, AppContants.UtilitiesValues.FileSizeMaxImage, fileTypes, ErrorCode.NOT_IMAGE_FILE);
     }
@@ -125,5 +126,17 @@ public class FileUploadService {
             return mapper.toResponse(entityOpt.get());
         }
         return FileUploadResponse.builder().build();
+    }
+
+    public void deleteFileList(List<Integer> ids) throws IOException {
+        for(int id:ids){
+            Optional<FileUpload> fileOpt = repository.findById(id);
+            if (fileOpt.isPresent()){
+                FileUpload file = fileOpt.get();
+                Path path = Paths.get(file.getPath(), file.getUniqueName());
+                Files.deleteIfExists(path);
+            }
+        }
+        repository.deleteAllById(ids);
     }
 }
