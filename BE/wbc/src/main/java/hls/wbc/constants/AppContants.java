@@ -29,10 +29,6 @@ public class AppContants {
 
     }
 
-    public static class Categories{
-        public static final String Announcement = "Announcement";
-    }
-
     public static class TokenKeyClaim {
         public static final String UNCATEGORIZED_EXCEPTION = "UNCATEGORIZED_EXCEPTION";
         public static final String scope = "scope";
@@ -60,5 +56,16 @@ public class AppContants {
         public static final String NOT_IMAGE_FILE = "NOT_IMAGE_FILE";
         public static final String WRONG_PW = "WRONG_PW";
         public static final String EMAIL_INVALID = "EMAIL_INVALID";
+    }
+
+    public static class Categories{
+        public static final String Announcement = "Announcement";
+    }
+
+    public static class Roles{
+        public static final String Admin = "Admin";
+        public static final String User = "User";
+        public static final String RoleAdmin = "ROLE_Admin";
+        public static final String RoleUser = "ROLE_User";
     }
 }

@@ -1,19 +1,21 @@
 package hls.wbc.enums;
 
+import hls.wbc.constants.AppContants;
 import lombok.Getter;
 
 @Getter
 public enum Roles {
-
-    User(1, "User"),
-    Admin(2, "Admin")
+    User(1, AppContants.Roles.User, AppContants.Roles.RoleUser),
+    Admin(2, AppContants.Roles.Admin, AppContants.Roles.RoleAdmin)
     ;
 
-    Roles(int id, String name) {
-        this.Id = id;
-        this.Name = name;
+    Roles(int id, String name, String roleName) {
+        this.id = id;
+        this.name = name;
+        this.roleName = roleName;
     }
 
-    private int Id;
-    private String Name;
+    private int id;
+    private String name;
+    private String roleName;
 }

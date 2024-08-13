@@ -7,7 +7,6 @@ import hls.wbc.dto.responses.UserResponse;
 import hls.wbc.entities.Role;
 import hls.wbc.entities.User;
 import hls.wbc.entities.UserExt;
-import hls.wbc.enums.Roles;
 import hls.wbc.exceptions.AppException;
 import hls.wbc.exceptions.ErrorCode;
 import hls.wbc.mappers.UserMapper;
@@ -43,7 +42,7 @@ public class UserService {
         log.info("Service: Create User");
         if (userRepository.existsByUserName(request.getUserName()))
             throw new AppException(ErrorCode.USER_EXISTED);
-        User user = userMapper.toUser(request);
+        User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setTraceNew(AppContants.SecuritiesValues.AdminId, null);
 
@@ -56,7 +55,7 @@ public class UserService {
 
         userSave.updateTraceUserAddNew(userSave.getId(), null);
         userRepository.save(user);
-        UserResponse result = userMapper.toUserResponse(userSave);
+        UserResponse result = userMapper.toResponse(userSave);
 
         if (!AppUtils.isNullOrEmptyOrBlank(request.getFirstName())
                 || !AppUtils.isNullOrEmptyOrBlank(request.getMiddleName())
@@ -93,7 +92,7 @@ public class UserService {
         String name = context.getAuthentication().getName();
         User user = userRepository.findByUserName(name).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        return userMapper.toUserResponse(user);
+        return userMapper.toResponse(user);
     }
 
     public UserResponse updateUser(int userId, UserUpdateRequest request) {
@@ -103,7 +102,7 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         var roles = roleRepository.findAllById(request.getRoles());
         user.setRoles(new HashSet<>(roles));
-        return userMapper.toUserResponse(userRepository.save(user));
+        return userMapper.toResponse(userRepository.save(user));
     }
 
     public void deleteUser(int userId){
@@ -114,13 +113,13 @@ public class UserService {
     public List<UserResponse> getUsers(){
         log.info("In method get Users");
         return userRepository.findAll().stream()
-                .map(userMapper::toUserResponse).toList();
+                .map(userMapper::toResponse).toList();
     }
 
     @PostAuthorize("returnObject.userName == authentication.name")
     public UserResponse getUser(int id){
         log.info("In method get user by Id");
-        return userMapper.toUserResponse(userRepository.findById(id)
+        return userMapper.toResponse(userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }
 }

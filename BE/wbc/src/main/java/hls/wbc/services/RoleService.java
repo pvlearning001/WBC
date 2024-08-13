@@ -23,19 +23,19 @@ public class RoleService {
     RoleMapper roleMapper;
 
     public RoleResponse create(RoleRequest request){
-        var role = roleMapper.toRole(request);
+        var role = roleMapper.toEntity(request);
 
         var permissions = permissionRepository.findAllById(request.getPermissions());
         role.setPermissions(new HashSet<>(permissions));
 
         role = roleRepository.save(role);
-        return roleMapper.toRoleResponse(role);
+        return roleMapper.toResponse(role);
     }
 
     public List<RoleResponse> getAll(){
         return roleRepository.findAll()
                 .stream()
-                .map(roleMapper::toRoleResponse)
+                .map(roleMapper::toResponse)
                 .toList();
     }
 

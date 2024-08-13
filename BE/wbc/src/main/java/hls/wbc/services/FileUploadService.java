@@ -8,7 +8,6 @@ import hls.wbc.exceptions.AppException;
 import hls.wbc.exceptions.ErrorCode;
 import hls.wbc.mappers.FileUploadMapper;
 import hls.wbc.repositories.FileUploadRepository;
-import hls.wbc.utilities.AppUtils;
 import hls.wbc.utilities.SecuritiesUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -16,9 +15,6 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,7 +37,7 @@ public class FileUploadService {
     @NonFinal
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
-    FileUploadRepository fileUploadRepository;
+    FileUploadRepository repository;
     FileUploadMapper mapper;
 
     public List<FileUploadResponse> uploadFiles(FileUploadRequest request, String uploadDirPath, int fileSizeMax, List<String> fileTypes, ErrorCode fileTypesError) throws IOException, NoSuchAlgorithmException, ParseException, JOSEException {
@@ -103,8 +99,8 @@ public class FileUploadService {
             entity.setTraceNew(userId, null);
             entity.setGuid(uniqueNamePrefix);
 
-            FileUpload saveItem = fileUploadRepository.save(entity);
-            FileUploadResponse resultItem = mapper.toFileUploadResponse(saveItem);
+            FileUpload saveItem = repository.save(entity);
+            FileUploadResponse resultItem = mapper.toResponse(saveItem);
             result.add(resultItem);
         }
 
@@ -121,5 +117,13 @@ public class FileUploadService {
         String uploadDirPath = "uploads/documents/messages/";
         List<String> fileTypes = List.of(AppContants.UtilitiesValues.FileContentTypePdf);
         return uploadFiles(request, uploadDirPath, AppContants.UtilitiesValues.FileSizeMaxImage, fileTypes, ErrorCode.NOT_IMAGE_FILE);
+    }
+
+    public FileUploadResponse getById(int id){
+        Optional<FileUpload> entityOpt = repository.findById(id);
+        if (entityOpt.isPresent()){
+            return mapper.toResponse(entityOpt.get());
+        }
+        return FileUploadResponse.builder().build();
     }
 }

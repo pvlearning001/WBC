@@ -33,7 +33,7 @@ public class FileUpload extends BaseEntity{
     @Column(name = "hash_content")
     String hashContent;
 
-    @Column(name = "descriptions")
+    @Column(name = "descriptions", length = 1024)
     String descriptions;
 
     @Builder

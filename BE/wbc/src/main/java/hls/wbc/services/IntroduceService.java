@@ -22,7 +22,7 @@ public class IntroduceService {
     public IntroduceResponse getIntroduce(){
         Introduce introduce = introduceRepository.findById(1)
                 .orElseThrow(() -> new AppException(ErrorCode.NO_INTRODUCE));
-        IntroduceResponse result = introduceMapper.toIntroduceResponse(introduce);
+        IntroduceResponse result = introduceMapper.toResponse(introduce);
         return result;
         /*
         return introduceMapper.toIntroduceResponse(

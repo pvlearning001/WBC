@@ -26,9 +26,8 @@ public enum ErrorCode  {
     EMAIL_INVALID(1015, "Email invalid", HttpStatus.BAD_REQUEST),
     CATEGORY_EXISTED(1016, "Category is existed", HttpStatus.BAD_REQUEST),
     CATEGORY_NOT_EXISTED(1017, "Category is not existed", HttpStatus.BAD_REQUEST),
+    NEWS_NOT_EXISTED(1018, "News is not existed", HttpStatus.BAD_REQUEST),
     ;
-    ;
-
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
         this.code = code;

@@ -20,40 +20,40 @@ public class Introduce extends BaseEntity {
     @Column(name = "hierarchy_map")
     String hierarchyMap;
 
-    @Column(name = "info_01")
+    @Column(name = "info_01", length = 1024)
     String info01;
 
-    @Column(name = "info_02")
+    @Column(name = "info_02", length = 1024)
     String info02;
 
-    @Column(name = "info_03")
+    @Column(name = "info_03", length = 1024)
     String info03;
 
-    @Column(name = "info_04")
+    @Column(name = "info_04", length = 1024)
     String info04;
 
-    @Column(name = "info_05")
+    @Column(name = "info_05", length = 1024)
     String info05;
 
-    @Column(name = "info_06")
+    @Column(name = "info_06", length = 1024)
     String info06;
 
-    @Column(name = "info_07")
+    @Column(name = "info_07", length = 1024)
     String info07;
 
-    @Column(name = "info_08")
+    @Column(name = "info_08", length = 1024)
     String info08;
 
-    @Column(name = "info_09")
+    @Column(name = "info_09", length = 1024)
     String info09;
 
-    @Column(name = "info_10")
+    @Column(name = "info_10", length = 1024)
     String info10;
 
-    @Column(name = "info_11")
+    @Column(name = "info_11", length = 1024)
     String info11;
 
-    @Column(name = "info_12")
+    @Column(name = "info_12", length = 1024)
     String info12;
 
     @Builder

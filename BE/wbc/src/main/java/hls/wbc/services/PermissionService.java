@@ -24,14 +24,14 @@ public class PermissionService {
     PermissionMapper permissionMapper;
 
     public PermissionResponse create(PermissionRequest request){
-        Permission permission = permissionMapper.toPermission(request);
+        Permission permission = permissionMapper.toEntity(request);
         permission = permissionRepository.save(permission);
-        return permissionMapper.toPermissionResponse(permission);
+        return permissionMapper.toResponse(permission);
     }
 
     public List<PermissionResponse> getAll(){
         var permissions = permissionRepository.findAll();
-        return permissions.stream().map(permissionMapper::toPermissionResponse).toList();
+        return permissions.stream().map(permissionMapper::toResponse).toList();
     }
 
     public void delete(int permissionId){

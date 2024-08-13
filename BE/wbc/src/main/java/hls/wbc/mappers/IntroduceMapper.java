@@ -5,5 +5,5 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface IntroduceMapper {
-    IntroduceResponse toIntroduceResponse(Introduce introduce);
+    IntroduceResponse toResponse(Introduce entity);
 }

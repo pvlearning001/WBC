@@ -16,7 +16,6 @@ import java.util.Set;
 @Entity
 @Table(name = "permission")
 public class Permission extends BaseEntity {
-
     @Column(name = "name")
     String name;
 

@@ -31,7 +31,7 @@ public class UserExt extends BaseEntity {
     @Column(name = "email")
     String email;
 
-    @Column(name = "addr")
+    @Column(name = "addr", length = 1024)
     String addr;
 
     @Column(name = "phone01")
