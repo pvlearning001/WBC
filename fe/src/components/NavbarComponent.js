@@ -34,7 +34,7 @@ export default function NavbarComponent() {
     <div className="row d-flex">
         <div className="container-xl position-relative d-flex align-items-center">
             <div className="logo d-flex align-items-center me-auto">
-                <h6 className="navbar-company-name">{introduceInfo.info01}</h6>
+                <h3 className="navbar-company-name">{introduceInfo.info01}</h3>
             </div>
 
             <nav id="navmenu" className="navmenu">
