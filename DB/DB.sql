@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.category: ~1 rows (approximately)
+-- Dumping data for table wbc.category: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.course
 CREATE TABLE IF NOT EXISTS `course` (
@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `file_upload` (
   `unique_name` varchar(255) DEFAULT NULL,
   `content_type` varchar(255) DEFAULT NULL,
   `hash_content` varchar(255) DEFAULT NULL,
-  `descriptions` varchar(255) DEFAULT NULL,
+  `descriptions` varchar(1024) DEFAULT NULL,
   `remark` varchar(255) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
   `ins_at` datetime DEFAULT utc_timestamp(),
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `file_upload` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.file_upload: ~10 rows (approximately)
+-- Dumping data for table wbc.file_upload: ~2 rows (approximately)
 
 -- Dumping structure for table wbc.introduce
 CREATE TABLE IF NOT EXISTS `introduce` (
@@ -101,18 +101,18 @@ CREATE TABLE IF NOT EXISTS `introduce` (
   `guid` varchar(255) DEFAULT uuid(),
   `history` varchar(2056) DEFAULT NULL,
   `hierarchy_map` varchar(255) DEFAULT NULL,
-  `info_01` varchar(255) DEFAULT NULL,
-  `info_02` varchar(255) DEFAULT NULL,
-  `info_03` varchar(255) DEFAULT NULL,
-  `info_04` varchar(255) DEFAULT NULL,
-  `info_05` varchar(255) DEFAULT NULL,
-  `info_06` varchar(255) DEFAULT NULL,
-  `info_07` varchar(255) DEFAULT NULL,
-  `info_08` varchar(255) DEFAULT NULL,
-  `info_09` varchar(255) DEFAULT NULL,
-  `info_10` varchar(255) DEFAULT NULL,
-  `info_11` varchar(255) DEFAULT NULL,
-  `info_12` varchar(255) DEFAULT NULL,
+  `info_01` varchar(1024) DEFAULT NULL,
+  `info_02` varchar(1024) DEFAULT NULL,
+  `info_03` varchar(1024) DEFAULT NULL,
+  `info_04` varchar(1024) DEFAULT NULL,
+  `info_05` varchar(1024) DEFAULT NULL,
+  `info_06` varchar(1024) DEFAULT NULL,
+  `info_07` varchar(1024) DEFAULT NULL,
+  `info_08` varchar(1024) DEFAULT NULL,
+  `info_09` varchar(1024) DEFAULT NULL,
+  `info_10` varchar(1024) DEFAULT NULL,
+  `info_11` varchar(1024) DEFAULT NULL,
+  `info_12` varchar(1024) DEFAULT NULL,
   `remark` varchar(255) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
   `ins_at` datetime DEFAULT utc_timestamp(),
@@ -141,7 +141,7 @@ CREATE TABLE IF NOT EXISTS `invalidated_token` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.invalidated_token: ~8 rows (approximately)
+-- Dumping data for table wbc.invalidated_token: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.mark_result
 CREATE TABLE IF NOT EXISTS `mark_result` (
@@ -233,19 +233,20 @@ CREATE TABLE IF NOT EXISTS `news` (
   `guid` varchar(255) DEFAULT uuid(),
   `cate_id` int(11) NOT NULL DEFAULT 0,
   `subject` varchar(512) DEFAULT NULL,
-  `Content` varchar(1028) DEFAULT NULL,
+  `content` varchar(1028) DEFAULT NULL,
   `content_ex_01` varchar(1028) DEFAULT NULL,
-  `content_ex_02` varchar(1028) DEFAULT NULL,
-  `content_ex_03` varchar(1028) DEFAULT NULL,
-  `remark` varchar(1028) DEFAULT NULL,
+  `content_ex_02` varchar(1024) DEFAULT NULL,
+  `content_ex_03` varchar(1024) DEFAULT NULL,
+  `content_ex_04` varchar(1024) DEFAULT NULL,
+  `content_ex_05` varchar(1024) DEFAULT NULL,
+  `content_ex_06` varchar(1024) DEFAULT NULL,
+  `remark` varchar(255) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
   `ins_at` datetime DEFAULT utc_timestamp(),
   `ins_by` int(11) DEFAULT 1,
   `upd_at` datetime DEFAULT utc_timestamp(),
   `upd_by` int(11) DEFAULT 1,
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `FK_userext_user` (`cate_id`) USING BTREE,
-  CONSTRAINT `FK_news_category` FOREIGN KEY (`cate_id`) REFERENCES `category` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 -- Dumping data for table wbc.news: ~0 rows (approximately)
@@ -256,34 +257,16 @@ CREATE TABLE IF NOT EXISTS `news_file_upload` (
   `guid` varchar(255) DEFAULT NULL,
   `news_id` int(11) DEFAULT NULL,
   `file_upload_id` int(11) DEFAULT NULL,
-  `remark` varchar(1028) DEFAULT NULL,
+  `remark` varchar(255) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
   `ins_at` datetime DEFAULT utc_timestamp(),
   `ins_by` int(11) DEFAULT 1,
   `upd_at` datetime DEFAULT utc_timestamp(),
   `upd_by` int(11) DEFAULT 1,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.news_file_upload: ~17 rows (approximately)
-REPLACE INTO `news_file_upload` (`id`, `guid`, `news_id`, `file_upload_id`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(2, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(3, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(4, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(5, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(6, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(7, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(8, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(9, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(10, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(11, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(12, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(13, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(14, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(15, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(16, NULL, NULL, NULL, NULL, b'0', '2024-08-09 02:59:54', 1, '2024-08-09 02:59:54', 1),
-	(17, NULL, NULL, NULL, NULL, b'0', '2024-08-10 05:13:23', 1, '2024-08-10 05:13:23', 1);
+-- Dumping data for table wbc.news_file_upload: ~2 rows (approximately)
 
 -- Dumping structure for table wbc.permission
 CREATE TABLE IF NOT EXISTS `permission` (
@@ -384,7 +367,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user: ~16 rows (approximately)
+-- Dumping data for table wbc.user: ~15 rows (approximately)
 
 -- Dumping structure for table wbc.user_ext
 CREATE TABLE IF NOT EXISTS `user_ext` (
@@ -395,7 +378,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   `m_name` varchar(255) DEFAULT NULL,
   `l_name` varchar(255) DEFAULT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `addr` varchar(255) DEFAULT NULL,
+  `addr` varchar(1024) DEFAULT NULL,
   `phone01` varchar(255) DEFAULT NULL,
   `phone02` varchar(255) DEFAULT NULL,
   `phone03` varchar(255) DEFAULT NULL,
@@ -408,7 +391,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_ext: ~16 rows (approximately)
+-- Dumping data for table wbc.user_ext: ~15 rows (approximately)
 
 -- Dumping structure for table wbc.user_role
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -429,7 +412,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_role: ~17 rows (approximately)
+-- Dumping data for table wbc.user_role: ~16 rows (approximately)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
