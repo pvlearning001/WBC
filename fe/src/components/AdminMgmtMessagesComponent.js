@@ -147,7 +147,7 @@ export function AdminMgmtMessagesComponent(props){
 
                                     <div style={rowStyles} className="row ">
                                         <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
-                                            Files đính kèm
+                                            Files đính kèm (pdf)
                                         </div>
                                         <div className="col-xxl-4 col-xl-4 col-lg-4 col-md-6 col-sm-12 col-12">
                                             <input multiple="multiple" type="file" onChange={(e) => handleFile(e)}  />                                    
