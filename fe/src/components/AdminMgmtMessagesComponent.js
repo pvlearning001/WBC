@@ -64,8 +64,11 @@ export function AdminMgmtMessagesComponent(props){
         formData.append('subject', title);
         formData.append('content', content);
         formData.append('contentEx01', contentEx01);
-        for (const file of filesUpload)
-            formData.append('files', file);
+        if (filesUpload != null && filesUpload.length  > 0) {
+            for (const file of filesUpload)
+                formData.append('files', file);
+        }
+        
         //formData.append("files", filesUpload);
         // make a POST request to the File Upload API with the FormData object and Rapid API headers
         axios({ 

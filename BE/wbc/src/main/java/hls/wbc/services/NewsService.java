@@ -69,7 +69,9 @@ public class NewsService {
         NewsResponse result = mapper.toResponse(saveEntity);
         MapToResponse(saveEntity, result);
         result.setId(saveEntity.getId());
-        if (!request.getFiles().isEmpty()){
+        var listFile = request.getFiles();
+
+        if (listFile != null){
             FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
                     .files(request.getFiles())
                     .build();
