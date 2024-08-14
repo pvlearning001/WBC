@@ -10,6 +10,7 @@ export default function AnnouncementComponent() {
     const [files, setFiles] = useState([]);
     const [doc, setDoc] = useState(constants.string_empty);
     const [showModal, setShowModal] = useState(false);
+    const [attTitle, setAttTitle] = useState(constants.string_empty);
 
     const getAnnouncement = async () => {        
         await axios.get(constants.api_get_latest_announcement)
@@ -18,6 +19,13 @@ export default function AnnouncementComponent() {
                 if (files.length === 0) {
                     for (const file of res.data.result.files)
                         files.push(file);
+
+                    if (files.length > 0) {
+                        setAttTitle("Xin xem thêm file đính kèm bên dưới:"); 
+                    }
+                    else{
+                        setAttTitle(constants.string_empty);
+                    }
                 }
             })
             .catch(error => {
@@ -60,7 +68,7 @@ export default function AnnouncementComponent() {
             <h5>{announcement.subject}</h5>	
             <div>{announcement.content}</div>
             <div>{announcement.contentEx01}</div>
-            <div>Xin xem thêm file đính kèm bên dưới (nếu có):</div>
+            <div>{attTitle}</div>
             <div>
                 <ul>
                     {files.map(item => (
