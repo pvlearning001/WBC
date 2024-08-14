@@ -56,6 +56,12 @@ public class NewsService {
                 .cateId(request.getCateId())
                 .subject(request.getSubject())
                 .content(request.getContent())
+                .contentEx01(request.getContentEx01())
+                .contentEx02(request.getContentEx02())
+                .contentEx03(request.getContentEx03())
+                .contentEx04(request.getContentEx04())
+                .contentEx05(request.getContentEx05())
+                .contentEx06(request.getContentEx06())
                 .build();
         int userId = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
         entity.setTraceNew(userId, null);
@@ -81,6 +87,13 @@ public class NewsService {
         News entity = entityOptional.get();
         entity.setSubject(request.getSubject());
         entity.setContent(request.getContent());
+        entity.setContentEx01(request.getContentEx01());
+        entity.setContentEx02(request.getContentEx02());
+        entity.setContentEx03(request.getContentEx03());
+        entity.setContentEx04(request.getContentEx04());
+        entity.setContentEx05(request.getContentEx05());
+        entity.setContentEx06(request.getContentEx06());
+
         int userId = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
         entity.setTraceUpdate(userId, request.getRemark());
         News saveEntity = repository.save(entity);
@@ -139,6 +152,19 @@ public class NewsService {
 
     }
 
+    public NewsResponse getResponseLatest(){
+        NewsResponse result = NewsResponse.builder().build();
+        Optional<News> entityOptinal = repository.getMaxID();
+        if (entityOptinal.isPresent()){
+            int id = entityOptinal.get().getId();
+            result = mapper.toResponse(entityOptinal.get());
+            MapToResponse(entityOptinal.get(), result);
+            List<FileUploadResponse> files = getFileList(id);
+            result.setFiles(files);
+        }
+        return result;
+
+    }
     public void MapToResponse(News entity, NewsResponse response){
         response.setId(entity.getId());
         response.setGuid(entity.getGuid());

@@ -8,7 +8,7 @@ class AdminMgmtMessages extends Component {
         return(
           <div>
             <NavbarAdminComponent />
-            <AdminMgmtMessagesComponent text="Management Messages Page" />
+            <AdminMgmtMessagesComponent text="QUẢN TRỊ THÔNG BÁO" />
           </div>
         )
       };

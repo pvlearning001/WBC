@@ -2,9 +2,9 @@ package hls.wbc.services;
 import com.nimbusds.jose.JOSEException;
 import hls.wbc.constants.AppContants;
 import hls.wbc.dto.requests.FileUploadRequest;
+import hls.wbc.dto.responses.FileAttachmentResponse;
 import hls.wbc.dto.responses.FileUploadResponse;
 import hls.wbc.entities.FileUpload;
-import hls.wbc.entities.NewsFileUpload;
 import hls.wbc.exceptions.AppException;
 import hls.wbc.exceptions.ErrorCode;
 import hls.wbc.mappers.FileUploadMapper;
@@ -138,5 +138,17 @@ public class FileUploadService {
             }
         }
         repository.deleteAllById(ids);
+    }
+
+    public FileAttachmentResponse getBinaryArray(int id) throws IOException {
+        byte byteArr[]={};
+        Optional<FileUpload> fileOpt = repository.findById(id);
+        if (fileOpt.isPresent()){
+            FileUpload file = fileOpt.get();
+            Path path = Paths.get(file.getPath(), file.getUniqueName());
+            byteArr = Files.readAllBytes(path);
+        }
+        FileAttachmentResponse result = FileAttachmentResponse.builder().fileContent(byteArr).build();
+        return result;
     }
 }

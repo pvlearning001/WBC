@@ -110,4 +110,6 @@ constructor(props){
 	
 https://stackoverflow.com/questions/41610811/react-js-how-to-send-a-multipart-form-data-to-server
 
-application/pdf
+https://stackoverflow.com/questions/76910484/java-how-to-return-pdf-image-from-spring-application-as-api-response-and-proce
+
+https://stackoverflow.com/questions/47262406/display-binary-pdf-in-react

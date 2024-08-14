@@ -8,8 +8,7 @@ export function MessageComponent(props){
         props.success = true;
     if (props.message == null)
         props.message = constants.string_empty;    
-    let colorMes = props.success ? "green" : "red";
-    //let isShow = !utils.isNullOrEmpty(props.message);
+    let colorMes = props.success ? "white" : "red";
     let isShow = props.show;
     let isDisplay = isShow ? 'inline' : 'none';
     let mes = props.message;

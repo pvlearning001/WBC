@@ -17,10 +17,10 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINTS_GET = {"/", "/welcome", "/introduce", "/test01/api01", "/test01/api02"};
+    private final String[] PUBLIC_ENDPOINTS_GET = {"/", "/welcome", "/introduce", "/news/latest"};
 
     private final String[] PUBLIC_ENDPOINTS_POST = {"/users",
-            "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh", "/upload/images", "/upload/documents"
+            "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh", "/upload/images", "/upload/documents", "/news/file"
     };
 
     @Autowired

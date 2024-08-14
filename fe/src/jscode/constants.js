@@ -28,6 +28,7 @@ export const page_logout = "/logout";
 export const page_register = "/register";
 export const page_contactus = "/contactus";
 export const page_courses_info = "/coursesinfo";
+export const page_announcement_info = "/announcement";
 export const page_home_user = "/userhome";
 export const page_home_admin = "/adminhome";
 
@@ -49,6 +50,7 @@ export const linkText_register = "Đăng ký";
 export const linkText_createAccount = "Tạo mới tài khoản";
 export const linkText_contactus = "Liên hệ";
 export const linkText_courses_info = "Thông tin khóa học";
+export const linkText_announcement_info = "Thông báo";
 export const linkText_home_user = "User";
 export const linkText_home_admin = "Admin";
 export const linkText_admin_courses = "Quản trị khóa học";
@@ -72,9 +74,11 @@ export const api_introduce = "/introduce";
 export const api_auth_token = "/auth/token";
 export const api_auth_logout = "/auth/logout";
 export const api_register_user = "/users";
-export const api_code_success = "1000";
+export const api_get_latest_announcement = "/news/latest";
+export const api_get_file_content_pdf = "/news/file";
+export const api_code_success = 1000;
 
-export const page_list_public = [page_home, page_login, page_register, page_contactus, page_courses_info];
+export const page_list_public = [page_home, page_login, page_register, page_contactus, page_courses_info, page_announcement_info];
 export const page_list_user = [page_home_user, page_user_changepw, page_user_info, page_user_courses, page_user_marks, page_user_messages];
 export const page_list_admin = [page_home_user, page_user_changepw, page_user_info, page_user_courses, page_user_marks, page_user_messages, page_home_admin, page_admin_courses, page_admin_marks, page_admin_messages, page_admin_users];
 

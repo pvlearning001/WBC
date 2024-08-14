@@ -43,7 +43,9 @@ export default function NavbarComponent() {
 
                     <NavbarItemComponent link={constants.page_contactus} css="active" text={constants.linkText_contactus} roles={constants.role_list_public} />
 
-                    <NavbarItemComponent link={constants.page_courses_info} css="active" text={constants.linkText_courses_info} roles={constants.role_list_public} />
+                    <NavbarItemComponent link={constants.page_courses_info} css="active" text={constants.linkText_courses_info} roles={constants.role_list_public} show={false} />
+
+                    <NavbarItemComponent link={constants.page_announcement_info} css="active" text={constants.linkText_announcement_info} roles={constants.role_list_public} />
 
                     <NavbarItemComponent link={constants.page_home_user} css="active" text={constants.linkText_home_user} roles={constants.role_user} />
 
