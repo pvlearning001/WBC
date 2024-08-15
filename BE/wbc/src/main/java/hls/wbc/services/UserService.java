@@ -3,6 +3,7 @@ package hls.wbc.services;
 import hls.wbc.constants.AppContants;
 import hls.wbc.dto.requests.UserCreationRequest;
 import hls.wbc.dto.requests.UserUpdateRequest;
+import hls.wbc.dto.responses.PagingResponse;
 import hls.wbc.dto.responses.UserResponse;
 import hls.wbc.entities.Role;
 import hls.wbc.entities.User;
@@ -18,12 +19,16 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -121,5 +126,47 @@ public class UserService {
         log.info("In method get user by Id");
         return userMapper.toResponse(userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
+    }
+
+    public List<UserResponse> getUserByRole(int roleId){
+        List<UserResponse> result = new ArrayList<>();
+        List<User> list = userRepository.getUserByRole(roleId);
+        for(User item:list){
+            UserResponse resultItem = userMapper.toResponse(item);
+            result.add(resultItem);
+        }
+        return result;
+    }
+
+    public List<Object> getUsersRoles(int userIdIndex){
+        return userRepository.getUsersRoles(userIdIndex);
+    }
+
+    public PagingResponse getUserPaging(int pageIndex){
+
+        int totalPage = AppUtils.getTotalPage(userRepository.getTotalRecord());
+        Sort sort = Sort.by("id").descending();
+        /*
+        List<UserResponse> resultList = new ArrayList<>();
+
+        Page<User> list = userRepository.getAllDataPaging(PageRequest.of(pageIndex, 5, sort));
+        for(User item:list){
+            UserResponse resultItem = userMapper.toResponse(item);
+            resultList.add(resultItem);
+        }
+
+        return PagingResponse.<UserResponse>builder()
+                .pageIndex(pageIndex)
+                .pageTotal(totalPage)
+                .pageResult(resultList)
+                .build();
+         */
+        List<Object> objList = userRepository.getAllUserDetailsPaging(PageRequest.of(pageIndex, AppContants.Paging.PageSize, sort));
+        return PagingResponse.<Object>builder()
+                .pageIndex(pageIndex)
+                .pageTotal(totalPage)
+                .pageResult(objList)
+                .build();
+
     }
 }

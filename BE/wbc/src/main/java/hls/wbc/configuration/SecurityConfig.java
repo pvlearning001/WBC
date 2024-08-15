@@ -20,7 +20,7 @@ public class SecurityConfig {
     private final String[] PUBLIC_ENDPOINTS_GET = {"/", "/welcome", "/introduce", "/news/latest"};
 
     private final String[] PUBLIC_ENDPOINTS_POST = {"/users",
-            "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh", "/upload/images", "/upload/documents", "/news/file"
+            "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh", "/upload/images", "/upload/documents", "/news/file", "/users/test/role", "/users/test/userrole", "users/test/userp"
     };
 
     @Autowired

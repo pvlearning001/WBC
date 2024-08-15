@@ -1,6 +1,7 @@
 package hls.wbc.CustomRepositories;
 
 import hls.wbc.entities.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,4 +17,7 @@ public interface UserCustomRepository {
     User customSave(Object t);
     User customUpdate(Object t);
     User customDelete(int id);
+    List<Object> getUsersRoles(int userIdIndex);
+
+    List<Object> getAllUserDetailsPaging(Pageable pageable);
 }

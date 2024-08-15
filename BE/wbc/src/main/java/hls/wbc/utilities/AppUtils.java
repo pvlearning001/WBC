@@ -100,4 +100,12 @@ public class AppUtils {
         }
         return result.toString().trim();
     }
+
+    public static int getTotalPage(int totalRecord){
+        int result = totalRecord/AppContants.Paging.PageSize;
+        int mod = totalRecord % AppContants.Paging.PageSize;
+        if (mod > 0)
+            result = result + 1;
+        return result;
+    }
 }

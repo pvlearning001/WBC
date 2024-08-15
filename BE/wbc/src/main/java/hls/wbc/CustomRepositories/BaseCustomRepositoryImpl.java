@@ -7,15 +7,26 @@ import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 @Repository
 public class BaseCustomRepositoryImpl implements BaseCustomRepository {
     @PersistenceContext
-    private EntityManager entityManager;
+    EntityManager entityManager;
     @Override
     public List<Object> baseCustomGetDataBySql(String sql) {
         TypedQuery<Object> query = entityManager.createQuery(sql, Object.class);
         return query.getResultList();
+    }
+
+    @Override
+    public List<Object> baseCustomGetDataBySqlPaging(String sql, Pageable pageable) {
+        TypedQuery<Object> query = entityManager.createQuery(sql, Object.class);
+        int firstIndex = (int) pageable.getOffset();
+        return query
+                .setFirstResult(firstIndex)
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
     }
 
     @Override

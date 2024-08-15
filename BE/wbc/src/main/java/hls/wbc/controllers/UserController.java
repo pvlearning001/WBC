@@ -2,9 +2,9 @@ package hls.wbc.controllers;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
-import hls.wbc.dto.requests.UserCreationRequest;
-import hls.wbc.dto.requests.UserUpdateRequest;
+import hls.wbc.dto.requests.*;
 import hls.wbc.dto.responses.ApiResponse;
+import hls.wbc.dto.responses.PagingResponse;
 import hls.wbc.dto.responses.UserResponse;
 import hls.wbc.services.AuthenticationService;
 import hls.wbc.services.UserService;
@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -84,6 +83,30 @@ public class UserController {
     ApiResponse<UserResponse> updateUser(@PathVariable int userId, @RequestBody UserUpdateRequest request){
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(userId, request))
+                .build();
+    }
+
+    @PostMapping("/test/role")
+    ApiResponse<List<UserResponse>> getUserByRole(@RequestBody  @Valid TestUserRoleRequest request){
+        List<UserResponse> res = userService.getUserByRole(request.getRoleId());
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(res)
+                .build();
+    }
+
+    @PostMapping("/test/userrole")
+    ApiResponse<List<Object>> getUsersRoles(@RequestBody  @Valid TestUserIdIndexRequest request){
+        List<Object> res = userService.getUsersRoles(request.getUserIdIndex());
+        return ApiResponse.<List<Object>>builder()
+                .result(res)
+                .build();
+    }
+
+    @PostMapping("/test/userp")
+    ApiResponse<PagingResponse> getUserPaging(@RequestBody  @Valid TestUserPagingRequest request){
+        PagingResponse res = userService.getUserPaging(request.getPageIndex());
+        return ApiResponse.<PagingResponse>builder()
+                .result(res)
                 .build();
     }
 }
