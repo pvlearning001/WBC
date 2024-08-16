@@ -1,12 +1,12 @@
 export const string_empty = "";
 export const string_space = " ";
+export const string_none = "none";
+export const string_true = "true";
+export const string_false = "false";
 export const string_alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 export const bool_true = true;
 export const bool_false = false;
-
-export const string_true = "true";
-export const string_false = "false";
 
 export const token_isAuthenticated = "isAuthenticated";
 export const token_string = "token";
@@ -88,6 +88,17 @@ export const load_Intro_Info_Way = load_Intro_Info_By_Local;
 
 export const msg_status_success = 1;
 export const msg_status_error = 2;
+
+export const page_type_item = 1;
+export const page_type_first = 2;
+export const page_type_last = 3;
+export const page_type_prev = 4;
+export const page_type_next = 5;
+export const page_type_ellipsis = 6;
+
+export const page_first_default = 1;
+export const page_total_default = 1;
+export const page_session_default = 3;
 
 
 

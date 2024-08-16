@@ -64,7 +64,7 @@ export function AdminMgmtMessagesComponent(props){
         formData.append('subject', title);
         formData.append('content', content);
         formData.append('contentEx01', contentEx01);
-        if (filesUpload != null && filesUpload.length  > 0) {
+        if (filesUpload != null && filesUpload.length > 0) {
             for (const file of filesUpload)
                 formData.append('files', file);
         }
