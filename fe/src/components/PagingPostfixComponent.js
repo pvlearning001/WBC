@@ -1,43 +1,18 @@
-import { memo, useEffect, useState } from "react";
-import * as constants from '../jscode/constants';
-import PagingItemComponent from "./PagingItemComponent";
+import { memo, useCallback } from "react";
+import Pagination from 'react-bootstrap/Pagination';
 
 function PagingPostfixComponent(props) {
-    const isShowDefault = true;    
-    const [isShowLast, setIsShowLast] = useState(isShowDefault);
-    const [isShowNext, setIsShowNext] = useState(isShowDefault);
-
-    function initStates() {          
-        let varIsShowLast = isShowDefault;
-        let varIsShowNext = isShowDefault;
-
-        if (props.isShowLast != null && props.isShowLast !== undefined)
-            varIsShowLast = props.isShowLast;
-
-        if (props.isShowNext != null && props.isShowNext !== undefined)
-            varIsShowNext = props.isShowNext;
-
-        setIsShowLast(varIsShowLast);
-        setIsShowNext(varIsShowNext);
-    }
-
-    useEffect(() => { initStates()}, [props.isShowLast, props.isShowNext]);
-
-
-    const handleItemClick = (key) => {
+    let nextValue = props.pageIndex + 1;
+    let totalValue = props.pageTotal;
+    const handleItemClick = useCallback((value) => {
         if (props.pageItemClick != null && props.pageItemClick !== undefined){            
-            props.pageItemClick(key);      }
-      }
+            props.pageItemClick(value);      
+            }
+        }, []);
 
-    let result = [];
-
-    if (result.length == 0){
-        if (isShowNext)
-            result.push(<PagingItemComponent type={constants.page_type_next} isShow={isShowNext} pageItemClick={(key) => handleItemClick(key)} />);
-
-        if (isShowLast)
-            result.push(<PagingItemComponent type={constants.page_type_last} isShow={isShowLast} pageItemClick={(key) => handleItemClick(key)} />);
-    }
+    let result=[];
+    result.push(<Pagination.Next key="next" onClick={() => handleItemClick(nextValue)} />)
+    result.push(<Pagination.Last key="last" onClick={() => handleItemClick(totalValue)} />)
     return result
 }  
 export default memo(PagingPostfixComponent);

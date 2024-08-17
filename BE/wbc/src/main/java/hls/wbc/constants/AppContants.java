@@ -23,7 +23,7 @@ public class AppContants {
     }
 
     public static class UtilitiesValues {
-        public static final int FileSizeMaxImage = 10485760; // 10 x 1024 x 1024
+        public static final int FileSizeMaxImage = 104857600; // 10 x 1024 x 1024
         public static final String FileContentTypeImage = "image/";
         public static final String FileContentTypePdf = "application/pdf";
 

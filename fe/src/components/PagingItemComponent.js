@@ -4,21 +4,21 @@ import * as constants from "../jscode/constants";
 import * as utils from "../jscode/utilities";
 
 function PagingItemComponent(props) {
-  const [key, setKey] = useState(constants.string_empty);
+  const [itemValue, setItemValue] = useState(constants.string_empty);
   const [type, setType] = useState(constants.page_type_item);  
   const [text, setText] = useState(constants.page_first_default);
   const [isDisabled, setIsDisabled] = useState(false); 
   const [isActive, setIsActive] = useState(false);
 
   function initStates() {   
-        let varKey = constants.string_empty;       
+        let varItemValue = constants.string_empty;       
         let varType = constants.page_type_item;       
         let varText = constants.page_first_default;
         let varIsDisabled = false; 
         let varIsActive = false;
 
-        if (props.key != null && props.type !== undefined)
-          varKey = props.key;
+        if (props.itemValue != null && props.itemValue !== undefined)
+          varItemValue = props.itemValue;
 
         if (props.type != null && props.type !== undefined)
             varType = props.type;
@@ -32,7 +32,7 @@ function PagingItemComponent(props) {
         if (props.isActive != null && props.isActive !== undefined)
             varIsActive = props.isActive;
 
-        setKey(varKey);
+        setItemValue(varItemValue);
         setType(varType);
         setText(varText);
         setIsDisabled(varIsDisabled);
@@ -41,9 +41,9 @@ function PagingItemComponent(props) {
 
   useEffect(() => { initStates()}, []);
 
-  const handleItemClick = (key) => {
+  const handleItemClick = (itemValue) => {
     if (props.pageItemClick != null && props.pageItemClick !== undefined){
-        props.pageItemClick(key);
+        props.pageItemClick(itemValue);
     }
   }
   let disabledText = (isDisabled) ? constants.string_true : constants.string_empty;
@@ -53,34 +53,34 @@ function PagingItemComponent(props) {
   };
 
   if (type === constants.page_type_first){
-    if (utils.isNullOrEmpty(key))
-      setKey("first");
-    return <Pagination.First key={key} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(key)} />
+    if (utils.isNullOrEmpty(itemValue))
+      setItemValue("first");
+    return <Pagination.First itemValue={itemValue} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(itemValue)} />
   }
   else if (type === constants.page_type_last){
-    if (utils.isNullOrEmpty(key))
-      setKey("last");
-    return <Pagination.Last key={key} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(key)} />
+    if (utils.isNullOrEmpty(itemValue))
+      setItemValue("last");
+    return <Pagination.Last itemValue={itemValue} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(itemValue)} />
   }
   else if (type === constants.page_type_prev){
-    if (utils.isNullOrEmpty(key))
-      setKey("prev");
-    return <Pagination.Prev key={key} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(key)} />
+    if (utils.isNullOrEmpty(itemValue))
+      setItemValue("prev");
+    return <Pagination.Prev itemValue={itemValue} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(itemValue)} />
   }
   else if (type === constants.page_type_next){
-    if (utils.isNullOrEmpty(key))
-      setKey("next");
-    return <Pagination.Next key={key} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(key)} />
+    if (utils.isNullOrEmpty(itemValue))
+      setItemValue("next");
+    return <Pagination.Next itemValue={itemValue} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(itemValue)} />
   }
   else if (type === constants.page_type_ellipsis){
-    if (utils.isNullOrEmpty(key))
-      setKey("ellip");
-    return <Pagination.Ellipsis key={key} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(key)} />
+    if (utils.isNullOrEmpty(itemValue))
+      setItemValue("ellip");
+    return <Pagination.Ellipsis itemValue={itemValue} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(itemValue)} />
   }
   else{
-    if (utils.isNullOrEmpty(key))
-      setKey(text);
-    return <Pagination.Item key={text} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(key)} >{text}</Pagination.Item>
+    if (utils.isNullOrEmpty(itemValue))
+      setItemValue(text);
+    return <Pagination.Item itemValue={itemValue} disabled={disabledText} active={activeText} style={styleItem} onClick={() => handleItemClick(itemValue)} >{text}</Pagination.Item>
   }
 }
 
