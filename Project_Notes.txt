@@ -115,3 +115,19 @@ https://stackoverflow.com/questions/76910484/java-how-to-return-pdf-image-from-s
 https://stackoverflow.com/questions/47262406/display-binary-pdf-in-react
 
 git clone "https://github.com/pvlearning001/WBC" "D:\WBC04"
+
+https://stackoverflow.com/questions/50246308/store-stored-procedure-return-value-using-jpa
+
+UPDATE user SET is_deleted = 1 WHERE id = 7;
+
+SELECT * FROM user;
+
+SELECT u.*, ue.f_name FROM user u 
+	INNER JOIN user_ext ue ON u.id = ue.user_id 
+where u.is_deleted = 0 and ue.is_deleted = 0 
+LIMIT 0,5
+
+CALL sp_GetUsersData(5,@pageTotal);
+SELECT @pageTotal;
+
+SELECT COUNT(id) FROM user WHERE id > 5;
