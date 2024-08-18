@@ -11,6 +11,7 @@ import hls.wbc.entities.UserExt;
 import hls.wbc.exceptions.AppException;
 import hls.wbc.exceptions.ErrorCode;
 import hls.wbc.mappers.UserMapper;
+import hls.wbc.repositories.JdbcUserRepository;
 import hls.wbc.repositories.RoleRepository;
 import hls.wbc.repositories.UserExtRepository;
 import hls.wbc.repositories.UserRepository;
@@ -29,6 +30,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,8 +42,12 @@ public class UserService {
     UserRepository userRepository;
     UserExtRepository userExtRepository;
     RoleRepository roleRepository;
+
+    JdbcUserRepository jdbcUserRepository;
+
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+
 
     public UserResponse createUser(UserCreationRequest request){
         log.info("Service: Create User");
@@ -138,7 +144,18 @@ public class UserService {
         return result;
     }
 
-    public List<Object> getUsersRoles(int userIdIndex){
+    public List<Object> getUsersRoles(int userIdIndex) throws SQLException {
+        List<Object> result = new ArrayList<>();
+        Map<String, Object> test = jdbcUserRepository.getData(userIdIndex);
+        /*
+        ArrayList list1 = (ArrayList) test.get("#result-set-1");
+        ArrayList list2 =  (ArrayList) test.get("#result-set-2");
+
+        result.add(list1);
+        result.add(list2);
+        */
+
+        //return result;
         return userRepository.getUsersRoles(userIdIndex);
     }
 

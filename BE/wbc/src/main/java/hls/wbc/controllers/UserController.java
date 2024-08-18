@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.List;
 
@@ -95,7 +96,7 @@ public class UserController {
     }
 
     @PostMapping("/test/userrole")
-    ApiResponse<List<Object>> getUsersRoles(@RequestBody  @Valid TestUserIdIndexRequest request){
+    ApiResponse<List<Object>> getUsersRoles(@RequestBody  @Valid TestUserIdIndexRequest request) throws SQLException {
         List<Object> res = userService.getUsersRoles(request.getUserIdIndex());
         return ApiResponse.<List<Object>>builder()
                 .result(res)

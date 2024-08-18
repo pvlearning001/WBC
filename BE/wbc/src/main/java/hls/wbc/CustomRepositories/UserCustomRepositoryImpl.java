@@ -72,22 +72,25 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
         return toEntity(obj);
     }
 
-    @Query(value = "CALL sp_GetUsersRoles(:userIdIndex);", nativeQuery = true)
+    @Query(value = "CALL sp_GetUsersData(:userIdIndex);", nativeQuery = true)
     public List<Object> getUsersRoles(@Param("userIdIndex") int userIdIndex){
-        StoredProcedureQuery query2 = entityManager.createStoredProcedureQuery("sp_GetUsersRoles");
-        query2.registerStoredProcedureParameter("userIdIndex", Integer.class, ParameterMode.IN);;
+        StoredProcedureQuery query2 = entityManager.createStoredProcedureQuery("sp_GetUsersData");
+        query2.registerStoredProcedureParameter("userIdIndex", Integer.class, ParameterMode.IN);
+
+        query2.registerStoredProcedureParameter("pageTotal", Integer.class, ParameterMode.OUT);
         query2.setParameter("userIdIndex", userIdIndex);
 
         query2.execute();
+        Object objPageTotal = query2.getOutputParameterValue("pageTotal");
         List<Object> res = query2.getResultList();
         return res;
 
     }
 
-    @Query(value = "CALL sp_GetUsersRoles(:userIdIndex);", nativeQuery = true)
+    @Query(value = "CALL sp_GetUsersData(:userIdIndex);", nativeQuery = true)
     public List<Object> getUsersRoles2(@Param("userIdIndex") int userIdIndex){
-        StoredProcedureQuery query2 = entityManager.createStoredProcedureQuery("sp_GetUsersRoles");
-        query2.registerStoredProcedureParameter("userIdIndex", Integer.class, ParameterMode.IN);;
+        StoredProcedureQuery query2 = entityManager.createStoredProcedureQuery("sp_GetUsersData");
+        query2.registerStoredProcedureParameter("userIdIndex", Integer.class, ParameterMode.IN);
         query2.setParameter("userIdIndex", userIdIndex);
 
         query2.execute();
