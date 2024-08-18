@@ -21,11 +21,13 @@ public class JdbcUserRepositoryImp implements JdbcUserRepository {
         List prmtrsList = new ArrayList();
         prmtrsList.add(new SqlParameter(Types.INTEGER));
         prmtrsList.add(new SqlOutParameter("pageTotal", Types.INTEGER));
+        prmtrsList.add(new SqlOutParameter("pageTotal2", Types.INTEGER));
 
         Map<String, Object> resultData = jdbcTemplate.call(connection -> {
-            CallableStatement callableStatement = connection.prepareCall("{call sp_GetUsersData(?, ?)}");
+            CallableStatement callableStatement = connection.prepareCall("{call sp_TestGetUsersData(?, ?, ?)}");
             callableStatement.setInt("userIdIndex", userIdIndex);
             callableStatement.registerOutParameter("pageTotal", Types.INTEGER);
+            callableStatement.registerOutParameter("pageTotal2", Types.INTEGER);
             return callableStatement;
         }, prmtrsList);
         return resultData;

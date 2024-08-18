@@ -74,14 +74,18 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
 
     @Query(value = "CALL sp_TestGetUsersData(:userIdIndex);", nativeQuery = true)
     public List<Object> getUsersRoles(@Param("userIdIndex") int userIdIndex){
-        StoredProcedureQuery query2 = entityManager.createStoredProcedureQuery("sp_GetUsersData");
+        StoredProcedureQuery query2 = entityManager.createStoredProcedureQuery("sp_TestGetUsersData");
         query2.registerStoredProcedureParameter("userIdIndex", Integer.class, ParameterMode.IN);
 
         query2.registerStoredProcedureParameter("pageTotal", Integer.class, ParameterMode.OUT);
+
+        query2.registerStoredProcedureParameter("pageTotal2", Integer.class, ParameterMode.OUT);
+
         query2.setParameter("userIdIndex", userIdIndex);
 
         query2.execute();
         Object objPageTotal = query2.getOutputParameterValue("pageTotal");
+        Object objPageTotal2 = query2.getOutputParameterValue("pageTotal2");
         List<Object> res = query2.getResultList();
         return res;
 

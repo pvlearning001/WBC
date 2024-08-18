@@ -389,12 +389,14 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE `sp_TestGetUsersData`(
 	IN `userIdIndex` INT,
-	INOUT `pageTotal` INT
+	INOUT `pageTotal` INT,
+	OUT `pageTotal2` INT
 )
 BEGIN	
 	SELECT * FROM user WHERE id > userIdIndex;
 	SELECT * FROM user_ext WHERE user_id > userIdIndex;
 	SELECT COUNT(id) INTO pageTotal FROM user WHERE id > userIdIndex;
+	SET pageTotal2 = 12;
 END//
 DELIMITER ;
 
