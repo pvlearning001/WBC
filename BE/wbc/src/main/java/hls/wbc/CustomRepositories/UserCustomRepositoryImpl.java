@@ -72,7 +72,7 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
         return toEntity(obj);
     }
 
-    @Query(value = "CALL sp_GetUsersData(:userIdIndex);", nativeQuery = true)
+    @Query(value = "CALL sp_TestGetUsersData(:userIdIndex);", nativeQuery = true)
     public List<Object> getUsersRoles(@Param("userIdIndex") int userIdIndex){
         StoredProcedureQuery query2 = entityManager.createStoredProcedureQuery("sp_GetUsersData");
         query2.registerStoredProcedureParameter("userIdIndex", Integer.class, ParameterMode.IN);
@@ -87,7 +87,7 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
 
     }
 
-    @Query(value = "CALL sp_GetUsersData(:userIdIndex);", nativeQuery = true)
+    @Query(value = "CALL sp_TestGetUsersData(:userIdIndex);", nativeQuery = true)
     public List<Object> getUsersRoles2(@Param("userIdIndex") int userIdIndex){
         StoredProcedureQuery query2 = entityManager.createStoredProcedureQuery("sp_GetUsersData");
         query2.registerStoredProcedureParameter("userIdIndex", Integer.class, ParameterMode.IN);

@@ -37,7 +37,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, UserCustom
     @Query("select u from User u where userName = ?1 and isDeleted = true")
     Optional<User> findByUserNameDeleted(@Param("userName") String userName);
 
-    @Query(value = "CALL sp_GetUserByRole(:roleId);", nativeQuery = true)
+    @Query(value = "CALL sp_TestGetUserByRole(:roleId);", nativeQuery = true)
     List<User> getUserByRole(@Param("roleId") int roleId);
 
 }
