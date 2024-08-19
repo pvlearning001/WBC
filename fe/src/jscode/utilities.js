@@ -136,4 +136,36 @@ export function isTokenTimeoutExpired() {
     let token_expTime = Number(token_expTime_string);
     let currentTime = new Date().getTime();    
     return (currentTime > token_expTime);
-  };
+}
+
+export function buildPageSession(pageIndex, pageTotal){
+    pageIndex = parseInt(pageIndex);
+    pageTotal = parseInt(pageTotal);
+    let pageMin = parseInt(constants.page_first_default);
+    let pageMax = parseInt(constants.page_session_default);
+    let div = parseInt(Math.floor(constants.page_session_default / 2));
+
+    if (pageIndex <= 3){
+        pageMin = 1;
+    }
+    else if(pageIndex > (pageTotal - div)){
+        pageMin = pageTotal + 1 - constants.page_session_default;
+        pageMax = pageTotal;
+    }
+    else{
+        pageMin = pageIndex - div;
+        pageMax = pageIndex + div; 
+        console.log(pageMax);
+    }
+
+    pageMin = (pageMin < 1) ? 1 : pageMin;
+    pageMax = (pageMax > pageTotal) ? pageTotal : pageMax;
+
+    let result = [];
+    if (pageMax > 1){
+        for (let page = pageMin; page <= pageMax; page++) { 
+            result.push(page);
+        }
+    }
+return result;
+}

@@ -98,7 +98,7 @@ export const page_type_ellipsis = 6;
 
 export const page_first_default = 1;
 export const page_total_default = 1;
-export const page_session_default = 3;
+export const page_session_default = 5;
 
 
 

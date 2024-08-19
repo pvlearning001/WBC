@@ -1,5 +1,6 @@
 import { memo, useCallback } from "react";
 import Pagination from 'react-bootstrap/Pagination';
+import * as utils from "../jscode/utilities";
 
 function PagingListComponent(props) {
     const handleItemClick = useCallback((value) => {
@@ -8,13 +9,17 @@ function PagingListComponent(props) {
         }, []);
     
     let result = [];
-    for (let number = 1; number <= props.pageTotal; number++) { 
-        if (number === props.pageIndex){
-            result.push(<Pagination.Item key={number} active onClick={() => handleItemClick(number)}>{number}</Pagination.Item>);
+    if (props.pageTotal > 1){
+        let pageSession = utils.buildPageSession(props.pageIndex, props.pageTotal); 
+        for (let page of pageSession) {
+            if (page == props.pageIndex){
+                result.push(<Pagination.Item key={page} active>{page}</Pagination.Item>);
+            }
+            else{
+                result.push(<Pagination.Item key={page} onClick={() => handleItemClick(page)}>{page}</Pagination.Item>);
+            }
         }
-        else{
-            result.push(<Pagination.Item key={number} onClick={() => handleItemClick(number)}>{number}</Pagination.Item>);
-        }
+        
     }
 
     return result
