@@ -1,7 +1,10 @@
 package hls.wbc.CustomRepositories;
+import hls.wbc.constants.AppContants;
+import hls.wbc.dto.responses.PagingResponse;
 import hls.wbc.entities.User;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -70,6 +73,28 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
     public User customDelete(int id) {
         Object obj = super.baseCustomDelete(id);
         return toEntity(obj);
+    }
+
+    @Query(value = "CALL sp_GetUserList(:findText, :pageIndex);", nativeQuery = true)
+    public PagingResponse getUserList(@Param("findText") String findText, @Param("pageIndex") int pageIndex){
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("sp_GetUserList");
+
+        query.registerStoredProcedureParameter("findText", String.class, ParameterMode.IN);
+        query.setParameter("findText", findText);
+
+        query.registerStoredProcedureParameter("pageIndex", Integer.class, ParameterMode.IN);
+        query.setParameter("pageIndex", pageIndex);
+
+        query.registerStoredProcedureParameter("pageTotal", Integer.class, ParameterMode.OUT);
+
+        int pageTotal = Integer.parseInt(query.getOutputParameterValue("pageTotal").toString());
+        query.execute();
+        List<Object> list = query.getResultList();
+        return PagingResponse.<Object>builder()
+                .pageIndex(pageIndex)
+                .pageTotal(pageTotal)
+                .pageResult(list)
+                .build();
     }
 
     @Query(value = "CALL sp_TestGetUsersData(:userIdIndex);", nativeQuery = true)

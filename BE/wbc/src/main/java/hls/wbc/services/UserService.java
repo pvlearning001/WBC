@@ -2,6 +2,7 @@ package hls.wbc.services;
 
 import hls.wbc.constants.AppContants;
 import hls.wbc.dto.requests.UserCreationRequest;
+import hls.wbc.dto.requests.UserListRequest;
 import hls.wbc.dto.requests.UserUpdateRequest;
 import hls.wbc.dto.responses.PagingResponse;
 import hls.wbc.dto.responses.UserResponse;
@@ -145,6 +146,11 @@ public class UserService {
         log.info("In method get user by Id");
         return userMapper.toResponse(userRepository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
+    }
+
+    @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
+    public PagingResponse getUserList(UserListRequest request){
+        return userRepository.getUserList(request.getFindText(), request.getPageIndex());
     }
 
     //  Testing function

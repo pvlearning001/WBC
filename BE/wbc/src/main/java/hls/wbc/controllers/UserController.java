@@ -87,6 +87,14 @@ public class UserController {
                 .build();
     }
 
+    @PostMapping("/list")
+    ApiResponse<PagingResponse> getUserList(@RequestBody  @Valid UserListRequest request){
+        PagingResponse res = userService.getUserList(request);
+        return ApiResponse.<PagingResponse>builder()
+                .result(res)
+                .build();
+    }
+
     @PostMapping("/test/role")
     ApiResponse<List<UserResponse>> getUserByRole(@RequestBody  @Valid TestUserRoleRequest request){
         List<UserResponse> res = userService.getUserByRole(request.getRoleId());

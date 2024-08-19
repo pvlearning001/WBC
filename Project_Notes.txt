@@ -130,4 +130,7 @@ LIMIT 0,5
 CALL sp_GetUsersData(5,@pageTotal);
 SELECT @pageTotal;
 
-SELECT COUNT(id) FROM user WHERE id > 5;
+SELECT COUNT(id) FROM user WHERE id > 5;CALL sp_GetUserList(2,@pageTotal);
+SELECT @pageTotal;
+
+UPDATE configs SET page_size=30 WHERE id=1
