@@ -371,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.role: ~2 rows (approximately)
+-- Dumping data for table wbc.role: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.role_permission
 CREATE TABLE IF NOT EXISTS `role_permission` (
@@ -431,6 +431,7 @@ BEGIN
 		, ue.m_name
 		, ue.l_name
 		, ue.email
+		, u.pw_reset
 		, u.roles_id
 		, u.roles_name
 	FROM user u		
@@ -482,6 +483,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `user_name` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
   `is_reset_pw` bit(1) DEFAULT b'0',
+  `pw_reset` varchar(255) DEFAULT NULL,
   `roles_id` varchar(255) DEFAULT NULL,
   `roles_name` varchar(512) DEFAULT NULL,
   `remark` varchar(1028) DEFAULT NULL,
@@ -493,7 +495,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user: ~96 rows (approximately)
+-- Dumping data for table wbc.user: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.user_ext
 CREATE TABLE IF NOT EXISTS `user_ext` (
@@ -517,7 +519,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_ext: ~96 rows (approximately)
+-- Dumping data for table wbc.user_ext: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.user_role
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -538,7 +540,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_role: ~97 rows (approximately)
+-- Dumping data for table wbc.user_role: ~0 rows (approximately)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

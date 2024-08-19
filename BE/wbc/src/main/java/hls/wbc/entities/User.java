@@ -22,7 +22,10 @@ public class User extends BaseEntity {
     String password;
 
     @Column(name = "is_reset_pw")
-    boolean isResetPw;;
+    boolean isResetPw;
+
+    @Column(name = "pw_reset")
+    String pwReset;
 
     @Column(name = "roles_id")
     String rolesId;
@@ -31,11 +34,12 @@ public class User extends BaseEntity {
     String rolesName;
 
     @Builder
-    public User(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String userName, String password, boolean isResetPw, String rolesId, String rolesName, Set<Role> roles){
+    public User(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String userName, String password, boolean isResetPw, String pwReset, String rolesId, String rolesName, Set<Role> roles){
         super(id, guid, remark, isDeleted, insAt, insBy, updAt, updBy);
         this.userName = userName;
         this.password = password;
         this.isResetPw = isResetPw;
+        this.pwReset = pwReset;
         this.rolesId = rolesId;
         this.rolesName = rolesName;
         this.roles = roles;
