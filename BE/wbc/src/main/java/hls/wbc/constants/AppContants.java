@@ -9,6 +9,8 @@ public class AppContants {
         public static final String Empty = "";
         public static final String Alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         public static final String Dot = ".";
+        public static final String Comma = ",";
+        public static final String Semicolon = ";";
         public static final String Underscore = "_";
     }
 
@@ -16,10 +18,10 @@ public class AppContants {
         public static final int StrengBCrypt = 10;
         public static final String MD5 = "MD5";
         public static  final int AdminId = 1;
-        public static  final int UserRoleId = 1;
         public static final int TokenDuration = 12; //HOURS
         public static final String HasRoleAdmin = "hasRole('Admin')";
         public static final String JWTClaimsSetIssuer = "hls.com";
+        public static final String RoleTokenPrefix = "ROLE_";
     }
 
     public static class UtilitiesValues {

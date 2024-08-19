@@ -1,10 +1,8 @@
 package hls.wbc.configuration;
 
 import hls.wbc.constants.AppContants;
-import hls.wbc.entities.Category;
-import hls.wbc.entities.Role;
-import hls.wbc.entities.User;
-import hls.wbc.entities.UserExt;
+import hls.wbc.entities.*;
+import hls.wbc.enums.Roles;
 import hls.wbc.repositories.CategoryRepository;
 import hls.wbc.repositories.RoleRepository;
 import hls.wbc.repositories.UserExtRepository;
@@ -17,9 +15,12 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.stream.Collectors;
 
 @Configuration
@@ -46,7 +47,7 @@ public class ApplicationInitConfig {
         }
     }
 
-    private void initAdminUser(String userName, UserRepository userRepos, RoleRepository roleRepos, UserExtRepository userExtRepos, String remark){
+    private void initAdminUser(String userName, UserRepository userRepos, RoleRepository roleRepos, UserExtRepository userExtRepos){
         Optional<User> initUser = userRepos.findByUserName(userName);
         if (initUser.isEmpty()){
             if (userRepos.existsByUserNameDeleted(userName)){
@@ -58,15 +59,25 @@ public class ApplicationInitConfig {
                 }
             }
             else {
-                Set<Role> roleList = roleRepos.findByIsDeleted(false)
-                        .stream().collect(Collectors.toSet());
+                Set<Role> roleList = new HashSet<>(roleRepos.findByIsDeleted(false));
+                StringJoiner sjRolesId = new StringJoiner(AppContants.StringValues.Comma);
+                StringJoiner sjRolesName = new StringJoiner(AppContants.StringValues.Comma);
+                if (!CollectionUtils.isEmpty(roleList))
+                    roleList.forEach(role -> {
+                        sjRolesId.add(Integer.toString(role.getId()));
+                        sjRolesName.add(role.getName());
+                    });
+
                 User user = User.builder()
                         .guid(java.util.UUID.randomUUID().toString())
                         .userName(userName)
                         .password(passwordEncoder.encode("pw1"))
+                        .isResetPw(false)
+                        .rolesId(sjRolesId.toString())
+                        .rolesName(sjRolesName.toString())
                         .roles(roleList)
                         .build();
-                user.setTraceNew(null, remark);
+                user.setTraceNew(null, "Init User");
                 User saveResult = userRepos.save(user);
                 int userId = saveResult.getId();
                 UserExt userExt = UserExt.builder()
@@ -86,12 +97,20 @@ public class ApplicationInitConfig {
     private void initUserList(UserRepository userRepos, RoleRepository roleRepos, UserExtRepository userExtRepos){
         Optional<User> firstUser = userRepos.findByUserName("user02");
         if (firstUser.isEmpty()) {
-            Set<Role> roleList = roleRepos.findByName("User")
-                    .stream().collect(Collectors.toSet());
+            Set<Role> roleList = new HashSet<>(roleRepos.findByName("User"));
+
+            StringJoiner sjRolesId = new StringJoiner(AppContants.StringValues.Comma);
+            StringJoiner sjRolesName = new StringJoiner(AppContants.StringValues.Comma);
+            if (!CollectionUtils.isEmpty(roleList))
+                roleList.forEach(role -> {
+                    sjRolesId.add(Integer.toString(role.getId()));
+                    sjRolesName.add(role.getName());
+                });
+            String rolesId = sjRolesId.toString();
+            String rolesName = sjRolesName.toString();
+
             Optional<Role> userRole = roleList.stream().findFirst();
-            int roleId = userRole.isPresent()
-                    ? userRole.get().getId()
-                    : AppContants.SecuritiesValues.UserRoleId;
+            int roleId = userRole.map(BaseEntity::getId).orElseGet(Roles.User::getId);
             String roleIdString = String.valueOf(roleId);
             String pw = passwordEncoder.encode("pw1");
             for (int i = 1; i < 95; i++) {
@@ -102,7 +121,7 @@ public class ApplicationInitConfig {
                         : String.valueOf(maxId));
 
                 String userName = "user" + nameIndex;
-                String sql = "INSERT INTO User(user_name, password) VALUES('" + userName + "', '" + pw + "')";
+                String sql = "INSERT INTO User(user_name, password, is_reset_pw, roles_id, roles_name) VALUES('" + userName + "', '" + pw + "', 0, '" + rolesId + "', '" + rolesName + "')";
                 userRepos.customExecQuery(sql);
                 maxId = userRepos.customGetMaxId();
                 sql = "INSERT INTO User_Role(user_id, role_id) VALUES(" + String.valueOf(maxId) + ", " + roleIdString + ")";
@@ -146,7 +165,7 @@ public class ApplicationInitConfig {
             initRoles(roleRepos, "User", "Init User Role");
             initRoles(roleRepos, "Admin", "Init Admin Role");
             String userName = "admin";
-            initAdminUser(userName, userRepos, roleRepos, userExtRepos, "Init User");
+            initAdminUser(userName, userRepos, roleRepos, userExtRepos);
             if (userRepos.existsByUserName("admin")){
                 log.info("Admin user is exists");
             }

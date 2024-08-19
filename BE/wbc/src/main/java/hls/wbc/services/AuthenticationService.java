@@ -34,9 +34,7 @@ import org.springframework.util.CollectionUtils;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.StringJoiner;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -177,6 +175,17 @@ public class AuthenticationService {
     }
 
     private String buildScope(User user){
+        StringJoiner stringJoiner = new StringJoiner(AppContants.StringValues.Space);
+        List<String> rolesName = Arrays.stream(user.getRolesName().split(AppContants.StringValues.Comma)).toList();
+        if (!CollectionUtils.isEmpty(rolesName)){
+            rolesName.forEach(role -> {
+                stringJoiner.add(AppContants.SecuritiesValues.RoleTokenPrefix + role);
+            });
+        }
+        return stringJoiner.toString();
+    }
+
+    private String buildScope_Old(User user){
         StringJoiner stringJoiner = new StringJoiner(AppContants.StringValues.Space);
 
         if (!CollectionUtils.isEmpty(user.getRoles()))

@@ -8,6 +8,7 @@ import hls.wbc.dto.responses.UserResponse;
 import hls.wbc.entities.Role;
 import hls.wbc.entities.User;
 import hls.wbc.entities.UserExt;
+import hls.wbc.enums.Roles;
 import hls.wbc.exceptions.AppException;
 import hls.wbc.exceptions.ErrorCode;
 import hls.wbc.mappers.UserMapper;
@@ -28,6 +29,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.awt.print.Pageable;
 import java.sql.SQLException;
@@ -51,16 +53,27 @@ public class UserService {
 
     public UserResponse createUser(UserCreationRequest request){
         log.info("Service: Create User");
+
+        Set<Integer> roleIdListInit = new HashSet<Integer>(List.of(Roles.User.getId()));
+        Set<Role> roleListInit = new HashSet<>(roleRepository.findAllById(roleIdListInit));
+
+        StringJoiner sjRolesId = new StringJoiner(AppContants.StringValues.Comma);
+        StringJoiner sjRolesName = new StringJoiner(AppContants.StringValues.Comma);
+        if (!CollectionUtils.isEmpty(roleListInit))
+            roleListInit.forEach(role -> {
+                sjRolesId.add(Integer.toString(role.getId()));
+                sjRolesName.add(role.getName());
+            });
+
         if (userRepository.existsByUserName(request.getUserName()))
             throw new AppException(ErrorCode.USER_EXISTED);
         User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setResetPw(false);
+        user.setRolesId(sjRolesId.toString());
+        user.setRolesName(sjRolesName.toString());
         user.setTraceNew(AppContants.SecuritiesValues.AdminId, null);
 
-        Set<Integer> roleIdListInit = new HashSet<Integer>(Arrays.asList(AppContants.SecuritiesValues.UserRoleId));
-
-        Set<Role> roleListInit = roleRepository.findAllById(roleIdListInit)
-                .stream().collect(Collectors.toSet());
         user.setRoles(roleListInit);
         User userSave = userRepository.save(user);
 
@@ -134,6 +147,7 @@ public class UserService {
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }
 
+    //  Testing function
     public List<UserResponse> getUserByRole(int roleId){
         List<UserResponse> result = new ArrayList<>();
         List<User> list = userRepository.getUserByRole(roleId);
@@ -159,6 +173,7 @@ public class UserService {
         return userRepository.getUsersRoles(userIdIndex);
     }
 
+    //  Testing function
     public PagingResponse getUserPaging(int pageIndex){
 
         int totalPage = AppUtils.getTotalPage(userRepository.getTotalRecord());

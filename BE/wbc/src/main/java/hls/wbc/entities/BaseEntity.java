@@ -22,7 +22,7 @@ public class BaseEntity {
     @Column(name = "guid")
     String guid;
 
-    @Column(name = "remark")
+    @Column(name = "remark", length = 1028)
     String remark;
 
     @Column(name = "is_deleted")

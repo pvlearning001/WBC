@@ -95,6 +95,7 @@ public class UserController {
                 .build();
     }
 
+    //  Testing function
     @PostMapping("/test/userrole")
     ApiResponse<List<Object>> getUsersRoles(@RequestBody  @Valid TestUserIdIndexRequest request) throws SQLException {
         List<Object> res = userService.getUsersRoles(request.getUserIdIndex());
@@ -103,6 +104,7 @@ public class UserController {
                 .build();
     }
 
+    //  Testing function
     @PostMapping("/test/userp")
     ApiResponse<PagingResponse> getUserPaging(@RequestBody  @Valid TestUserPagingRequest request){
         PagingResponse res = userService.getUserPaging(request.getPageIndex());
