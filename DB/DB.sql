@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.category: ~2 rows (approximately)
+-- Dumping data for table wbc.category: ~1 rows (approximately)
 
 -- Dumping structure for table wbc.configs
 CREATE TABLE IF NOT EXISTS `configs` (
@@ -408,21 +408,46 @@ BEGIN
 	DECLARE startIndex INT;
 	DECLARE totalRecord INT;
 	DECLARE pageSize INT;
-	DECLARE findCount VARCHAR(250);
-	DECLARE find VARCHAR(250);
+	
+	DECLARE stmSelectCount VARCHAR(1024);
+	DECLARE stmSelectColumn VARCHAR(2048);
+	DECLARE stmFrom VARCHAR(1024);
+	DECLARE stmWhere VARCHAR(2048); 
+	DECLARE stmSort VARCHAR(512);
+	DECLARE stmLimit VARCHAR(512);
+		
+	DECLARE findValue VARCHAR(512);
 	DECLARE findCondition VARCHAR(1024);
-	DECLARE sortStmt VARCHAR(512);
+	
+	SET stmSelectCount = 'SELECT COUNT(u.id) INTO @totalRecord';
+	SET stmSelectColumn = '
+		SELECT u.id AS id
+		, u.user_name
+		, ue.f_name
+		, ue.m_name
+		, ue.l_name
+		, ue.email
+		, u.pw_reset
+		, u.roles_id
+		, u.roles_name';
+		
+	SET stmFrom = '
+	FROM user u		
+		LEFT JOIN user_ext ue ON u.id = ue.user_id
+	';
+	
+	SET stmWhere = '
+	WHERE (u.is_deleted = 0) AND (u.id > 1)
+	';
 
 	IF (findText IS NOT NULL) THEN
-		SET findCount = CONCAT('%', findText, '%');
-		SET find = CONCAT('\'', findCount, '\'');
-		SET findCondition = CONCAT(' AND(
-			(u.user_name LIKE ', find, ')
-			OR (ue.f_name LIKE ',  find, ')
-			OR (ue.m_name LIKE ', find, ')
-			OR (ue.l_name LIKE ', find, ')
-			OR (ue.email LIKE ', find, ')
-		)');
+		SET findValue = CONCAT('\'%', findText, '%\'');
+		SET findCondition = CONCAT(' 
+		AND((u.user_name LIKE ', findValue, ')
+			OR (ue.f_name LIKE ',  findValue, ')
+			OR (ue.m_name LIKE ', findValue, ')
+			OR (ue.l_name LIKE ', findValue, ')
+			OR (ue.email LIKE ', findValue, '))');
 	ELSE
 		SET findCondition = ' AND(1=1)';
 	END IF;
@@ -435,46 +460,30 @@ BEGIN
 		SET sortType = 'desc';
 	END IF;
 	
-	SET sortStmt = CONCAT(sort, ' ', sortType);
-		
-	SELECT COUNT(u.id) INTO totalRecord 
-	FROM user u
-		LEFT JOIN user_ext ue ON u.id = ue.user_id
-	WHERE u.is_deleted = 0
-		AND u.id > 1
-		AND(
-			((findText IS NULL) OR (u.user_name LIKE findCount))
-			OR ((findText IS NULL) OR (ue.f_name LIKE findCount))
-			OR ((findText IS NULL) OR (ue.m_name LIKE findCount))
-			OR ((findText IS NULL) OR (ue.l_name LIKE findCount))
-			OR ((findText IS NULL) OR (ue.email LIKE findCount))
-		);
+	SET stmSort = CONCAT('
+	ORDER BY ', sort, ' ', sortType);
+	
+	SET stmWhere = CONCAT(stmWhere, findCondition);
+	
+	SET @sqlCount = CONCAT(stmSelectCount, stmFrom, stmWhere, ';');
+	
+	PREPARE stm FROM @sqlCount;
+ 	EXECUTE stm;
+ 	
+ 	SELECT @totalRecord INTO totalRecord;
 	
 	SELECT fn_GetPageSize() INTO pageSize;	
 	SELECT fn_GetPageTotal(totalRecord, pageSize) INTO pageTotal;
 	SET startIndex = (pageIndex - 1) * pageSize;	
 	
-	SET @sql = CONCAT('
-	SELECT u.id AS id
-		, u.user_name
-		, ue.f_name
-		, ue.m_name
-		, ue.l_name
-		, ue.email
-		, u.pw_reset
-		, u.roles_id
-		, u.roles_name
-	FROM user u		
-		LEFT JOIN user_ext ue ON u.id = ue.user_id
-	WHERE u.is_deleted = 0
-		AND u.id > 1', findCondition, '		
-	ORDER BY ', sortStmt, '
-	LIMIT ', startIndex, ',', pageSize,';');
+	SET stmLimit = CONCAT('
+	LIMIT ', startIndex, ', ', pageSize);
 	
+	SET @sqlColumn = CONCAT(stmSelectColumn, stmFrom, stmWhere, stmSort, stmLimit, ';');
 	
-	PREPARE stmt FROM @sql;
- 	EXECUTE stmt;
- 	DEALLOCATE PREPARE stmt;
+	PREPARE stm FROM @sqlColumn;
+ 	EXECUTE stm;
+ 	DEALLOCATE PREPARE stm;
 END//
 DELIMITER ;
 
@@ -502,21 +511,46 @@ BEGIN
 	DECLARE startIndex INT;
 	DECLARE totalRecord INT;
 	DECLARE pageSize INT;
-	DECLARE findCount VARCHAR(250);
-	DECLARE find VARCHAR(250);
+	
+	DECLARE stmSelectCount VARCHAR(1024);
+	DECLARE stmSelectColumn VARCHAR(2048);
+	DECLARE stmFrom VARCHAR(1024);
+	DECLARE stmWhere VARCHAR(2048); 
+	DECLARE stmSort VARCHAR(512);
+	DECLARE stmLimit VARCHAR(512);
+		
+	DECLARE findValue VARCHAR(512);
 	DECLARE findCondition VARCHAR(1024);
-	DECLARE sortStmt VARCHAR(512);
+	
+	SET stmSelectCount = 'SELECT COUNT(u.id) INTO @totalRecord';
+	SET stmSelectColumn = '
+		SELECT u.id AS id
+		, u.user_name
+		, ue.f_name
+		, ue.m_name
+		, ue.l_name
+		, ue.email
+		, u.pw_reset
+		, u.roles_id
+		, u.roles_name';
+		
+	SET stmFrom = '
+	FROM user u		
+		LEFT JOIN user_ext ue ON u.id = ue.user_id
+	';
+	
+	SET stmWhere = '
+	WHERE (u.is_deleted = 0) AND (u.id > 1)
+	';
 
 	IF (findText IS NOT NULL) THEN
-		SET findCount = CONCAT('%', findText, '%');
-		SET find = CONCAT('\'', findCount, '\'');
-		SET findCondition = CONCAT(' AND(
-			(u.user_name LIKE ', find, ')
-			OR (ue.f_name LIKE ',  find, ')
-			OR (ue.m_name LIKE ', find, ')
-			OR (ue.l_name LIKE ', find, ')
-			OR (ue.email LIKE ', find, ')
-		)');
+		SET findValue = CONCAT('\'%', findText, '%\'');
+		SET findCondition = CONCAT(' 
+		AND((u.user_name LIKE ', findValue, ')
+			OR (ue.f_name LIKE ',  findValue, ')
+			OR (ue.m_name LIKE ', findValue, ')
+			OR (ue.l_name LIKE ', findValue, ')
+			OR (ue.email LIKE ', findValue, '))');
 	ELSE
 		SET findCondition = ' AND(1=1)';
 	END IF;
@@ -529,44 +563,30 @@ BEGIN
 		SET sortType = 'desc';
 	END IF;
 	
-	SET sortStmt = CONCAT(sort, ' ', sortType);
-		
-	SELECT COUNT(u.id) INTO totalRecord 
-	FROM user u
-		LEFT JOIN user_ext ue ON u.id = ue.user_id
-	WHERE u.is_deleted = 0
-		AND(
-			((findText IS NULL) OR (u.user_name LIKE findCount))
-			OR ((findText IS NULL) OR (ue.f_name LIKE findCount))
-			OR ((findText IS NULL) OR (ue.m_name LIKE findCount))
-			OR ((findText IS NULL) OR (ue.l_name LIKE findCount))
-			OR ((findText IS NULL) OR (ue.email LIKE findCount))
-		);
+	SET stmSort = CONCAT('
+	ORDER BY ', sort, ' ', sortType);
+	
+	SET stmWhere = CONCAT(stmWhere, findCondition);
+	
+	SET @sqlCount = CONCAT(stmSelectCount, stmFrom, stmWhere, ';');
+	
+	PREPARE stm FROM @sqlCount;
+ 	EXECUTE stm;
+ 	
+ 	SELECT @totalRecord INTO totalRecord;
 	
 	SELECT fn_GetPageSize() INTO pageSize;	
 	SELECT fn_GetPageTotal(totalRecord, pageSize) INTO pageTotal;
 	SET startIndex = (pageIndex - 1) * pageSize;	
 	
-	SET @sql = CONCAT('
-	SELECT u.id AS id
-		, u.user_name
-		, ue.f_name
-		, ue.m_name
-		, ue.l_name
-		, ue.email
-		, u.pw_reset
-		, u.roles_id
-		, u.roles_name
-	FROM user u		
-		LEFT JOIN user_ext ue ON u.id = ue.user_id
-	WHERE u.is_deleted = 0', findCondition, '		
-	ORDER BY ', sortStmt, '
-	LIMIT ', startIndex, ',', pageSize,';');
+	SET stmLimit = CONCAT('
+	LIMIT ', startIndex, ', ', pageSize);
 	
+	SET @sqlColumn = CONCAT(stmSelectColumn, stmFrom, stmWhere, stmSort, stmLimit, ';');
 	
-	PREPARE stmt FROM @sql;
- 	EXECUTE stmt;
- 	DEALLOCATE PREPARE stmt;
+	PREPARE stm FROM @sqlColumn;
+ 	EXECUTE stm;
+ 	DEALLOCATE PREPARE stm;
 END//
 DELIMITER ;
 

@@ -46,6 +46,10 @@ SELECT * FROM user_ext;
 SELECT * FROM user_role;
 
 
+
+UPDATE configs SET page_size=30 WHERE id=1
+
+
 List<User> userList = userRepos.queryUserList();
 
 userList.forEach((u) -> {
@@ -135,4 +139,14 @@ SELECT COUNT(id) FROM user WHERE id > 5;
 CALL sp_GetUserList(null, null, "asc", 1, @pageTotal);
 SELECT @pageTotal;
 
-UPDATE configs SET page_size=30 WHERE id=1
+DYNAMIC SQL:
+
+CREATE PROCEDURE test_maxsum(uid varchar(25))
+BEGIN
+    SET @SQL = CONCAT('SELECT MAX(sum_val) INTO @maxsum FROM ', uid);
+    PREPARE stmt FROM @SQL;
+    EXECUTE stmt;
+    DEALLOCATE PREPARE stmt;
+
+    SELECT @maxsum;
+END//
