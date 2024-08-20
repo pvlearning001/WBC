@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.category: ~1 rows (approximately)
+-- Dumping data for table wbc.category: ~2 rows (approximately)
 
 -- Dumping structure for table wbc.configs
 CREATE TABLE IF NOT EXISTS `configs` (
@@ -49,7 +49,7 @@ CREATE TABLE IF NOT EXISTS `configs` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.configs: ~1 rows (approximately)
+-- Dumping data for table wbc.configs: ~0 rows (approximately)
 REPLACE INTO `configs` (`id`, `guid`, `page_size`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
 	(1, '47b94929-5dee-11ef-b984-509a4cb5cc32', 20, NULL, b'0', '2024-08-19 05:45:45.000000', 1, '2024-08-19 05:45:45.000000', 1);
 
@@ -371,7 +371,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.role: ~0 rows (approximately)
+-- Dumping data for table wbc.role: ~2 rows (approximately)
 
 -- Dumping structure for table wbc.role_permission
 CREATE TABLE IF NOT EXISTS `role_permission` (
@@ -399,6 +399,8 @@ CREATE TABLE IF NOT EXISTS `role_permission` (
 DELIMITER //
 CREATE PROCEDURE `sp_GetUserList`(
 	IN `findText` VARCHAR(250),
+	IN `sort` VARCHAR(50),
+	IN `sortType` VARCHAR(10),
 	IN `pageIndex` INT,
 	OUT `pageTotal` INT
 )
@@ -406,25 +408,53 @@ BEGIN
 	DECLARE startIndex INT;
 	DECLARE totalRecord INT;
 	DECLARE pageSize INT;
+	DECLARE findCount VARCHAR(250);
 	DECLARE find VARCHAR(250);
-	SET find = CONCAT('%', findText, '%');
+	DECLARE findCondition VARCHAR(1024);
+	DECLARE sortStmt VARCHAR(512);
+
+	IF (findText IS NOT NULL) THEN
+		SET findCount = CONCAT('%', findText, '%');
+		SET find = CONCAT('\'', findCount, '\'');
+		SET findCondition = CONCAT(' AND(
+			(u.user_name LIKE ', find, ')
+			OR (ue.f_name LIKE ',  find, ')
+			OR (ue.m_name LIKE ', find, ')
+			OR (ue.l_name LIKE ', find, ')
+			OR (ue.email LIKE ', find, ')
+		)');
+	ELSE
+		SET findCondition = ' AND(1=1)';
+	END IF;
+	
+	IF (sort IS NULL) THEN
+		SET sort = 'u.id';
+	END IF;
+	
+	IF (sortType IS NULL) THEN
+		SET sortType = 'desc';
+	END IF;
+	
+	SET sortStmt = CONCAT(sort, ' ', sortType);
 		
 	SELECT COUNT(u.id) INTO totalRecord 
 	FROM user u
 		LEFT JOIN user_ext ue ON u.id = ue.user_id
 	WHERE u.is_deleted = 0
+		AND u.id > 1
 		AND(
-			((findText IS NULL) OR (u.user_name LIKE find))
-			OR ((findText IS NULL) OR (ue.f_name LIKE find))
-			OR ((findText IS NULL) OR (ue.m_name LIKE find))
-			OR ((findText IS NULL) OR (ue.l_name LIKE find))
-			OR ((findText IS NULL) OR (ue.email LIKE find))
+			((findText IS NULL) OR (u.user_name LIKE findCount))
+			OR ((findText IS NULL) OR (ue.f_name LIKE findCount))
+			OR ((findText IS NULL) OR (ue.m_name LIKE findCount))
+			OR ((findText IS NULL) OR (ue.l_name LIKE findCount))
+			OR ((findText IS NULL) OR (ue.email LIKE findCount))
 		);
 	
 	SELECT fn_GetPageSize() INTO pageSize;	
 	SELECT fn_GetPageTotal(totalRecord, pageSize) INTO pageTotal;
-	SET startIndex = (pageIndex - 1) * pageSize;
+	SET startIndex = (pageIndex - 1) * pageSize;	
 	
+	SET @sql = CONCAT('
 	SELECT u.id AS id
 		, u.user_name
 		, ue.f_name
@@ -437,16 +467,14 @@ BEGIN
 	FROM user u		
 		LEFT JOIN user_ext ue ON u.id = ue.user_id
 	WHERE u.is_deleted = 0
-		AND(
-			((findText IS NULL) OR (u.user_name LIKE find))
-			OR ((findText IS NULL) OR (ue.f_name LIKE find))
-			OR ((findText IS NULL) OR (ue.m_name LIKE find))
-			OR ((findText IS NULL) OR (ue.l_name LIKE find))
-			OR ((findText IS NULL) OR (ue.email LIKE find))
-		) 
-	ORDER BY u.id DESC
-	LIMIT startIndex, pageSize;
+		AND u.id > 1', findCondition, '		
+	ORDER BY ', sortStmt, '
+	LIMIT ', startIndex, ',', pageSize,';');
 	
+	
+	PREPARE stmt FROM @sql;
+ 	EXECUTE stmt;
+ 	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -458,6 +486,87 @@ CREATE PROCEDURE `sp_TestGetUserByRole`(
 BEGIN
 	SELECT u.* FROM user u 
 	WHERE EXISTS (SELECT 1 FROM user_role ur WHERE u.id = ur.user_id AND ur.role_id = roleId LIMIT 1);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure wbc.sp_TestGetUserList
+DELIMITER //
+CREATE PROCEDURE `sp_TestGetUserList`(
+	IN `findText` VARCHAR(250),
+	IN `sort` VARCHAR(50),
+	IN `sortType` VARCHAR(10),
+	IN `pageIndex` INT,
+	OUT `pageTotal` INT
+)
+BEGIN
+	DECLARE startIndex INT;
+	DECLARE totalRecord INT;
+	DECLARE pageSize INT;
+	DECLARE findCount VARCHAR(250);
+	DECLARE find VARCHAR(250);
+	DECLARE findCondition VARCHAR(1024);
+	DECLARE sortStmt VARCHAR(512);
+
+	IF (findText IS NOT NULL) THEN
+		SET findCount = CONCAT('%', findText, '%');
+		SET find = CONCAT('\'', findCount, '\'');
+		SET findCondition = CONCAT(' AND(
+			(u.user_name LIKE ', find, ')
+			OR (ue.f_name LIKE ',  find, ')
+			OR (ue.m_name LIKE ', find, ')
+			OR (ue.l_name LIKE ', find, ')
+			OR (ue.email LIKE ', find, ')
+		)');
+	ELSE
+		SET findCondition = ' AND(1=1)';
+	END IF;
+	
+	IF (sort IS NULL) THEN
+		SET sort = 'u.id';
+	END IF;
+	
+	IF (sortType IS NULL) THEN
+		SET sortType = 'desc';
+	END IF;
+	
+	SET sortStmt = CONCAT(sort, ' ', sortType);
+		
+	SELECT COUNT(u.id) INTO totalRecord 
+	FROM user u
+		LEFT JOIN user_ext ue ON u.id = ue.user_id
+	WHERE u.is_deleted = 0
+		AND(
+			((findText IS NULL) OR (u.user_name LIKE findCount))
+			OR ((findText IS NULL) OR (ue.f_name LIKE findCount))
+			OR ((findText IS NULL) OR (ue.m_name LIKE findCount))
+			OR ((findText IS NULL) OR (ue.l_name LIKE findCount))
+			OR ((findText IS NULL) OR (ue.email LIKE findCount))
+		);
+	
+	SELECT fn_GetPageSize() INTO pageSize;	
+	SELECT fn_GetPageTotal(totalRecord, pageSize) INTO pageTotal;
+	SET startIndex = (pageIndex - 1) * pageSize;	
+	
+	SET @sql = CONCAT('
+	SELECT u.id AS id
+		, u.user_name
+		, ue.f_name
+		, ue.m_name
+		, ue.l_name
+		, ue.email
+		, u.pw_reset
+		, u.roles_id
+		, u.roles_name
+	FROM user u		
+		LEFT JOIN user_ext ue ON u.id = ue.user_id
+	WHERE u.is_deleted = 0', findCondition, '		
+	ORDER BY ', sortStmt, '
+	LIMIT ', startIndex, ',', pageSize,';');
+	
+	
+	PREPARE stmt FROM @sql;
+ 	EXECUTE stmt;
+ 	DEALLOCATE PREPARE stmt;
 END//
 DELIMITER ;
 
@@ -495,7 +604,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user: ~0 rows (approximately)
+-- Dumping data for table wbc.user: ~255 rows (approximately)
 
 -- Dumping structure for table wbc.user_ext
 CREATE TABLE IF NOT EXISTS `user_ext` (
@@ -519,7 +628,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_ext: ~0 rows (approximately)
+-- Dumping data for table wbc.user_ext: ~255 rows (approximately)
 
 -- Dumping structure for table wbc.user_role
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -540,7 +649,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_role: ~0 rows (approximately)
+-- Dumping data for table wbc.user_role: ~256 rows (approximately)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
