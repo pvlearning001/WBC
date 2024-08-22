@@ -169,3 +169,25 @@ export function buildPageSession(pageIndex, pageTotal){
     }
 return result;
 }
+
+export const isJsonBlob = (data) => {
+    return (data instanceof Blob && data.type === "application/json");
+}
+
+export const isBlobData = (data) => {
+    return (data instanceof Blob);
+}
+
+export function base64ToByteArray(base64) {
+    let binaryString = atob(base64);
+    let result = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        result[i] = binaryString.charCodeAt(i);
+    }
+    return result;    
+}
+
+export function base64ToArrayBuffer(base64) {
+    let byteArray = base64ToByteArray(base64);
+    return byteArray.buffer;
+}

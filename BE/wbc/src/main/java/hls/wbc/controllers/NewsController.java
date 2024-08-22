@@ -59,8 +59,9 @@ public class NewsController {
 
     @PostMapping("/file")
     ApiResponse<FileAttachmentResponse> getFile(@RequestBody @Valid FileAttachmentRequest request) throws IOException  {
+        FileAttachmentResponse fileResponse = fileUploadService.getBinaryArray(request.getId());
         return ApiResponse.<FileAttachmentResponse>builder()
-                .result(fileUploadService.getBinaryArray(request.getId()))
+                .result(fileResponse)
                 .build();
     }
 }

@@ -1,14 +1,17 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
+import { pdfjs } from "react-pdf";
 import { Link } from 'react-router-dom';
 import '../assets/css/page.css';
 import * as constants from "../jscode/constants";
+import * as utils from "../jscode/utilities";
+
+pdfjs.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.6.172/pdf.worker.min.js';
 
 export default function AnnouncementComponent() {  
     const [announcement, setAnnouncement] = useState({});
     const [files, setFiles] = useState([]);
-    const [doc, setDoc] = useState(constants.string_empty);
     const [showModal, setShowModal] = useState(false);
     const [attTitle, setAttTitle] = useState(constants.string_empty);
 
@@ -33,24 +36,60 @@ export default function AnnouncementComponent() {
             });
     }
 
-    async function clickAttachmentFile(fileId){ 
+    function clickAttachmentFile(fileId){ 
         const request = {
             id: fileId
         };
 
-        await axios.post(constants.api_get_file_content_pdf, request)
-            .then(res => {                
-                console.log(res.data.result);
-                let binary = res.data.result.fileContent;
-                if (binary != null) {
-                    let contentType = "application/pdf";
-                    let pdfFile = "data:" + contentType + ";base64," + binary;
-                    setDoc(pdfFile);                    
+        axios.post(constants.api_get_file_content_pdf, request)
+            .then(res => {               
+                let pdfData = utils.base64ToArrayBuffer(res?.data.result.fileContent);
+                let blobData = new Blob([pdfData], { type: 'application/pdf' });
+                const fileURL = URL.createObjectURL(blobData);
+                window.open(fileURL, "_blank");
+
+                /*
+                var len = pdfdata.length;
+                var bytes = new Uint8Array(len);
+                for (var i = 0; i < len; i++){
+                    bytes[i] = pdfdata.charCodeAt(i);                    
                 }
-                else{
-                    setDoc(constants.string_empty);
+                renderPdf = bytes.buffer;
+                const pdfFile = new Blob([renderPdf], { type: 'application/pdf' });
+                const fileURL = URL.createObjectURL(pdfFile);
+                window.open(fileURL, "_blank");
+                const url = window.URL.createObjectURL(pdfFile);
+                */
+
+        // Create a temporary <a> element to trigger the download
+        /*
+        const tempLink = document.createElement("a");
+        tempLink.href = url;
+        tempLink.setAttribute(
+          "download",
+          `bill.pdf`
+        ); // Set the desired filename for the downloaded file
+
+        // Append the <a> element to the body and click it to trigger the download
+        document.body.appendChild(tempLink);
+        tempLink.click();
+
+        // Clean up the temporary elements and URL
+        document.body.removeChild(tempLink);
+        window.URL.revokeObjectURL(url);
+        */
+                /*               
+                var len = pdfdata.length;
+                var bytes = new Uint8Array(len);
+                for (var i = 0; i < len; i++){
+                    bytes[i] = pdfdata.charCodeAt(i);                    
                 }
-                setShowModal(true);
+                renderPdf = bytes.buffer;
+                console.log(renderPdf);
+                setFileContent(renderPdf);   
+                console.log(fileContent);  
+                */           
+                //setShowModal(true);
             })
             .catch(error => {
                 console.log("Error: ", error);
@@ -97,18 +136,7 @@ export default function AnnouncementComponent() {
             </Modal.Header>
             <Modal.Body>
                 <div className="container col-xxl-12 col-xl-12 col-lg-112 col-md-12 col-sm-12 col-12">
-
-                    <embed
-                        src={doc}
-                        id="displayFile"
-                        alt="your image"
-                        width="100%"
-                        height="600px"
-                        style={{ borderStyle: "solid" }}
-                        type="application/pdf"
-                    />
                 
-
                 </div>
             </Modal.Body>
         </Modal>

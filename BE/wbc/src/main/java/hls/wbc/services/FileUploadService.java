@@ -141,14 +141,14 @@ public class FileUploadService {
     }
 
     public FileAttachmentResponse getBinaryArray(int id) throws IOException {
-        byte byteArr[]={};
+        String base64String = AppContants.StringValues.Empty;
         Optional<FileUpload> fileOpt = repository.findById(id);
         if (fileOpt.isPresent()){
             FileUpload file = fileOpt.get();
             Path path = Paths.get(file.getPath(), file.getUniqueName());
-            byteArr = Files.readAllBytes(path);
+            byte[] byteArr = Files.readAllBytes(path);
+            base64String = Base64.getEncoder().encodeToString(byteArr);
         }
-        FileAttachmentResponse result = FileAttachmentResponse.builder().fileContent(byteArr).build();
-        return result;
+        return FileAttachmentResponse.builder().fileContent(base64String).build();
     }
 }
