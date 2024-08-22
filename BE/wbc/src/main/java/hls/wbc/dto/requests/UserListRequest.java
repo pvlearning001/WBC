@@ -10,5 +10,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserListRequest {
     String findText;
+    String sort;
+    String sortType;
     int pageIndex;
 }

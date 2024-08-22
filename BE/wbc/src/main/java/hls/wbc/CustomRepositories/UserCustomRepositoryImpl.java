@@ -4,7 +4,6 @@ import hls.wbc.dto.responses.PagingResponse;
 import hls.wbc.entities.User;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -75,28 +74,13 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
         return toEntity(obj);
     }
 
-    @Query(value = "CALL sp_GetUserList(:findText, :pageIndex);", nativeQuery = true)
-    public PagingResponse getUserList(@Param("findText") String findText, @Param("pageIndex") int pageIndex){
-        StoredProcedureQuery query = entityManager.createStoredProcedureQuery("sp_GetUserList");
-
-        query.registerStoredProcedureParameter("findText", String.class, ParameterMode.IN);
-        query.setParameter("findText", findText);
-
-        query.registerStoredProcedureParameter("pageIndex", Integer.class, ParameterMode.IN);
-        query.setParameter("pageIndex", pageIndex);
-
-        query.registerStoredProcedureParameter("pageTotal", Integer.class, ParameterMode.OUT);
-
-        int pageTotal = Integer.parseInt(query.getOutputParameterValue("pageTotal").toString());
-        query.execute();
-        List<Object> list = query.getResultList();
-        return PagingResponse.<Object>builder()
-                .pageIndex(pageIndex)
-                .pageTotal(pageTotal)
-                .pageResult(list)
-                .build();
+    @Query(value = AppContants.SP_UserGetList.exeQuery, nativeQuery = true)
+    public PagingResponse getUserList(@Param(AppContants.SP_PagingList.paramFindText) String findText, @Param(AppContants.SP_PagingList.paramSort) String sort, @Param(AppContants.SP_PagingList.paramSortType)
+    String sortType, @Param(AppContants.SP_PagingList.paramPageIndex) int pageIndex){
+        return getDataPagingList(AppContants.SP_UserGetList.storeName, findText, sort, sortType, pageIndex);
     }
 
+    //  Test function
     @Query(value = "CALL sp_TestGetUsersData(:userIdIndex);", nativeQuery = true)
     public List<Object> getUsersRoles(@Param("userIdIndex") int userIdIndex){
         StoredProcedureQuery query2 = entityManager.createStoredProcedureQuery("sp_TestGetUsersData");
@@ -116,6 +100,7 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
 
     }
 
+    //  Test function
     @Query(value = "CALL sp_TestGetUsersData(:userIdIndex);", nativeQuery = true)
     public List<Object> getUsersRoles2(@Param("userIdIndex") int userIdIndex){
         StoredProcedureQuery query2 = entityManager.createStoredProcedureQuery("sp_GetUsersData");
@@ -128,6 +113,7 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
 
     }
 
+    //  Test function
     public List<Object> getAllUserDetailsPaging(Pageable pageable){
         String sql = "SELECT ue, u FROM User u INNER JOIN UserExt ue ON u.id = ue.userId where u.isDeleted = false and ue.isDeleted = false order by u.id desc";
         return baseCustomGetDataBySqlPaging(sql, pageable);

@@ -1,9 +1,9 @@
 package hls.wbc.CustomRepositories;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.Query;
-import jakarta.persistence.TypedQuery;
+import hls.wbc.constants.AppContants;
+import hls.wbc.dto.responses.PagingResponse;
+import jakarta.persistence.*;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,5 +87,34 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
             entityManager.remove(obj);
         }
         return obj;
+    }
+
+    @Override
+    @Transactional
+    public PagingResponse getDataPagingList(String storeName, String findText, String sort, String sortType, int pageIndex){
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery(storeName);
+
+        query.registerStoredProcedureParameter(AppContants.SP_PagingList.paramFindText, String.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_PagingList.paramFindText, findText);
+
+        query.registerStoredProcedureParameter(AppContants.SP_PagingList.paramSort, String.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_PagingList.paramSort, sort);
+
+        query.registerStoredProcedureParameter(AppContants.SP_PagingList.paramSortType, String.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_PagingList.paramSortType, sortType);
+
+        query.registerStoredProcedureParameter(AppContants.SP_PagingList.paramPageIndex, Integer.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_PagingList.paramPageIndex, pageIndex);
+
+        query.registerStoredProcedureParameter(AppContants.SP_PagingList.paramPageTotal, Integer.class, ParameterMode.OUT);
+
+        int pageTotal = Integer.parseInt(query.getOutputParameterValue(AppContants.SP_PagingList.paramPageTotal).toString());
+        query.execute();
+        List<Object> list = query.getResultList();
+        return PagingResponse.<Object>builder()
+                .pageIndex(pageIndex)
+                .pageTotal(pageTotal)
+                .pageResult(list)
+                .build();
     }
 }

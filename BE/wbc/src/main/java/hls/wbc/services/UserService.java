@@ -150,7 +150,7 @@ public class UserService {
 
     @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
     public PagingResponse getUserList(UserListRequest request){
-        return userRepository.getUserList(request.getFindText(), request.getPageIndex());
+        return userRepository.getUserList(request.getFindText(), request.getSort(), request.getSortType(), request.getPageIndex());
     }
 
     //  Testing function

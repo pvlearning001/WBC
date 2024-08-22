@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.category: ~1 rows (approximately)
+-- Dumping data for table wbc.category: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.configs
 CREATE TABLE IF NOT EXISTS `configs` (
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `file_upload` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.file_upload: ~0 rows (approximately)
+-- Dumping data for table wbc.file_upload: ~2 rows (approximately)
 
 -- Dumping structure for function wbc.fn_GetPageSize
 DELIMITER //
@@ -292,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.news: ~0 rows (approximately)
+-- Dumping data for table wbc.news: ~2 rows (approximately)
 
 -- Dumping structure for table wbc.news_file_upload
 CREATE TABLE IF NOT EXISTS `news_file_upload` (
@@ -309,7 +309,7 @@ CREATE TABLE IF NOT EXISTS `news_file_upload` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.news_file_upload: ~0 rows (approximately)
+-- Dumping data for table wbc.news_file_upload: ~2 rows (approximately)
 
 -- Dumping structure for table wbc.permission
 CREATE TABLE IF NOT EXISTS `permission` (
@@ -394,98 +394,6 @@ CREATE TABLE IF NOT EXISTS `role_permission` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
 -- Dumping data for table wbc.role_permission: ~0 rows (approximately)
-
--- Dumping structure for procedure wbc.sp_GetUserList
-DELIMITER //
-CREATE PROCEDURE `sp_GetUserList`(
-	IN `findText` VARCHAR(250),
-	IN `sort` VARCHAR(50),
-	IN `sortType` VARCHAR(10),
-	IN `pageIndex` INT,
-	OUT `pageTotal` INT
-)
-BEGIN
-	DECLARE startIndex INT;
-	DECLARE totalRecord INT;
-	DECLARE pageSize INT;
-	
-	DECLARE stmSelectCount VARCHAR(1024);
-	DECLARE stmSelectColumn VARCHAR(2048);
-	DECLARE stmFrom VARCHAR(1024);
-	DECLARE stmWhere VARCHAR(2048); 
-	DECLARE stmSort VARCHAR(512);
-	DECLARE stmLimit VARCHAR(512);
-		
-	DECLARE findValue VARCHAR(512);
-	DECLARE findCondition VARCHAR(1024);
-	
-	SET stmSelectCount = 'SELECT COUNT(u.id) INTO @totalRecord';
-	SET stmSelectColumn = '
-		SELECT u.id AS id
-		, u.user_name
-		, ue.f_name
-		, ue.m_name
-		, ue.l_name
-		, ue.email
-		, u.pw_reset
-		, u.roles_id
-		, u.roles_name';
-		
-	SET stmFrom = '
-	FROM user u		
-		LEFT JOIN user_ext ue ON u.id = ue.user_id
-	';
-	
-	SET stmWhere = '
-	WHERE (u.is_deleted = 0) AND (u.id > 1)
-	';
-
-	IF (findText IS NOT NULL) THEN
-		SET findValue = CONCAT('\'%', findText, '%\'');
-		SET findCondition = CONCAT(' 
-		AND((u.user_name LIKE ', findValue, ')
-			OR (ue.f_name LIKE ',  findValue, ')
-			OR (ue.m_name LIKE ', findValue, ')
-			OR (ue.l_name LIKE ', findValue, ')
-			OR (ue.email LIKE ', findValue, '))');
-	ELSE
-		SET findCondition = ' AND(1=1)';
-	END IF;
-	
-	IF (sort IS NULL) THEN
-		SET sort = 'u.id';
-	END IF;
-	
-	IF (sortType IS NULL) THEN
-		SET sortType = 'desc';
-	END IF;
-	
-	SET stmSort = CONCAT('
-	ORDER BY ', sort, ' ', sortType);
-	
-	SET stmWhere = CONCAT(stmWhere, findCondition);
-	
-	SET @sqlCount = CONCAT(stmSelectCount, stmFrom, stmWhere, ';');
-	
-	PREPARE stm FROM @sqlCount;
- 	EXECUTE stm;
- 	
- 	SELECT @totalRecord INTO totalRecord;
-	
-	SELECT fn_GetPageSize() INTO pageSize;	
-	SELECT fn_GetPageTotal(totalRecord, pageSize) INTO pageTotal;
-	SET startIndex = (pageIndex - 1) * pageSize;	
-	
-	SET stmLimit = CONCAT('
-	LIMIT ', startIndex, ', ', pageSize);
-	
-	SET @sqlColumn = CONCAT(stmSelectColumn, stmFrom, stmWhere, stmSort, stmLimit, ';');
-	
-	PREPARE stm FROM @sqlColumn;
- 	EXECUTE stm;
- 	DEALLOCATE PREPARE stm;
-END//
-DELIMITER ;
 
 -- Dumping structure for procedure wbc.sp_TestGetUserByRole
 DELIMITER //
@@ -602,6 +510,98 @@ BEGIN
 	SELECT * FROM user_ext WHERE user_id > userIdIndex;
 	SELECT COUNT(id) INTO pageTotal FROM user WHERE id > userIdIndex;
 	SET pageTotal2 = 12;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure wbc.sp_UserGetList
+DELIMITER //
+CREATE PROCEDURE `sp_UserGetList`(
+	IN `findText` VARCHAR(250),
+	IN `sort` VARCHAR(50),
+	IN `sortType` VARCHAR(10),
+	IN `pageIndex` INT,
+	OUT `pageTotal` INT
+)
+BEGIN
+	DECLARE startIndex INT;
+	DECLARE totalRecord INT;
+	DECLARE pageSize INT;
+	
+	DECLARE stmSelectCount VARCHAR(1024);
+	DECLARE stmSelectColumn VARCHAR(2048);
+	DECLARE stmFrom VARCHAR(1024);
+	DECLARE stmWhere VARCHAR(2048); 
+	DECLARE stmSort VARCHAR(512);
+	DECLARE stmLimit VARCHAR(512);
+		
+	DECLARE findValue VARCHAR(512);
+	DECLARE findCondition VARCHAR(1024);
+	
+	SET stmSelectCount = 'SELECT COUNT(u.id) INTO @totalRecord';
+	SET stmSelectColumn = '
+		SELECT u.id AS id
+		, u.user_name
+		, ue.f_name
+		, ue.m_name
+		, ue.l_name
+		, ue.email
+		, u.pw_reset
+		, u.roles_id
+		, u.roles_name';
+		
+	SET stmFrom = '
+	FROM user u		
+		LEFT JOIN user_ext ue ON u.id = ue.user_id
+	';
+	
+	SET stmWhere = '
+	WHERE (u.is_deleted = 0) AND (u.id > 1)
+	';
+
+	IF (findText IS NOT NULL) THEN
+		SET findValue = CONCAT('\'%', findText, '%\'');
+		SET findCondition = CONCAT(' 
+		AND((u.user_name LIKE ', findValue, ')
+			OR (ue.f_name LIKE ',  findValue, ')
+			OR (ue.m_name LIKE ', findValue, ')
+			OR (ue.l_name LIKE ', findValue, ')
+			OR (ue.email LIKE ', findValue, '))');
+	ELSE
+		SET findCondition = ' AND(1=1)';
+	END IF;
+	
+	IF (sort IS NULL) THEN
+		SET sort = 'u.id';
+	END IF;
+	
+	IF (sortType IS NULL) THEN
+		SET sortType = 'desc';
+	END IF;
+	
+	SET stmSort = CONCAT('
+	ORDER BY ', sort, ' ', sortType);
+	
+	SET stmWhere = CONCAT(stmWhere, findCondition);
+	
+	SET @sqlCount = CONCAT(stmSelectCount, stmFrom, stmWhere, ';');
+	
+	PREPARE stm FROM @sqlCount;
+ 	EXECUTE stm;
+ 	
+ 	SELECT @totalRecord INTO totalRecord;
+	
+	SELECT fn_GetPageSize() INTO pageSize;	
+	SELECT fn_GetPageTotal(totalRecord, pageSize) INTO pageTotal;
+	SET startIndex = (pageIndex - 1) * pageSize;	
+	
+	SET stmLimit = CONCAT('
+	LIMIT ', startIndex, ', ', pageSize);
+	
+	SET @sqlColumn = CONCAT(stmSelectColumn, stmFrom, stmWhere, stmSort, stmLimit, ';');
+	
+	PREPARE stm FROM @sqlColumn;
+ 	EXECUTE stm;
+ 	DEALLOCATE PREPARE stm;
 END//
 DELIMITER ;
 

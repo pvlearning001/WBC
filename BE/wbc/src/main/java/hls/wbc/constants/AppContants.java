@@ -1,7 +1,5 @@
 package hls.wbc.constants;
 
-import com.nimbusds.jwt.JWTClaimsSet;
-
 public class AppContants {
 
     public static class StringValues {
@@ -78,5 +76,18 @@ public class AppContants {
     public static class FilePaths{
         public static final String DocumentsMessage = "uploads/documents/messages/";
         public static final String ImageUser = "uploads/images/users/";
+    }
+
+    public static class SP_PagingList {
+        public static final String paramFindText = "findText";
+        public static final String paramSort = "sort";
+        public static final String paramSortType = "sortType";
+        public static final String paramPageIndex = "pageIndex";
+        public static final String paramPageTotal = "pageTotal";
+    }
+
+    public static class SP_UserGetList {
+        public static final String storeName = "sp_UserGetList";
+        public static final String exeQuery = "CALL sp_UserGetList(:findText, :sort, :sortType, :pageIndex);";
     }
 }

@@ -20,7 +20,8 @@ public interface UserCustomRepository {
     User customUpdate(Object t);
     User customDelete(int id);
 
-    PagingResponse getUserList(String findText, int pageIndex);
+    PagingResponse getUserList(String findText, String sort,
+    String sortType, int pageIndex);
 
     List<Object> getUsersRoles(int userIdIndex);
 

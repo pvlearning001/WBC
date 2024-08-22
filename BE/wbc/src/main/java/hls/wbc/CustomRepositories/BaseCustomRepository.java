@@ -1,5 +1,6 @@
 package hls.wbc.CustomRepositories;
 
+import hls.wbc.dto.responses.PagingResponse;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Pageable;
@@ -17,4 +18,5 @@ public interface BaseCustomRepository {
     Object baseCustomSave(Object t);
     Object baseCustomUpdate(Object t);
     Object baseCustomDelete(int id);
+    PagingResponse getDataPagingList(String storeName, String findText, String sort, String sortType, int pageIndex);
 }
