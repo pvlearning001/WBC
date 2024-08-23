@@ -103,6 +103,8 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
         query.registerStoredProcedureParameter(AppContants.SP_PagingList.paramSortType, String.class, ParameterMode.IN);
         query.setParameter(AppContants.SP_PagingList.paramSortType, sortType);
 
+        if (pageIndex == 0)
+            pageIndex = 1;
         query.registerStoredProcedureParameter(AppContants.SP_PagingList.paramPageIndex, Integer.class, ParameterMode.IN);
         query.setParameter(AppContants.SP_PagingList.paramPageIndex, pageIndex);
 

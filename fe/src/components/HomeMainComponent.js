@@ -2,10 +2,8 @@ import React, { useContext } from "react";
 import '../assets/css/main.css';
 import imgOrgChart from "../assets/img/hero-img.png";
 import { IntroduceContext } from "../ParentPage";
-import * as userServices from '../services/userServices';
 
 export default function HomeMainComponent() {
-  let userList = userServices.getList("user0", null, null, 1); 
   const introduceInfo = useContext(IntroduceContext);
   return (
   <main className="main hero section dark-background">

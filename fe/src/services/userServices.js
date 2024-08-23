@@ -66,6 +66,5 @@ export async function getList(findText, sort, sortType, pageIndex) {
     .catch((err) => {
         console.log("Error: ", err);
     })
-    //console.log(result);
     return result;
 }

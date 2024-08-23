@@ -154,8 +154,7 @@ export function buildPageSession(pageIndex, pageTotal){
     }
     else{
         pageMin = pageIndex - div;
-        pageMax = pageIndex + div; 
-        console.log(pageMax);
+        pageMax = pageIndex + div;
     }
 
     pageMin = (pageMin < 1) ? 1 : pageMin;

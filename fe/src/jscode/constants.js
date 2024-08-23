@@ -100,7 +100,8 @@ export const page_first_default = 1;
 export const page_total_default = 1;
 export const page_session_default = 5;
 
-export const url_pdfjs = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.3.200/pdf.worker.min.js';
+export const sort_type_asc = "asc";
+export const sort_type_desc = "desc";
 
 
 
