@@ -191,3 +191,17 @@ export function base64ToArrayBuffer(base64) {
     let byteArray = base64ToByteArray(base64);
     return byteArray.buffer;
 }
+
+export function buildFMName(fname, mname) {
+    let result = fname;
+    if (!isNullOrEmptyOrSpace(mname))
+        result = result + constants.string_space + mname;
+    return result;
+}
+
+export function buildFullName(fname, mname, lname) {
+    let result = buildFMName(fname, mname);
+    if (!isNullOrEmptyOrSpace(lname))
+        result = result + constants.string_space + lname;
+    return result;
+}

@@ -98,10 +98,10 @@ export function AdminMgmtMessagesComponent(props){
         <main className="main hero section dark-background">
             <div className="container-fluid">
                 <div className="row gy-4">                    
-                    <div className="col-lg-12 order-2 order-lg-1 d-flex flex-column justify-content-top">
+                    <div className="col-lg-12 order-2 order-lg-1 flex-column justify-content-top">
                         <h5 style={addNewPopupTitle}>{props.text}</h5>
 
-                        <Button variant="primary" onClick={() =>    openModel()}>
+                        <Button className='btn' onClick={() => openModel()}>
                             Thêm mới
                         </Button>
 

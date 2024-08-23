@@ -95,8 +95,7 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
         query2.execute();
         Object objPageTotal = query2.getOutputParameterValue("pageTotal");
         Object objPageTotal2 = query2.getOutputParameterValue("pageTotal2");
-        List<Object> res = query2.getResultList();
-        return res;
+        return (List<Object>) query2.getResultList();
 
     }
 
@@ -108,8 +107,7 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
         query2.setParameter("userIdIndex", userIdIndex);
 
         query2.execute();
-        List<Object> res = query2.getResultList();
-        return res;
+        return (List<Object>) query2.getResultList();
 
     }
 

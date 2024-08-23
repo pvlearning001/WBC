@@ -38,7 +38,7 @@ body {
   background-color: #ccffee;
 }
 
-.btn {
+.btn-custom {
   font-size: 22px;
   background-color: #0278ae;
   border: none;
@@ -47,7 +47,7 @@ body {
   border-radius: 5px;
 }
 
-.btn:hover {
+.btn-custom:hover {
   background-color: blue;
 }
 

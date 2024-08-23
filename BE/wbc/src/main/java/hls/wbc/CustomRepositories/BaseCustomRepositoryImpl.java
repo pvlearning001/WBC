@@ -91,7 +91,7 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
 
     @Override
     @Transactional
-    public PagingResponse getDataPagingList(String storeName, String findText, String sort, String sortType, int pageIndex){
+    public PagingResponse<Object> getDataPagingList(String storeName, String findText, String sort, String sortType, int pageIndex){
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(storeName);
 
         query.registerStoredProcedureParameter(AppContants.SP_PagingList.paramFindText, String.class, ParameterMode.IN);

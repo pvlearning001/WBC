@@ -18,5 +18,5 @@ public interface BaseCustomRepository {
     Object baseCustomSave(Object t);
     Object baseCustomUpdate(Object t);
     Object baseCustomDelete(int id);
-    PagingResponse getDataPagingList(String storeName, String findText, String sort, String sortType, int pageIndex);
+    PagingResponse<Object> getDataPagingList(String storeName, String findText, String sort, String sortType, int pageIndex);
 }
