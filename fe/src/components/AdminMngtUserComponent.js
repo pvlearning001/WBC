@@ -29,12 +29,12 @@ export default function AdminMngtUserComponent(props){
         borderRadius: "5px",
         backgroundColor: "#ccffee",
     };
-
-    const pageTotalExample = 5;
+    
     const defaultSort =  "u.id";
     const lNameSort =  "ue.l_name";
+    const maxCountRedirect =  2;
     const [pageIndex, setPageIndex] = useState(1); 
-    const [pageTotal, setPageTotal] = useState(pageTotalExample);
+    const [pageTotal, setPageTotal] = useState(0);
     const findText = useRef("");
     const sort = useRef(defaultSort);
     const sortType = useRef(constants.sort_type_desc);
@@ -44,55 +44,38 @@ export default function AdminMngtUserComponent(props){
     const location = useLocation();
 
     const onPageItemClick = useCallback((itemValue) => {
-        countInitRedirect.current = 0;
         let url = constants.page_admin_users + "?page=" + itemValue;
         navigate(url);
     }, []);
 
-    function pageInitValues() {
-        countInitRedirect.current = countInitRedirect.current + 1;
-        console.log("pos 1");
-        console.log("countInitRedirect", countInitRedirect.current);
+    function pageInitValues() {                
         let pageIndexParamValue = 1;
         const queryParams = new URLSearchParams(location.search);        
-        let pageIndexParam = queryParams.get('page');        
-        if (pageIndexParam != null 
-            && pageIndexParam !== undefined) {
-            if (parseInt(pageIndexParam) > parseInt(pageTotal))
-                pageIndexParam = parseInt(pageTotal);
-            pageIndexParamValue = parseInt(pageIndexParam);
-            setPageIndex(pageIndexParamValue);
-            if (countInitRedirect.current === 2){
-                countInitRedirect.current = countInitRedirect.current + 1; 
+        let pageIndexParam = queryParams.get('page');
+        countInitRedirect.current = countInitRedirect.current + 1;
+        if (countInitRedirect.current === (maxCountRedirect)){
+            countInitRedirect.current = 0;         
+            if (pageIndexParam != null 
+                && pageIndexParam !== undefined) {
+                console.log("P1 No param");
+                if (parseInt(pageIndexParam) > parseInt(pageTotal))
+                    pageIndexParam = parseInt(pageTotal);
+                pageIndexParamValue = parseInt(pageIndexParam);                    
+                setPageIndex(pageIndexParamValue);                
+                doSearchByPageParam(pageIndexParamValue);
+            }
+            else{
+                console.log("P2 Have param");
+                setPageIndex(1);
+                findText.current = "";
+                sort.current = defaultSort;
+                sortType.current = constants.sort_type_desc;       
                 doSearch();
             }
-        }
-        else{
-            countInitRedirect.current = countInitRedirect.current + 1;           
-            setPageIndex(1);
-            findText.current = "";
-            sort.current = defaultSort;
-            sortType.current = constants.sort_type_desc; 
-            
-            console.log("pos 2");
-            console.log("countInitRedirect pos 2", countInitRedirect.current);
-            
-            if(countInitRedirect.current === 2){
-                setPageIndex(1);
-                if (pageIndex === 1){
-                    console.log("do search pos 2");
-                    doSearch();
-                }
-                countInitRedirect.current = 0;
-            }
-            
-        }
-        //if (pageIndexParamValue === pageIndex && countInitRedirect.current === 2)
-        
-            
+        }   
     }
-    
-    function doSearch() {        
+
+    function doSearchByPageParam(pageValue) {        
         let searchValue = document.getElementById('txtSearch').value;
         searchValue = searchValue.trim();
 
@@ -106,15 +89,18 @@ export default function AdminMngtUserComponent(props){
             sortType.current = constants.sort_type_asc;
         }
         console.log(findText.current, sort.current, sortType.current, pageIndex); 
-        let info = userServices.getList(findText.current, sort.current, sortType.current, pageIndex); 
+        let info = userServices.getList(findText.current, sort.current, sortType.current, pageValue); 
         info.then((result) => {
-            console.log(result); // "Some User token"
+            console.log(result);
             setPageTotal(result.pageTotal);
         });
     }
+    
+    function doSearch() {        
+        doSearchByPageParam(pageIndex);
+    }
 
     function onClickSearch(){
-        countInitRedirect.current = 1;
         let url = constants.page_admin_users + "?page=1";        
         if (pageIndex > 1){
             setPageIndex(1);            
@@ -171,7 +157,7 @@ export default function AdminMngtUserComponent(props){
                                         <th>STT</th>
                                         <th onClick={() => doSort("ue.f_name")}>Họ và tên lót</th>
                                         <th onClick={() => doSort("ue.l_name")}>Tên</th>
-                                        <th onClick={() => doSort("ue.phone")}>Số ĐT</th>
+                                        <th onClick={() => doSort("ue.phone01")}>Số ĐT</th>
                                         <th onClick={() => doSort("ue.email")}>Email</th>
                                         <th>Pw Reset</th>
                                         <th>Actions</th>
