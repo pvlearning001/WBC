@@ -32,50 +32,58 @@ export default function AdminMngtUserComponent(props){
     
     const defaultSort =  "u.id";
     const lNameSort =  "ue.l_name";
-    const maxCountRedirect =  2;
     const [pageIndex, setPageIndex] = useState(1); 
     const [pageTotal, setPageTotal] = useState(0);
+    const [dataList, setDataList] = useState([]);
     const findText = useRef("");
+    const isFirstTime = useRef(true);
     const sort = useRef(defaultSort);
     const sortType = useRef(constants.sort_type_desc);
-    const countInitRedirect = useRef(0);
 
     const navigate = useNavigate();
     const location = useLocation();
 
     const onPageItemClick = useCallback((itemValue) => {
+        itemValue = parseInt(itemValue);
+        setPageIndex(itemValue);
         let url = constants.page_admin_users + "?page=" + itemValue;
         navigate(url);
-    }, []);
+    }, [pageIndex]);   
+    
+    
+    useEffect(() => { pageInitValues();}, [pageIndex, findText]);    
 
-    function pageInitValues() {                
+    function pageInitValues() { 
+        if (pageIndex < 1)
+            setPageIndex(1);         
         let pageIndexParamValue = 1;
         const queryParams = new URLSearchParams(location.search);        
         let pageIndexParam = queryParams.get('page');
-        countInitRedirect.current = countInitRedirect.current + 1;
-        if (countInitRedirect.current === (maxCountRedirect)){
-            countInitRedirect.current = 0;         
-            if (pageIndexParam != null 
-                && pageIndexParam !== undefined) {
-                console.log("P1 No param");
-                if (parseInt(pageIndexParam) > parseInt(pageTotal))
-                    pageIndexParam = parseInt(pageTotal);
-                pageIndexParamValue = parseInt(pageIndexParam);                    
-                setPageIndex(pageIndexParamValue);                
-                doSearchByPageParam(pageIndexParamValue);
-            }
-            else{
-                console.log("P2 Have param");
-                setPageIndex(1);
-                findText.current = "";
+        
+        if (pageIndexParam != null 
+            && pageIndexParam !== undefined 
+            && pageIndex > 0) {
+            console.log("P1 Have param");
+            if (parseInt(pageIndexParam) > parseInt(pageTotal))
+                pageIndexParam = parseInt(pageTotal);
+            pageIndexParamValue = parseInt(pageIndexParam);
+            doSearchByPage(pageIndexParamValue); 
+                      
+        }
+        else{
+            console.log("P2 No param");
+            if (pageIndex > 0){ 
                 sort.current = defaultSort;
-                sortType.current = constants.sort_type_desc;       
-                doSearch();
+                sortType.current = constants.sort_type_desc;
+                if ((isFirstTime.current) && (findText.current === "")){
+                    doSearch();
+                    isFirstTime.current = false;
+                }                
             }
-        }   
+        }
     }
 
-    function doSearchByPageParam(pageValue) {        
+    function setFindText(){
         let searchValue = document.getElementById('txtSearch').value;
         searchValue = searchValue.trim();
 
@@ -83,6 +91,10 @@ export default function AdminMngtUserComponent(props){
             && utils.isNullOrEmptyOrSpace(findText.current)){
                 findText.current = searchValue;
         }
+    }
+
+    function doSearchByPage(pageValue) {        
+        setFindText();
 
         if (!utils.isNullOrEmptyOrSpace(findText.current) && sort.current === defaultSort){
             sort.current = lNameSort;
@@ -93,18 +105,23 @@ export default function AdminMngtUserComponent(props){
         info.then((result) => {
             console.log(result);
             setPageTotal(result.pageTotal);
+            dataList.splice(0,dataList.length);
+            for (let dataItem of result.dataList) {
+                dataList.push(dataItem);// code block to be executed
+            }
+            console.log(dataList);
         });
     }
     
     function doSearch() {        
-        doSearchByPageParam(pageIndex);
+        doSearchByPage(pageIndex);
     }
 
     function onClickSearch(){
-        let url = constants.page_admin_users + "?page=1";        
-        if (pageIndex > 1){
-            setPageIndex(1);            
-        }
+        let url = constants.page_admin_users + "?page=1"; 
+        setPageIndex(0);
+        setFindText();
+        console.log('click search');
         navigate(url);
     }
     
@@ -124,11 +141,6 @@ export default function AdminMngtUserComponent(props){
     function handleChangeText(value){
         findText.current = value;
     }
-    
-    
-    useEffect(() => { pageInitValues();});
-    //useEffect(() => { doSearch();}, [pageIndex]);
-    //useEffect(() => { doSort();});    
 
     return(
         <main className="main hero section dark-background">
