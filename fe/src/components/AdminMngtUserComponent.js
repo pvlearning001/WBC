@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { useLocation, useNavigate } from 'react-router-dom';
 import * as constants from "../jscode/constants";
 import * as utils from "../jscode/utilities";
@@ -29,16 +31,23 @@ export default function AdminMngtUserComponent(props){
         borderRadius: "5px",
         backgroundColor: "#ccffee",
     };
+
+    const textModal = {
+        color: "white",
+    }
     
     const defaultSort =  "u.id";
     const lNameSort =  "ue.l_name";
     const [pageIndex, setPageIndex] = useState(1); 
     const [pageTotal, setPageTotal] = useState(0);
-    const [dataList, setDataList] = useState([]);
+    let [dataList, setDataList] = useState([]);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const findText = useRef("");
     const isFirstTime = useRef(true);
     const sort = useRef(defaultSort);
     const sortType = useRef(constants.sort_type_desc);
+
+    const curId = useRef(0);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -105,9 +114,9 @@ export default function AdminMngtUserComponent(props){
         info.then((result) => {
             console.log(result);
             setPageTotal(result.pageTotal);
-            dataList.splice(0,dataList.length);
-            for (let dataItem of result.dataList) {
-                dataList.push(dataItem);// code block to be executed
+            dataList.splice(0,dataList.length);            
+            for (let dataItem of result.dataList) {              
+                dataList.push(dataItem);                
             }
             console.log(dataList);
         });
@@ -142,6 +151,36 @@ export default function AdminMngtUserComponent(props){
         findText.current = value;
     }
 
+    function doEdit(id){
+        console.log("Edit at id = ", id);
+    }
+
+    function doDelete(id){
+        console.log("Delete at id = ", id);
+        curId.current = id;
+        setShowDeleteModal(true);
+    }
+
+    function handleCloseDeleteModal(){
+        setShowDeleteModal(false);
+    }
+
+    function deleteUser(){
+        let tempList = [];
+        for (let dataItem of dataList) {
+            if (dataItem.id !== curId.current)              
+                tempList.push(dataItem);                
+        }
+        console.log("curId.current: ", curId.current);
+        console.log(tempList);
+        dataList.splice(0,dataList.length);            
+        for (let dataItem of tempList) {              
+            dataList.push(dataItem);                
+        }
+        console.log(dataList);
+        handleCloseDeleteModal();
+    }
+
     return(
         <main className="main hero section dark-background">
             <div className="container-fluid">
@@ -169,6 +208,7 @@ export default function AdminMngtUserComponent(props){
                                         <th>STT</th>
                                         <th onClick={() => doSort("ue.f_name")}>Họ và tên lót</th>
                                         <th onClick={() => doSort("ue.l_name")}>Tên</th>
+                                        <th onClick={() => doSort("u.user_name")}>User name</th>
                                         <th onClick={() => doSort("ue.phone01")}>Số ĐT</th>
                                         <th onClick={() => doSort("ue.email")}>Email</th>
                                         <th>Pw Reset</th>
@@ -176,54 +216,26 @@ export default function AdminMngtUserComponent(props){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>John</td>
-                                        <td>Doe</td>
-                                        <td>0902.111.111</td>
-                                        <td>john@example.com</td>
-                                        <td>ABCXYZ</td>
+                                { 
+                                    dataList.map(dataItem => 
+                                    <tr key={dataItem.id}>
+                                        <td>{dataItem.orderNo}</td>
+                                        <td>{dataItem.fmName}</td>
+                                        <td>{dataItem.lName}</td>
+                                        <td>{dataItem.uName}</td>
+                                        <td>{dataItem.phone}</td>
+                                        <td>{dataItem.email}</td>
+                                        <td>{dataItem.pwReset}</td>
                                         <td>
-                                            <button style={actionsStyles} type="button" className="btn btn-primary">
+                                            <button style={actionsStyles} type="button" className="btn btn-primary" onClick={(id) => doEdit(dataItem.id)}>
                                                 Sửa
                                             </button>
-                                            <button type="button" className="btn btn-danger">
+                                            <button type="button" className="btn btn-danger" onClick={(id) => doDelete(dataItem.id)}>
                                                 Xóa
                                             </button>
                                         </td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>Mary</td>
-                                        <td>Moe</td>
-                                        <td>0902.111.111</td>
-                                        <td>mary@example.com</td>
-                                        <td></td>
-                                        <td>
-                                            <button style={actionsStyles} type="button" className="btn btn-primary">
-                                                Sửa
-                                            </button>
-                                            <button type="button" className="btn btn-danger">
-                                                Xóa
-                                            </button>
-                                        </td>
-                                    </tr> 
-                                    <tr>
-                                        <td>3</td>
-                                        <td>Robert</td>
-                                        <td>Kenedy</td>
-                                        <td>0902.111.111</td>
-                                        <td>robertkenedy@example.com</td>
-                                        <td></td>
-                                        <td>
-                                            <button style={actionsStyles} type="button" className="btn btn-primary">
-                                                Sửa
-                                            </button>
-                                            <button type="button" className="btn btn-danger">
-                                                Xóa
-                                            </button>
-                                        </td>
-                                    </tr>
+                                    </tr>)
+                                }
                                 </tbody>
                             </table>
                             <PagingComponent pageIndex={pageIndex} pageTotal={pageTotal} pageItemClick={(value) => onPageItemClick(value)} /> 
@@ -231,6 +243,21 @@ export default function AdminMngtUserComponent(props){
                     </div>
                 </div>
             </div>
+
+            <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
+                <Modal.Header closeButton>
+                <Modal.Title style={textModal}>Xóa User</Modal.Title>
+                </Modal.Header>
+                <Modal.Body style={textModal}>Bạn có chắc chắn xóa user này không</Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseDeleteModal}>
+                    Đóng
+                </Button>
+                <Button variant="primary" className="btn btn-danger" onClick={deleteUser}>
+                    Xóa
+                </Button>
+                </Modal.Footer>
+            </Modal>
         </main>
     )
   };

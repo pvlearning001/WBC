@@ -15,8 +15,12 @@ export default function AnnouncementComponent() {
             .then(res => {                
                 setAnnouncement(res.data.result);
                 if (files.length === 0) {
-                    for (const file of res.data.result.files)
-                        files.push(file);
+                    if (res.data.result.files != null
+                        && res.data.result.files !== undefined
+                        && (res.data.result.files.length > 0)){
+                        for (const file of res.data.result.files)
+                            files.push(file);
+                    }                    
 
                     if (files.length > 0) {
                         setAttTitle("Xin xem thêm file đính kèm bên dưới:"); 
