@@ -90,7 +90,7 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
         query.registerStoredProcedureParameter(AppContants.SP_UserSetDelete.paramUserChanged, Integer.class, ParameterMode.IN);
         query.setParameter(AppContants.SP_UserSetDelete.paramUserChanged, userChanged);
 
-        query.registerStoredProcedureParameter(AppContants.SP_UserSetDelete.paramDeletedValue, Integer.class, ParameterMode.IN);
+        query.registerStoredProcedureParameter(AppContants.SP_UserSetDelete.paramDeletedValue, Boolean.class, ParameterMode.IN);
         query.setParameter(AppContants.SP_UserSetDelete.paramDeletedValue, deletedValue);
 
         return query.execute();

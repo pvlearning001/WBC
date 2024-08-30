@@ -94,6 +94,8 @@ public class ApplicationInitConfig {
         else{
             log.info("user list exists");
         }
+
+        userRepos.setDeleted(250, AppContants.SecuritiesValues.AdminId, true);
     }
 
     private void initCategory(CategoryRepository cateRepos, String cateName){
