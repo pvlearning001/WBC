@@ -1,4 +1,4 @@
-package hls.wbc.CustomRepositories;
+package hls.wbc.RepositoriesCustom;
 
 import hls.wbc.dto.responses.PagingResponse;
 import org.springframework.stereotype.Repository;

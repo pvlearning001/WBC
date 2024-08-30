@@ -1,9 +1,8 @@
-package hls.wbc.CustomRepositories;
+package hls.wbc.RepositoriesCustom;
 
 import hls.wbc.constants.AppContants;
 import hls.wbc.dto.responses.PagingResponse;
 import jakarta.persistence.*;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

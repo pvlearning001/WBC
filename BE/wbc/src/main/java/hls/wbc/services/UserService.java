@@ -54,59 +54,22 @@ public class UserService {
 
     public UserResponse createUser(UserCreationRequest request){
         log.info("Service: Create User");
+        String userRoleId = String.valueOf(Roles.User.getId());
+        String pw = passwordEncoder.encode(request.getPassword());
 
-        Set<Integer> roleIdListInit = new HashSet<Integer>(List.of(Roles.User.getId()));
-        Set<Role> roleListInit = new HashSet<>(roleRepository.findAllById(roleIdListInit));
+        int userId = userRepository.save(0, 0, request.getUserName(), pw, request.getFirstName(), request.getMiddleName(), request.getLastName(), request.getEmail(), request.getPhone(), userRoleId);
+        Optional<User> userSave = userRepository.findById(userId);
+        UserResponse result = UserResponse.builder().build();
+        if (userSave.isPresent()){
+            result = userMapper.toResponse(userSave.get());
+            if (result != null) {
+                result.setFirstName(request.getFirstName());
+                result.setLastName(request.getLastName());
+                result.setMiddleName(request.getMiddleName());
+                result.setEmail(request.getEmail());
+                result.setPhone(request.getPhone());
+            }
 
-        StringJoiner sjRolesId = new StringJoiner(AppContants.StringValues.Comma);
-        StringJoiner sjRolesName = new StringJoiner(AppContants.StringValues.Comma);
-        if (!CollectionUtils.isEmpty(roleListInit))
-            roleListInit.forEach(role -> {
-                sjRolesId.add(Integer.toString(role.getId()));
-                sjRolesName.add(role.getName());
-            });
-
-        if (userRepository.existsByUserName(request.getUserName()))
-            throw new AppException(ErrorCode.USER_EXISTED);
-        User user = userMapper.toEntity(request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setResetPw(false);
-        user.setRolesId(sjRolesId.toString());
-        user.setRolesName(sjRolesName.toString());
-        user.setTraceNew(AppContants.SecuritiesValues.AdminId, null);
-
-        user.setRoles(roleListInit);
-        User userSave = userRepository.save(user);
-
-        userSave.updateTraceUserAddNew(userSave.getId(), null);
-        userRepository.save(user);
-        UserResponse result = userMapper.toResponse(userSave);
-
-        if (!AppUtils.isNullOrEmptyOrBlank(request.getFirstName())
-                || !AppUtils.isNullOrEmptyOrBlank(request.getMiddleName())
-                || !AppUtils.isNullOrEmptyOrBlank(request.getLastName())
-                || !AppUtils.isNullOrEmptyOrBlank(request.getEmail())
-                || !AppUtils.isNullOrEmptyOrBlank(request.getPhone())
-        ){
-            UserExt userExt = UserExt
-                    .builder()
-                    .userId(userSave.getId())
-                    .fName(request.getFirstName())
-                    .mName(request.getMiddleName())
-                    .lName(request.getLastName())
-                    .email(request.getEmail())
-                    .phone01(request.getPhone())
-                    .build();
-            userExt.setTraceNew(AppContants.SecuritiesValues.AdminId, null);
-
-            UserExt userExtSave = userExtRepository.save(userExt);
-            userExtSave.updateTraceUserAddNew(userSave.getId(), null);
-            userExtSave = userExtRepository.save(userExt);
-            result.setFirstName(userExtSave.getFName());
-            result.setLastName(userExtSave.getLName());
-            result.setMiddleName(userExtSave.getMName());
-            result.setEmail(userExtSave.getEmail());
-            result.setPhone(userExtSave.getPhone01());
         }
 
         return result;

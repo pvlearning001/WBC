@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.category: ~0 rows (approximately)
+-- Dumping data for table wbc.category: ~2 rows (approximately)
 
 -- Dumping structure for table wbc.configs
 CREATE TABLE IF NOT EXISTS `configs` (
@@ -49,9 +49,9 @@ CREATE TABLE IF NOT EXISTS `configs` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.configs: ~0 rows (approximately)
+-- Dumping data for table wbc.configs: ~1 rows (approximately)
 REPLACE INTO `configs` (`id`, `guid`, `page_size`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, '47b94929-5dee-11ef-b984-509a4cb5cc32', 20, NULL, b'0', '2024-08-19 05:45:45.000000', 1, '2024-08-19 05:45:45.000000', 1);
+	(1, '4ffc61e6-669c-11ef-b0e8-509a4cb5cc32', 10, NULL, b'0', '2024-08-30 06:51:41.000000', 1, '2024-08-30 06:51:41.000000', 1);
 
 -- Dumping structure for table wbc.course
 CREATE TABLE IF NOT EXISTS `course` (
@@ -113,6 +113,23 @@ CREATE TABLE IF NOT EXISTS `file_upload` (
 
 -- Dumping data for table wbc.file_upload: ~0 rows (approximately)
 
+-- Dumping structure for function wbc.fn_CheckSameRoles
+DELIMITER //
+CREATE FUNCTION `fn_CheckSameRoles`(`userid` INT,
+	`rolesId` VARCHAR(250)
+) RETURNS tinyint(4)
+BEGIN
+	DECLARE result TINYINT;
+	SET result = 0;
+	SET @rolesIdAssigned = (SELECT GROUP_CONCAT(role_id SEPARATOR ',')
+	FROM user_role
+	WHERE user_id = userid
+	ORDER BY role_id);
+	SET result = STRCMP(@rolesIdAssigned, rolesId);
+	RETURN result;
+END//
+DELIMITER ;
+
 -- Dumping structure for function wbc.fn_GetPageSize
 DELIMITER //
 CREATE FUNCTION `fn_GetPageSize`() RETURNS int(11)
@@ -134,6 +151,34 @@ BEGIN
 	SET result = totalRecord DIV pageSize;
 	SET pageMod = MOD(totalRecord, pageSize);
 	SELECT IF(pageMod > 0, (result +1), result) INTO result;
+	RETURN result;
+END//
+DELIMITER ;
+
+-- Dumping structure for function wbc.fn_GetRolesId
+DELIMITER //
+CREATE FUNCTION `fn_GetRolesId`(`rolesName` VARCHAR(250)
+) RETURNS varchar(250) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+BEGIN
+	DECLARE result VARCHAR(250);
+	SET result = (SELECT GROUP_CONCAT(id SEPARATOR ',')
+	FROM role
+	WHERE FIND_IN_SET(name,rolesName)
+	ORDER BY id);
+	RETURN result;
+END//
+DELIMITER ;
+
+-- Dumping structure for function wbc.fn_GetRolesName
+DELIMITER //
+CREATE FUNCTION `fn_GetRolesName`(`rolesId` VARCHAR(250)
+) RETURNS varchar(250) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+BEGIN
+	DECLARE result VARCHAR(250);
+	SET result = (SELECT GROUP_CONCAT(NAME SEPARATOR ',')
+	FROM role
+	WHERE FIND_IN_SET(id,rolesId)
+	ORDER BY id);
 	RETURN result;
 END//
 DELIMITER ;
@@ -395,6 +440,36 @@ CREATE TABLE IF NOT EXISTS `role_permission` (
 
 -- Dumping data for table wbc.role_permission: ~0 rows (approximately)
 
+-- Dumping structure for procedure wbc.sp_CleanData
+DELIMITER //
+CREATE PROCEDURE `sp_CleanData`()
+BEGIN
+	DELETE FROM user_role;
+	DELETE FROM role;
+	DELETE FROM user_ext;
+	DELETE FROM user;
+	DELETE FROM file_upload;
+	DELETE FROM invalidated_token;
+	DELETE FROM category;
+	DELETE FROM news_file_upload;
+	DELETE FROM news;
+	DELETE FROM configs;
+	
+	ALTER TABLE user_role AUTO_INCREMENT = 1;
+	ALTER TABLE role AUTO_INCREMENT = 1;
+	ALTER TABLE user_ext AUTO_INCREMENT = 1;
+	ALTER TABLE user AUTO_INCREMENT = 1;
+	ALTER TABLE file_upload AUTO_INCREMENT = 1;
+	ALTER TABLE invalidated_token AUTO_INCREMENT = 1;
+	ALTER TABLE category AUTO_INCREMENT = 1;
+	ALTER TABLE news_file_upload AUTO_INCREMENT = 1;
+	ALTER TABLE news AUTO_INCREMENT = 1;
+	ALTER TABLE configs AUTO_INCREMENT = 1;
+	
+	INSERT INTO configs(page_size) VALUES(10);
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure wbc.sp_TestGetUserByRole
 DELIMITER //
 CREATE PROCEDURE `sp_TestGetUserByRole`(
@@ -607,6 +682,178 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure wbc.sp_UserSave
+DELIMITER //
+CREATE PROCEDURE `sp_UserSave`(
+	IN `userid` INT,
+	IN `userChanged` INT,
+	IN `uName` VARCHAR(50),
+	IN `pw` VARCHAR(100),
+	IN `fName` VARCHAR(50),
+	IN `mName` VARCHAR(50),
+	IN `lName` VARCHAR(50),
+	IN `email` VARCHAR(50),
+	IN `phone` VARCHAR(20),
+	IN `roles_id` VARCHAR(150),
+	OUT `outid` INT
+)
+BEGIN
+	SELECT UTC_TIMESTAMP() INTO @curTime;
+	SELECT fn_GetRolesName(roles_id) INTO @roles_name;
+	SELECT fn_CheckSameRoles(userid, roles_id) INTO @isDiffRoles;
+	IF (userid = 0 OR userid IS NULL) THEN #INSERT NEW
+		INSERT INTO user(
+			user_name
+			, password
+			, roles_id
+			, roles_name
+			, ins_at
+			, ins_by	
+			, upd_at		
+			, upd_by
+		) 
+		VALUES(
+			uName
+			, pw
+			, roles_id
+			, @roles_name
+			, @curTime
+			, userChanged
+			, @curTime
+			, userChanged
+		);
+			
+		SELECT LAST_INSERT_ID() INTO userid;
+		SET outid = userid;
+		
+		IF (userChanged = 0) THEN
+			SET userChanged = userid;
+			UPDATE user SET
+				ins_at = @curTime
+				, ins_by = userChanged
+				, upd_at = @curTime
+				, upd_by = userChanged
+			WHERE id = userid;
+		END IF;
+		
+		INSERT INTO user_ext(
+			user_id
+			, f_name
+			, m_name
+			, l_name, email
+			, phone01
+			, ins_at
+			, ins_by	
+			, upd_at		
+			, upd_by
+		) 
+		VALUES(
+			userid
+			, fName
+			, mName
+			, lName
+			, email
+			, phone
+			, @curTime
+			, userChanged
+			, @curTime
+			, userChanged
+		);
+		
+		INSERT INTO user_role(
+			user_id
+			, role_id
+			, ins_at
+			, ins_by	
+			, upd_at		
+			, upd_by
+		)
+		SELECT userid AS user_id
+			, r.id AS role_id
+			, @curTime AS ins_at
+			, @userChanged AS ins_by
+			, @curTime AS upd_at
+			, @userChanged AS upd_by
+		FROM role r
+		WHERE FIND_IN_SET(r.id, roles_id);
+	
+	ELSE #UPDATE
+		SET outid = userid;
+		UPDATE user SET 
+			user_name = uName
+			, password = pw
+			, upd_at = @curTime
+			, upd_by = userChanged
+		WHERE id = userid;
+		
+		UPDATE user_ext SET
+			f_name = fName
+			, m_name = mName
+			, l_name = lName
+			, email = email
+			, phone01 = phone
+		WHERE user_id = userid;
+		
+		IF (@isDiffRoles <> 0) THEN
+			UPDATE user SET
+				roles_id = roles_id
+				, roles_name = @roles_name
+			WHERE id = userid;
+			
+			DELETE FROM user_role
+			WHERE user_id = userid;
+			
+			INSERT INTO user_role(
+				user_id
+				, role_id
+				, ins_at
+				, ins_by	
+				, upd_at		
+				, upd_by
+			)
+			SELECT userid AS user_id
+				, r.id AS role_id
+				, @curTime AS ins_at
+				, @userChanged AS ins_by
+				, @curTime AS upd_at
+				, @userChanged AS upd_by
+			FROM role r
+			WHERE FIND_IN_SET(r.id, roles_id);
+			
+		END IF;
+			
+	END IF;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure wbc.sp_UserSetDelete
+DELIMITER //
+CREATE PROCEDURE `sp_UserSetDelete`(
+	IN `userid` INT,
+	IN `userChanged` INT,
+	IN `deletedValue` BIT
+)
+BEGIN
+	UPDATE user 
+	SET is_deleted = deletedValue
+		, upd_at=utc_timestamp() 
+		, upd_by = userChanged
+	WHERE id=userid;
+	
+	UPDATE user_ext 
+	SET is_deleted = deletedValue
+		, upd_at=utc_timestamp() 
+		, upd_by = userChanged 
+	WHERE user_id = userid;
+	
+	UPDATE user_role 
+	SET is_deleted = deletedValue
+		, upd_at=utc_timestamp() 
+		, upd_by = userChanged 
+	WHERE user_id = userid;
+END//
+DELIMITER ;
+
 -- Dumping structure for table wbc.user
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -642,7 +889,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   `phone02` varchar(255) DEFAULT NULL,
   `phone03` varchar(255) DEFAULT NULL,
   `remark` varchar(1028) DEFAULT NULL,
-  `is_deleted` bit(1) NOT NULL DEFAULT b'0',
+  `is_deleted` bit(1) DEFAULT b'0',
   `ins_at` datetime DEFAULT utc_timestamp(),
   `ins_by` int(11) DEFAULT 1,
   `upd_at` datetime DEFAULT utc_timestamp(),

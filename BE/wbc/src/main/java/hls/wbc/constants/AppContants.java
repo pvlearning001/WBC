@@ -90,4 +90,29 @@ public class AppContants {
         public static final String storeName = "sp_UserGetList";
         public static final String exeQuery = "CALL sp_UserGetList(:findText, :sort, :sortType, :pageIndex);";
     }
+
+    public static class SP_UserSetDelete {
+        public static final String storeName = "sp_UserSetDelete";
+        public static final String exeQuery = "CALL sp_UserSetDelete(:userid, :userChanged, :deletedValue);";
+        public static final String paramUserId = "userid";
+        public static final String paramUserChanged = "userChanged";
+        public static final String paramDeletedValue = "deletedValue";
+    }
+
+    public static class SP_UserSave {
+        public static final String storeName = "sp_UserSave";
+        public static final String exeQuery = "CALL sp_UserSave(:userid, :userChanged, :uName, :pw, :fName, :mName, :lName, :email, :phone);";
+        public static final String paramUserId = "userid";
+        public static final String paramUserChanged = "userChanged";
+        public static final String paramUName = "uName";
+        public static final String paramPw = "pw";
+        public static final String paramFName = "fName";
+        public static final String paramMName = "mName";
+        public static final String paramLName = "lName";
+        public static final String paramEmail = "email";
+        public static final String paramPhone = "phone";
+        public static final String paramRolesId = "roles_id";
+        public static final String paramOutId = "outid";
+
+    }
 }

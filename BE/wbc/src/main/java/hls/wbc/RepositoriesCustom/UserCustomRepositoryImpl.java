@@ -1,4 +1,4 @@
-package hls.wbc.CustomRepositories;
+package hls.wbc.RepositoriesCustom;
 import hls.wbc.constants.AppContants;
 import hls.wbc.dto.responses.PagingResponse;
 import hls.wbc.entities.User;
@@ -78,6 +78,65 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
     public PagingResponse getUserList(@Param(AppContants.SP_PagingList.paramFindText) String findText, @Param(AppContants.SP_PagingList.paramSort) String sort, @Param(AppContants.SP_PagingList.paramSortType)
     String sortType, @Param(AppContants.SP_PagingList.paramPageIndex) int pageIndex){
         return getDataPagingList(AppContants.SP_UserGetList.storeName, findText, sort, sortType, pageIndex);
+    }
+    @Query(value = AppContants.SP_UserSetDelete.exeQuery, nativeQuery = true)
+    public boolean setDeleted(@Param(AppContants.SP_UserSetDelete.paramUserId) int userId, @Param(AppContants.SP_UserSetDelete.paramUserChanged)  int userChanged, @Param(AppContants.SP_UserSetDelete.paramDeletedValue)  boolean deletedValue){
+
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery(AppContants.SP_UserSetDelete.storeName);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSetDelete.paramUserId, Integer.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSetDelete.paramUserId, userId);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSetDelete.paramUserChanged, Integer.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSetDelete.paramUserChanged, userChanged);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSetDelete.paramDeletedValue, Integer.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSetDelete.paramDeletedValue, deletedValue);
+
+        return query.execute();
+
+    }
+
+    public int save(@Param(AppContants.SP_UserSave.paramUserId) int userId, @Param(AppContants.SP_UserSave.paramUserChanged) int userChanged, @Param(AppContants.SP_UserSave.paramUName)  String uName, @Param(AppContants.SP_UserSave.paramPw)  String pw,  @Param(AppContants.SP_UserSave.paramFName) String fName, @Param(AppContants.SP_UserSave.paramMName)  String mName, @Param(AppContants.SP_UserSave.paramLName)  String lName, @Param(AppContants.SP_UserSave.paramEmail)  String email, @Param(AppContants.SP_UserSave.paramPhone)  String phone, @Param(AppContants.SP_UserSave.paramRolesId)  String rolesId){
+
+        StoredProcedureQuery query = entityManager.createStoredProcedureQuery(AppContants.SP_UserSave.storeName);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSave.paramUserId, Integer.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSave.paramUserId, userId);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSave.paramUserChanged, Integer.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSave.paramUserChanged, userChanged);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSave.paramUName, String.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSave.paramUName, uName);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSave.paramPw, String.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSave.paramPw, pw);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSave.paramFName, String.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSave.paramFName, fName);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSave.paramMName, String.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSave.paramMName, mName);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSave.paramLName, String.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSave.paramLName, lName);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSave.paramEmail, String.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSave.paramEmail, email);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSave.paramPhone, String.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSave.paramPhone, phone);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSave.paramRolesId, String.class, ParameterMode.IN);
+        query.setParameter(AppContants.SP_UserSave.paramRolesId, rolesId);
+
+        query.registerStoredProcedureParameter(AppContants.SP_UserSave.paramOutId, Integer.class, ParameterMode.OUT);
+        int result = Integer.parseInt(query.getOutputParameterValue(AppContants.SP_UserSave.paramOutId).toString());
+
+        query.execute();
+
+        return result;
     }
 
     //  Test function

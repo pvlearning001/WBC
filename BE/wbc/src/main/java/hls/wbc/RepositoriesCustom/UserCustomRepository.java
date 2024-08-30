@@ -1,9 +1,8 @@
-package hls.wbc.CustomRepositories;
+package hls.wbc.RepositoriesCustom;
 
 import hls.wbc.dto.responses.PagingResponse;
 import hls.wbc.entities.User;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,6 +21,10 @@ public interface UserCustomRepository {
 
     PagingResponse getUserList(String findText, String sort,
     String sortType, int pageIndex);
+
+    boolean setDeleted(int userId, int userChanged, boolean deletedValue);
+
+    int save(int userId, int userChanged, String uName, String pw, String fName, String mName, String lName, String email, String phone, String rolesId);
 
     List<Object> getUsersRoles(int userIdIndex);
 

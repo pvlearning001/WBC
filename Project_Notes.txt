@@ -150,3 +150,126 @@ BEGIN
 
     SELECT @maxsum;
 END//
+
+npm i react-pdf@7.6.0
+
+npm install --save --save-exact pdfjs-dist@3.10.111
+
+https://github.com/wojtekmaj/react-pdf/releases?page=2
+
+onChange={(e) => handleChangeText(e.target.value)}
+
+**********************************************************************
+
+SELECT * FROM mytable WHERE FIND_IN_SET(id,@myvar);
+
+SET @myvar = (SELECT GROUP_CONCAT(id SEPARATOR ',') AS myval FROM (SELECT * FROM `mytable` WHERE systemid=1 ORDER BY id DESC LIMIT 3 ) A GROUP BY A.systemid);
+
+DELETE FROM mytable WHERE FIND_IN_SET(id,@myvar);
+
+**********************************************************************
+
+
+SET @c = 'xxx,yyy,zzz';
+SELECT * from countries 
+WHERE FIND_IN_SET(countryname,@c);
+
+**********************************************************************
+SET @myjson = '["gmail.com","mail.ru","arcor.de","gmx.de","t-online.de",
+                "web.de","googlemail.com","freenet.de","yahoo.de","gmx.net",
+                "me.com","bluewin.ch","hotmail.com","hotmail.de","live.de",
+                "icloud.com","hotmail.co.uk","yahoo.co.jp","yandex.ru"]';
+
+SELECT JSON_LENGTH(@myjson);
+-- result: 19
+
+SELECT JSON_VALUE(@myjson, '$[0]');
+-- result: gmail.com
+
+DELIMITER //
+CREATE OR REPLACE FUNCTION example() RETURNS varchar(1000) DETERMINISTIC
+BEGIN
+  DECLARE _result varchar(1000) DEFAULT '';
+  DECLARE _counter INT DEFAULT 0;
+  DECLARE _value varchar(50);
+
+  SET @myjson = '["gmail.com","mail.ru","arcor.de","gmx.de","t-online.de",
+                "web.de","googlemail.com","freenet.de","yahoo.de","gmx.net",
+                "me.com","bluewin.ch","hotmail.com","hotmail.de","live.de",
+                "icloud.com","hotmail.co.uk","yahoo.co.jp","yandex.ru"]';
+
+  WHILE _counter < JSON_LENGTH(@myjson) DO
+    -- do whatever, e.g. add-up strings...
+    SET _result = CONCAT(_result, _counter, '-', JSON_VALUE(@myjson, CONCAT('$[',_counter,']')), '#');
+
+    SET _counter = _counter + 1;
+  END WHILE;
+
+  RETURN _result;
+END //
+DELIMITER ;
+
+SELECT example();
+
+**********************************************************************
+
+SET @myArrayOfValue = '2,5,2,23,6,';
+
+WHILE (LOCATE(',', @myArrayOfValue) > 0)
+DO
+    SET @value = ELT(1, @myArrayOfValue);
+    SET @myArrayOfValue= SUBSTRING(@myArrayOfValue, LOCATE(',',@myArrayOfValue) + 1);
+
+    INSERT INTO `EXEMPLE` VALUES(@value, 'hello');
+END WHILE;
+
+SET @rolesId = '1,2';
+SELECT * from role 
+WHERE FIND_IN_SET(id,@rolesId);
+
+***********************************************************************
+
+CALL sp_UserGetList('User2', 'ue.phone1', "desc", 1, @pageTotal);
+SELECT @pageTotal;
+
+SELECT * FROM file_upload
+
+UPDATE configs SET page_size=10 WHERE id=1
+
+SELECT * FROM user ORDER BY id DESC LIMIT 10;
+
+CALL sp_UserDelete(255, 1);
+
+SET @myid='1,2';
+SELECT fn_GetRolesName(@myid) INTO @roleName;
+SELECT @roleName;
+
+SET @myname='User,Admin';
+SELECT fn_GetRolesId(@myname) INTO @roleId;
+SELECT @roleId;
+
+SET @rolesIdUpdated='1,2,3';
+SET @rolesId = (SELECT GROUP_CONCAT(role_id SEPARATOR ',')
+FROM user_role
+WHERE user_id = 1
+ORDER BY role_id);
+SELECT @rolesId;
+SELECT STRCMP(@rolesIdUpdated, @rolesId);
+
+SET @rolesIdUpdated='1,2';
+SELECT fn_CheckSameRoles(2, @rolesIdUpdated) INTO @sameRoles;
+SELECT @sameRoles;
+
+utc_timestamp()
+
+DECLARE result VARCHAR(250);
+SET result = (SELECT GROUP_CONCAT(id SEPARATOR ',')
+FROM role
+WHERE FIND_IN_SET(name,rolesName)
+ORDER BY id);
+RETURN result;
+
+SELECT 256 AS userid,
+	r.id 
+FROM role r
+WHERE FIND_IN_SET(id,'1,2')

@@ -51,94 +51,43 @@ public class ApplicationInitConfig {
         Optional<User> initUser = userRepos.findByUserName(userName);
         if (initUser.isEmpty()){
             if (userRepos.existsByUserNameDeleted(userName)){
-                Optional<User> existUser = userRepos.findByUserNameDeleted(userName);
-                if (existUser.isPresent()) {
-                    existUser.get().setDeleted(false, AppContants.SecuritiesValues.AdminId, "Revert User");
-                    userRepos.save(existUser.get());
-                    log.info("admin user has been restored");
-                }
+                userRepos.setDeleted(AppContants.SecuritiesValues.AdminId, AppContants.SecuritiesValues.AdminId, false);
             }
             else {
-                Set<Role> roleList = new HashSet<>(roleRepos.findByIsDeleted(false));
-                StringJoiner sjRolesId = new StringJoiner(AppContants.StringValues.Comma);
-                StringJoiner sjRolesName = new StringJoiner(AppContants.StringValues.Comma);
-                if (!CollectionUtils.isEmpty(roleList))
-                    roleList.forEach(role -> {
-                        sjRolesId.add(Integer.toString(role.getId()));
-                        sjRolesName.add(role.getName());
-                    });
-
-                User user = User.builder()
-                        .guid(java.util.UUID.randomUUID().toString())
-                        .userName(userName)
-                        .password(passwordEncoder.encode("pw1"))
-                        .isResetPw(false)
-                        .rolesId(sjRolesId.toString())
-                        .rolesName(sjRolesName.toString())
-                        .roles(roleList)
-                        .build();
-                user.setTraceNew(null, "Init User");
-                User saveResult = userRepos.save(user);
-                int userId = saveResult.getId();
-                UserExt userExt = UserExt.builder()
-                        .userId(userId)
-                        .fName("WBC")
-                        .lName("Admin")
-                        .email("admin@wbc.com")
-                        .phone01("0903.123456")
-                        .build();
-                userExt.setTraceNew(null, null);
-                userExtRepos.save(userExt);
+                userRepos.save(0, AppContants.SecuritiesValues.AdminId, userName, passwordEncoder.encode("pw1"), "WBC", null, "Admin", "admin@wbc.com", "0903.123456", "1,2");
             }
             log.info("admin user has been created with default password: admin, please change it");
         }
     }
 
     private void initUserList(UserRepository userRepos, RoleRepository roleRepos, UserExtRepository userExtRepos){
-        Optional<User> firstUser = userRepos.findByUserName("user02");
+        Optional<User> firstUser = userRepos.findByUserName("user002");
         if (firstUser.isEmpty()) {
-            Set<Role> roleList = new HashSet<>(roleRepos.findByName("User"));
-
-            StringJoiner sjRolesId = new StringJoiner(AppContants.StringValues.Comma);
-            StringJoiner sjRolesName = new StringJoiner(AppContants.StringValues.Comma);
-            if (!CollectionUtils.isEmpty(roleList))
-                roleList.forEach(role -> {
-                    sjRolesId.add(Integer.toString(role.getId()));
-                    sjRolesName.add(role.getName());
-                });
-            String rolesId = sjRolesId.toString();
-            String rolesName = sjRolesName.toString();
-
-            Optional<Role> userRole = roleList.stream().findFirst();
-            int roleId = userRole.map(BaseEntity::getId).orElseGet(Roles.User::getId);
-            String roleIdString = String.valueOf(roleId);
+            String uNamePrefix = "user";
+            String uName = "";
             String pw = passwordEncoder.encode("pw1");
-            for (int i = 1; i < 255; i++) {
-                int maxId = userRepos.customGetMaxId();
-                maxId = maxId + 1;
-                String nameIndex = ((maxId < 10)
-                        ? "0" + String.valueOf(maxId)
-                        : String.valueOf(maxId));
+            String fName = "WBC";
+            String lNamePrefix = "User";
+            String lName = "";
+            String emailPostfix = "@wbc.com";
+            String email = "";
+            String phone = "0903.111111";
+            String rolesId = "1";
+            String index = "";
+            for (int i = 2; i < 256; i++) {
+                index =
+                        (i < 10)
+                        ? "00" + String.valueOf(i)
+                        :   (
+                                (i < 99)
+                                ? "0" + String.valueOf(i)
+                                : String.valueOf(i)
+                            );
 
-                String userName = "user" + nameIndex;
-                String sql = "INSERT INTO User(user_name, password, is_reset_pw, roles_id, roles_name) VALUES('" + userName + "', '" + pw + "', 0, '" + rolesId + "', '" + rolesName + "')";
-                userRepos.customExecQuery(sql);
-                maxId = userRepos.customGetMaxId();
-                sql = "INSERT INTO User_Role(user_id, role_id) VALUES(" + String.valueOf(maxId) + ", " + roleIdString + ")";
-                userRepos.customExecQuery(sql);
-
-                String lName = "User" + nameIndex;
-                String email = userName + "@wbc.com";
-
-                UserExt userExt = UserExt.builder()
-                        .userId(maxId)
-                        .fName("WBC")
-                        .lName(lName)
-                        .email(email)
-                        .phone01("0903.111111")
-                        .build();
-                userExt.setTraceNew(null, null);
-                userExtRepos.save(userExt);
+                uName = uNamePrefix + index;
+                lName = lNamePrefix + index;
+                email = uName + emailPostfix;
+                userRepos.save(0, 0, uName, pw, fName, null, lName, email, phone, rolesId);
             }
             log.info("init user list");
         }
