@@ -95,7 +95,7 @@ public class FileUploadService {
                     .hashContent(hashContent)
                     .build();
 
-            String token = SecuritiesUtils.getToken();
+            String token = SecuritiesUtils.getTokenString();
             int userId = SecuritiesUtils.getClaimsUserId(token, SIGNER_KEY);
             entity.setTraceNew(userId, null);
             entity.setGuid(uniqueNamePrefix);

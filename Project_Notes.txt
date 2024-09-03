@@ -228,6 +228,14 @@ SELECT * from role
 WHERE FIND_IN_SET(id,@rolesId);
 
 ***********************************************************************
+SUBSTRING(string, start, length)
+OR
+SUBSTRING(string FROM start FOR length)
+
+POSITION(substring IN string)
+
+
+***********************************************************************
 
 CALL sp_UserGetList('User2', 'ue.phone1', "desc", 1, @pageTotal);
 SELECT @pageTotal;

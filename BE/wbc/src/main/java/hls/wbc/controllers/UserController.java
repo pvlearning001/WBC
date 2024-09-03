@@ -48,7 +48,7 @@ public class UserController {
     @GetMapping
     ApiResponse<List<UserResponse>> getUsers() throws ParseException, JOSEException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = SecuritiesUtils.getToken();
+        String token = SecuritiesUtils.getTokenString();
         SignedJWT signedJWT = authenticationService.verifyToken(token);
         log.info("Username: {}", authentication.getName());
         authentication.getAuthorities().forEach(grantedAuthority -> log.info(grantedAuthority.getAuthority()));
@@ -72,18 +72,18 @@ public class UserController {
                 .build();
     }
 
-    @DeleteMapping("/{userId}")
-    ApiResponse<String> deleteUser(@PathVariable int userId){
-        userService.deleteUser(userId);
+    @PutMapping("/delete")
+    ApiResponse<String> deleteUser(@RequestBody @Valid DeletingRequest request) throws ParseException, JOSEException {
+        userService.deleteUser(request.getId(), request.isDeletedValue());
         return ApiResponse.<String>builder()
-                .result("User has been deleted")
+                .result("User has been set deleted value")
                 .build();
     }
 
-    @PutMapping("/{userId}")
-    ApiResponse<UserResponse> updateUser(@PathVariable int userId, @RequestBody UserUpdateRequest request){
+    @PutMapping("/update")
+    ApiResponse<UserResponse> updateUser(@RequestBody @Valid UserUpdateRequest request) throws ParseException, JOSEException {
         return ApiResponse.<UserResponse>builder()
-                .result(userService.updateUser(userId, request))
+                .result(userService.updateUser(request))
                 .build();
     }
 

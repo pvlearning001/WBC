@@ -42,10 +42,12 @@ export default function AdminMngtUserComponent(props){
     const [pageTotal, setPageTotal] = useState(0);
     let [dataList, setDataList] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
     const findText = useRef("");
     const isFirstTime = useRef(true);
     const sort = useRef(defaultSort);
     const sortType = useRef(constants.sort_type_desc);
+    const curUser = useRef({});
 
     const curId = useRef(0);
 
@@ -57,7 +59,7 @@ export default function AdminMngtUserComponent(props){
         setPageIndex(itemValue);
         let url = constants.page_admin_users + "?page=" + itemValue;
         navigate(url);
-    }, [pageIndex]);   
+    }, [pageIndex, dataList]);   
     
     
     useEffect(() => { pageInitValues();}, [pageIndex, findText]);    
@@ -68,19 +70,15 @@ export default function AdminMngtUserComponent(props){
         let pageIndexParamValue = 1;
         const queryParams = new URLSearchParams(location.search);        
         let pageIndexParam = queryParams.get('page');
-        
         if (pageIndexParam != null 
             && pageIndexParam !== undefined 
             && pageIndex > 0) {
-            console.log("P1 Have param");
-            if (parseInt(pageIndexParam) > parseInt(pageTotal))
-                pageIndexParam = parseInt(pageTotal);
             pageIndexParamValue = parseInt(pageIndexParam);
+            setPageIndex(pageIndexParamValue);
             doSearchByPage(pageIndexParamValue); 
                       
         }
         else{
-            console.log("P2 No param");
             if (pageIndex > 0){ 
                 sort.current = defaultSort;
                 sortType.current = constants.sort_type_desc;
@@ -108,17 +106,14 @@ export default function AdminMngtUserComponent(props){
         if (!utils.isNullOrEmptyOrSpace(findText.current) && sort.current === defaultSort){
             sort.current = lNameSort;
             sortType.current = constants.sort_type_asc;
-        }
-        console.log(findText.current, sort.current, sortType.current, pageIndex); 
+        }        
         let info = userServices.getList(findText.current, sort.current, sortType.current, pageValue); 
         info.then((result) => {
-            console.log(result);
             setPageTotal(result.pageTotal);
             dataList.splice(0,dataList.length);            
             for (let dataItem of result.dataList) {              
                 dataList.push(dataItem);                
             }
-            console.log(dataList);
         });
     }
     
@@ -130,7 +125,6 @@ export default function AdminMngtUserComponent(props){
         let url = constants.page_admin_users + "?page=1"; 
         setPageIndex(0);
         setFindText();
-        console.log('click search');
         navigate(url);
     }
     
@@ -153,6 +147,10 @@ export default function AdminMngtUserComponent(props){
 
     function doEdit(id){
         console.log("Edit at id = ", id);
+        curUser.current = userServices.findItemInList(dataList, id);        
+        console.log(curUser.current);
+        if (curUser.current != null)
+            setShowEditModal(true);
     }
 
     function doDelete(id){
@@ -165,20 +163,46 @@ export default function AdminMngtUserComponent(props){
         setShowDeleteModal(false);
     }
 
-    function deleteUser(){
+    function handleCloseEditModal(){
+        setShowEditModal(false);
+    }
+
+    function deleteUser(){        
+        userServices.setDelete(curId.current, true);
+        handleCloseDeleteModal();
         let tempList = [];
         for (let dataItem of dataList) {
             if (dataItem.id !== curId.current)              
                 tempList.push(dataItem);                
         }
-        console.log("curId.current: ", curId.current);
-        console.log(tempList);
         dataList.splice(0,dataList.length);            
         for (let dataItem of tempList) {              
             dataList.push(dataItem);                
         }
-        console.log(dataList);
-        handleCloseDeleteModal();
+        doSearch();
+    }
+
+    function editUser(){        
+        console.log("Da edit user", curUser.current.id);        
+        userServices.update(curUser.current);
+        handleCloseEditModal();
+    }
+
+    const parseName = (text) => {
+        const nameArr = utils.getDetailsName(text);		
+        curUser.current.fName = nameArr[0];
+        curUser.current.mName = nameArr[1];
+        curUser.current.lName = nameArr[2];
+        curUser.current.fmName = utils.buildFMName(curUser.current.fName, curUser.current.mName);
+        curUser.current.fullName = utils.buildFullName(curUser.current.fName, curUser.current.mName, curUser.current.lName);
+    }
+
+    const setUserEmail = (text) => {
+        curUser.current.email = text;
+    }
+
+    const setUserPhone = (text) => {
+        curUser.current.phone = text;
     }
 
     return(
@@ -255,6 +279,49 @@ export default function AdminMngtUserComponent(props){
                 </Button>
                 <Button variant="primary" className="btn btn-danger" onClick={deleteUser}>
                     Xóa
+                </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showEditModal} fullscreen={true} onHide={handleCloseEditModal} dialogClassName="modal-90w main hero section  dark-background"
+                            aria-labelledby="example-custom-modal-styling-title">
+                <Modal.Header closeButton>
+                <Modal.Title style={textModal}>{curUser.current.fullName}</Modal.Title>
+                </Modal.Header>
+                <Modal.Body style={textModal}>
+                    <div className="container">
+                        <div className="row">
+                            <div className='col-md-3'>
+                                Họ và tên:
+                            </div>
+                            <div className='col-md-9'>
+                                <input className="register-form-control border-0" type="text" name="fullName" defaultValue={curUser.current.fullName}  onChange={(e) => parseName(e.target.value)} />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className='col-md-3'>
+                                Email:
+                            </div>
+                            <div className='col-md-9'>
+                                <input className="register-form-control border-0" type="text" name="email" defaultValue={curUser.current.email}  onChange={(e) => setUserEmail(e.target.value)} />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className='col-md-3'>
+                                Phone:
+                            </div>
+                            <div className='col-md-9'>
+                                <input className="register-form-control border-0" type="text" name="email" defaultValue={curUser.current.phone}  onChange={(e) => setUserPhone(e.target.value)} />
+                            </div>
+                        </div>
+                    </div>
+				</Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseEditModal}>
+                    Đóng
+                </Button>
+                <Button variant="primary" className="btn btn-danger" onClick={editUser}>
+                    Sửa
                 </Button>
                 </Modal.Footer>
             </Modal>

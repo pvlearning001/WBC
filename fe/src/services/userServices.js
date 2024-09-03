@@ -56,7 +56,8 @@ export async function getList(findText, sort, sortType, pageIndex) {
                 rolesName = item[10];               
 
                 let usermodel = new userModel(id, uname, fname, mname, lname, email, phone, isResetPw, pwReset, rolesId, rolesName);
-                usermodel.setFMName(fname, mname);
+                //usermodel.setFMName();
+                usermodel.setFullName();
                 usermodel.setOrderNo(orderNo);
                 result.dataList.push(usermodel);
             }
@@ -67,4 +68,102 @@ export async function getList(findText, sort, sortType, pageIndex) {
         console.log("Error: ", err);
     })
     return result;
+}
+
+export async function setDelete(id, deletedValue) {
+    let result = "";
+    let token = localStorage.getItem(constants.token_string);
+    const requestItem = {
+        "id": id,
+        "deletedValue": deletedValue
+    };
+
+    await axios({ 
+        // Endpoint to send files 
+        url: "/users/delete", 
+        method: "PUT", 
+        headers: {   
+            "Authorization" : `Bearer ${token}`
+        }, 
+        
+        data: requestItem, 
+    }) 
+    .then((res) => {
+        if (res.data.code === constants.api_code_success){
+            result = res.data.result;
+        }
+    }) 
+    .catch((err) => {
+        console.log("Error: ", err);
+    })
+    return result;
+}
+
+export async function update(updateItem) {
+    /*
+    int userId;
+    String userName;
+    String fName;
+    String mName;
+    String lName;
+    String email;
+    String phone;
+    String roles;
+
+        this.id = id;
+      this.uName = uname;
+      this.fName = fname;
+      this.mName = mname;
+      this.fmName = "";
+      this.fullName = "";
+      this.lName = lname;
+      this.email = email;
+      this.phone = phone;
+      this.isResetPw = is_reset_pw;
+      this.pwReset = pw_reset;
+      this.roles_id = roles_id; 
+      this.roles_name = roles_name;
+    */
+    let result = "";
+    let token = localStorage.getItem(constants.token_string);
+    console.log(updateItem.fName, updateItem.mName, updateItem.lName);
+    const requestItem = {
+        "userId": updateItem.id,
+        "userName": updateItem.uName,
+        "firstName": updateItem.fName,
+        "middleName": updateItem.mName,
+        "lastName": updateItem.lName,
+        "email": updateItem.email,
+        "phone": updateItem.phone,
+        "roles": updateItem.roles_id
+    };
+
+    await axios({ 
+        // Endpoint to send files 
+        url: "/users/update", 
+        method: "PUT", 
+        headers: {   
+            "Authorization" : `Bearer ${token}`
+        }, 
+        
+        data: requestItem, 
+    }) 
+    .then((res) => {
+        if (res.data.code === constants.api_code_success){
+            result = res.data.result;
+            console.log(result);
+        }
+    }) 
+    .catch((err) => {
+        console.log("Error: ", err);
+    })
+    return result;
+}
+
+export function findItemInList(dataList, id){
+    for (let dataItem of dataList) {
+        if (dataItem.id === id)              
+            return dataItem;                
+    }
+    return null;
 }

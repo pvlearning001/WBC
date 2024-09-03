@@ -7,6 +7,7 @@ export class userModel {
       this.fName = fname;
       this.mName = mname;
       this.fmName = "";
+      this.fullName = "";
       this.lName = lname;
       this.email = email;
       this.phone = phone;
@@ -20,7 +21,12 @@ export class userModel {
       this.orderNo = orderNo;
     }
 
-    setFMName(fname, mname) {
-      this.fmName = utils.buildFMName(fname, mname);
+    setFMName() {
+      this.fmName = utils.buildFMName(this.fName, this.mName);
+    }    
+
+    setFullName() {
+      this.fmName = utils.buildFMName(this.fName, this.mName);
+      this.fullName = utils.buildFullName(this.fName, this.mName, this.lName);
     }
 }

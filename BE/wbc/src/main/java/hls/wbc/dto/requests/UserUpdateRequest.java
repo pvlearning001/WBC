@@ -2,8 +2,6 @@ package hls.wbc.dto.requests;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.Set;
-
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Builder
@@ -12,7 +10,12 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 
 public class UserUpdateRequest extends BaseRequest {
+    int userId;
     String userName;
-    String password;
-    Set<Integer> roles;
+    String firstName;
+    String middleName;
+    String lastName;
+    String email;
+    String phone;
+    String roles;
 }

@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.category: ~2 rows (approximately)
+-- Dumping data for table wbc.category: ~1 rows (approximately)
 
 -- Dumping structure for table wbc.configs
 CREATE TABLE IF NOT EXISTS `configs` (
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `configs` (
 
 -- Dumping data for table wbc.configs: ~1 rows (approximately)
 REPLACE INTO `configs` (`id`, `guid`, `page_size`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, '4ffc61e6-669c-11ef-b0e8-509a4cb5cc32', 10, NULL, b'0', '2024-08-30 06:51:41.000000', 1, '2024-08-30 06:51:41.000000', 1);
+	(1, 'f965dd8e-69e5-11ef-983c-509a4cb5cc32', 10, NULL, b'0', '2024-09-03 11:16:32.000000', 1, '2024-09-03 11:16:32.000000', 1);
 
 -- Dumping structure for table wbc.course
 CREATE TABLE IF NOT EXISTS `course` (
@@ -470,6 +470,47 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure wbc.sp_TableRelationSetDelete
+DELIMITER //
+CREATE PROCEDURE `sp_TableRelationSetDelete`(
+	IN `tableName` VARCHAR(1028),
+	IN `columnName` VARCHAR(1028),
+	IN `id` INT,
+	IN `userChanged` INT,
+	IN `deletedValue` INT
+)
+BEGIN
+	SET @sql = CONCAT('UPDATE ', tableName, '
+		SET is_deleted = ?
+		, upd_by = ?
+		, upd_at=utc_timestamp() 
+		WHERE ', columnName, '=?');	
+	PREPARE stm FROM @sql;
+ 	EXECUTE stm USING deletedValue, userChanged, id;
+ 	DEALLOCATE PREPARE stm;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure wbc.sp_TableSetDelete
+DELIMITER //
+CREATE PROCEDURE `sp_TableSetDelete`(
+	IN `tableName` VARCHAR(1028),
+	IN `id` INT,
+	IN `userChanged` INT,
+	IN `deletedValue` BIT
+)
+BEGIN
+	SET @sqlStm = CONCAT('UPDATE ', tableName, '
+		SET is_deleted = ?
+			, upd_by = ?
+			, upd_at=utc_timestamp() 
+		WHERE id = ?');
+	PREPARE stm FROM @sqlStm;
+ 	EXECUTE stm USING deletedValue, userChanged, id;
+ 	DEALLOCATE PREPARE stm;
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure wbc.sp_TestGetUserByRole
 DELIMITER //
 CREATE PROCEDURE `sp_TestGetUserByRole`(
@@ -588,6 +629,24 @@ BEGIN
 END//
 DELIMITER ;
 
+-- Dumping structure for procedure wbc.sp_TestWhileLoop
+DELIMITER //
+CREATE PROCEDURE `sp_TestWhileLoop`(
+	IN `input` VARCHAR(1028)
+)
+BEGIN
+	SET @len = LENGTH(input);
+	SET @posFirstComma = POSITION(',' IN input);
+	WHILE (@len > 0 AND @posFirstComma > 0) DO
+		SET @posFirstComma = POSITION(',' IN input);		
+	   SET @val01 = SUBSTRING(input, 1, @posFirstComma - 1);
+	   SET input = SUBSTRING(input, @posFirstComma + 1);
+	   SET @len = LENGTH(input);
+	   SELECT @val01, input;	 
+	END WHILE;
+END//
+DELIMITER ;
+
 -- Dumping structure for procedure wbc.sp_UserGetList
 DELIMITER //
 CREATE PROCEDURE `sp_UserGetList`(
@@ -635,7 +694,7 @@ BEGIN
 	WHERE (u.is_deleted = 0) AND (u.id > 1)
 	';
 
-	IF (findText IS NOT NULL) THEN
+	IF (findText IS NOT NULL AND findText <> '') THEN
 		SET findValue = CONCAT('\'%', findText, '%\'');
 		SET findCondition = CONCAT(' 
 		AND((u.user_name LIKE ', findValue, ')
@@ -779,13 +838,6 @@ BEGIN
 	
 	ELSE #UPDATE
 		SET outid = userid;
-		UPDATE user SET 
-			user_name = uName
-			, password = pw
-			, upd_at = @curTime
-			, upd_by = userChanged
-		WHERE id = userid;
-		
 		UPDATE user_ext SET
 			f_name = fName
 			, m_name = mName
@@ -800,8 +852,7 @@ BEGIN
 				, roles_name = @roles_name
 			WHERE id = userid;
 			
-			DELETE FROM user_role
-			WHERE user_id = userid;
+			CALL sp_TableRelationSetDelete('user_role', 'user_id', userid, userChanged, 1);
 			
 			INSERT INTO user_role(
 				user_id
@@ -818,10 +869,8 @@ BEGIN
 				, @curTime AS upd_at
 				, @userChanged AS upd_by
 			FROM role r
-			WHERE FIND_IN_SET(r.id, roles_id);
-			
-		END IF;
-			
+			WHERE FIND_IN_SET(r.id, roles_id);			
+		END IF;			
 	END IF;
 END//
 DELIMITER ;
@@ -834,23 +883,10 @@ CREATE PROCEDURE `sp_UserSetDelete`(
 	IN `deletedValue` BIT
 )
 BEGIN
-	UPDATE user 
-	SET is_deleted = deletedValue
-		, upd_at=utc_timestamp() 
-		, upd_by = userChanged
-	WHERE id=userid;
+	CALL sp_TableSetDelete('user', userid, userChanged, deletedValue);
+	CALL sp_TableRelationSetDelete('user_ext', 'user_id', userid, userChanged, deletedValue); 
+	CALL sp_TableRelationSetDelete('user_role', 'user_id', userid, userChanged, deletedValue);
 	
-	UPDATE user_ext 
-	SET is_deleted = deletedValue
-		, upd_at=utc_timestamp() 
-		, upd_by = userChanged 
-	WHERE user_id = userid;
-	
-	UPDATE user_role 
-	SET is_deleted = deletedValue
-		, upd_at=utc_timestamp() 
-		, upd_by = userChanged 
-	WHERE user_id = userid;
 END//
 DELIMITER ;
 
@@ -873,7 +909,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user: ~255 rows (approximately)
+-- Dumping data for table wbc.user: ~256 rows (approximately)
 
 -- Dumping structure for table wbc.user_ext
 CREATE TABLE IF NOT EXISTS `user_ext` (
@@ -897,7 +933,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_ext: ~255 rows (approximately)
+-- Dumping data for table wbc.user_ext: ~256 rows (approximately)
 
 -- Dumping structure for table wbc.user_role
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -918,7 +954,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_role: ~256 rows (approximately)
+-- Dumping data for table wbc.user_role: ~257 rows (approximately)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

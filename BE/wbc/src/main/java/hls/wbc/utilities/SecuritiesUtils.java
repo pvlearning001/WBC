@@ -6,8 +6,6 @@ import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import hls.wbc.constants.AppContants;
-import hls.wbc.exceptions.AppException;
-import hls.wbc.exceptions.ErrorCode;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -19,9 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import jakarta.xml.bind.DatatypeConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
-import javax.swing.text.Utilities;
 import java.text.ParseException;
-import java.util.Date;
 
 public class SecuritiesUtils {
     public static String toEncodeMD5(String text) throws NoSuchAlgorithmException {
@@ -42,7 +38,18 @@ public class SecuritiesUtils {
         return passwordEncoder.matches(plainText, enryptText);
     }
 
-    public static String getToken(){
+    public static String getUserNameByToken(){
+        String result = AppContants.StringValues.Empty;
+        try {
+            result = SecurityContextHolder.getContext().getAuthentication().getName();
+        }
+        catch (Exception ex){
+            result = AppContants.StringValues.Empty;
+        }
+        return result;
+    }
+
+    public static String getTokenString(){
         String result = AppContants.StringValues.Empty;
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -61,7 +68,7 @@ public class SecuritiesUtils {
     }
 
     public static SignedJWT getSignedJWT(String signerKey) throws JOSEException, ParseException {
-        String token = getToken();
+        String token = getTokenString();
         return getSignedJWT(token, signerKey);
     }
 
@@ -77,7 +84,7 @@ public class SecuritiesUtils {
     }
 
     public static Object getClaimsValue(String signerKey, String claimsKey) throws ParseException, JOSEException {
-        String token = getToken();
+        String token = getTokenString();
         return getClaimsValue(token, signerKey, claimsKey);
     }
 
@@ -90,7 +97,7 @@ public class SecuritiesUtils {
     }
 
     public static int getClaimsUserId(String signerKey) throws ParseException, JOSEException {
-        String token = getToken();
+        String token = getTokenString();
         return getClaimsUserId(token, signerKey);
     }
 }

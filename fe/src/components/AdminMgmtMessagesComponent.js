@@ -28,10 +28,6 @@ export function AdminMgmtMessagesComponent(props){
         width: "300%",
     }
 
-    const textModal = {
-        color: "white",
-    }
-
     const [title, setTitle] = useState(constants.string_empty); 
     const [content, setContent] = useState(constants.string_empty); 
     const [contentEx01, setContentEx01] = useState(constants.string_empty); 

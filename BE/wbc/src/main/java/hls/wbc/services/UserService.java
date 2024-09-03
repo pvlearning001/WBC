@@ -1,14 +1,13 @@
 package hls.wbc.services;
 
+import com.nimbusds.jose.JOSEException;
 import hls.wbc.constants.AppContants;
 import hls.wbc.dto.requests.UserCreationRequest;
 import hls.wbc.dto.requests.UserListRequest;
 import hls.wbc.dto.requests.UserUpdateRequest;
 import hls.wbc.dto.responses.PagingResponse;
 import hls.wbc.dto.responses.UserResponse;
-import hls.wbc.entities.Role;
 import hls.wbc.entities.User;
-import hls.wbc.entities.UserExt;
 import hls.wbc.enums.Roles;
 import hls.wbc.exceptions.AppException;
 import hls.wbc.exceptions.ErrorCode;
@@ -18,11 +17,13 @@ import hls.wbc.repositories.RoleRepository;
 import hls.wbc.repositories.UserExtRepository;
 import hls.wbc.repositories.UserRepository;
 import hls.wbc.utilities.AppUtils;
+import hls.wbc.utilities.SecuritiesUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
@@ -30,18 +31,20 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
-import java.awt.print.Pageable;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class UserService {
+    @NonFinal
+    @Value("${jwt.signerKey}")
+    protected String SIGNER_KEY;
+
     UserRepository userRepository;
     UserExtRepository userExtRepository;
     RoleRepository roleRepository;
@@ -83,18 +86,36 @@ public class UserService {
         return userMapper.toResponse(user);
     }
 
-    public UserResponse updateUser(int userId, UserUpdateRequest request) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        userMapper.updateUser(user, request);
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        var roles = roleRepository.findAllById(request.getRoles());
-        user.setRoles(new HashSet<>(roles));
-        return userMapper.toResponse(userRepository.save(user));
+    public UserResponse updateUser(UserUpdateRequest request) throws ParseException, JOSEException {
+        int userIdChanged = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
+        int userId = userRepository.save(request.getUserId()
+                , userIdChanged
+                , request.getUserName()
+                , null
+                , request.getFirstName()
+                , request.getMiddleName()
+                , request.getLastName()
+                , request.getEmail()
+                , request.getPhone()
+                , request.getRoles());
+        Optional<User> userSave = userRepository.findById(userId);
+        UserResponse result = UserResponse.builder().build();
+        if (userSave.isPresent()){
+            result = userMapper.toResponse(userSave.get());
+            if (result != null) {
+                result.setFirstName(request.getFirstName());
+                result.setMiddleName(request.getMiddleName());
+                result.setLastName(request.getLastName());
+                result.setEmail(request.getEmail());
+                result.setPhone(request.getPhone());
+            }
+        }
+        return result;
     }
 
-    public void deleteUser(int userId){
-        userRepository.deleteById(userId);
+    public void deleteUser(int userId, boolean deleteValue) throws ParseException, JOSEException {
+        int userChanged = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
+        userRepository.setDeleted(userId, userChanged, deleteValue);
     }
 
     @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
