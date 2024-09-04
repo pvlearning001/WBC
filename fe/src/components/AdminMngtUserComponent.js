@@ -40,7 +40,7 @@ export default function AdminMngtUserComponent(props){
     const lNameSort =  "ue.l_name";
     const [pageIndex, setPageIndex] = useState(1); 
     const [pageTotal, setPageTotal] = useState(0);
-    let [dataList, setDataList] = useState([]);
+    const [dataList, setDataList] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const findText = useRef("");
@@ -59,12 +59,12 @@ export default function AdminMngtUserComponent(props){
         setPageIndex(itemValue);
         let url = constants.page_admin_users + "?page=" + itemValue;
         navigate(url);
-    }, [pageIndex, dataList]);   
+    }, [pageIndex]);   
     
     
-    useEffect(() => { pageInitValues();}, [pageIndex, findText]);    
+    useEffect(() => { pageInitValues();}, [pageIndex, findText]);
 
-    function pageInitValues() { 
+    function pageInitValues() {
         if (pageIndex < 1)
             setPageIndex(1);         
         let pageIndexParamValue = 1;
@@ -74,9 +74,8 @@ export default function AdminMngtUserComponent(props){
             && pageIndexParam !== undefined 
             && pageIndex > 0) {
             pageIndexParamValue = parseInt(pageIndexParam);
-            setPageIndex(pageIndexParamValue);
             doSearchByPage(pageIndexParamValue); 
-                      
+            setPageIndex(pageIndexParamValue);                                  
         }
         else{
             if (pageIndex > 0){ 
@@ -102,7 +101,6 @@ export default function AdminMngtUserComponent(props){
 
     function doSearchByPage(pageValue) {        
         setFindText();
-
         if (!utils.isNullOrEmptyOrSpace(findText.current) && sort.current === defaultSort){
             sort.current = lNameSort;
             sortType.current = constants.sort_type_asc;
@@ -110,9 +108,9 @@ export default function AdminMngtUserComponent(props){
         let info = userServices.getList(findText.current, sort.current, sortType.current, pageValue); 
         info.then((result) => {
             setPageTotal(result.pageTotal);
-            dataList.splice(0,dataList.length);            
-            for (let dataItem of result.dataList) {              
-                dataList.push(dataItem);                
+            dataList.splice(0,dataList.length);
+            for (let dataItem of result.dataList) {
+                setDataList(prevState => [...prevState, dataItem]);
             }
         });
     }
@@ -146,15 +144,12 @@ export default function AdminMngtUserComponent(props){
     }
 
     function doEdit(id){
-        console.log("Edit at id = ", id);
-        curUser.current = userServices.findItemInList(dataList, id);        
-        console.log(curUser.current);
+        curUser.current = userServices.findItemInList(dataList, id);
         if (curUser.current != null)
             setShowEditModal(true);
     }
 
     function doDelete(id){
-        console.log("Delete at id = ", id);
         curId.current = id;
         setShowDeleteModal(true);
     }
@@ -170,20 +165,10 @@ export default function AdminMngtUserComponent(props){
     function deleteUser(){        
         userServices.setDelete(curId.current, true);
         handleCloseDeleteModal();
-        let tempList = [];
-        for (let dataItem of dataList) {
-            if (dataItem.id !== curId.current)              
-                tempList.push(dataItem);                
-        }
-        dataList.splice(0,dataList.length);            
-        for (let dataItem of tempList) {              
-            dataList.push(dataItem);                
-        }
         doSearch();
     }
 
-    function editUser(){        
-        console.log("Da edit user", curUser.current.id);        
+    function editUser(){
         userServices.update(curUser.current);
         handleCloseEditModal();
     }

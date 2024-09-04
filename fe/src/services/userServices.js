@@ -55,8 +55,7 @@ export async function getList(findText, sort, sortType, pageIndex) {
                 rolesId = item[9];
                 rolesName = item[10];               
 
-                let usermodel = new userModel(id, uname, fname, mname, lname, email, phone, isResetPw, pwReset, rolesId, rolesName);
-                //usermodel.setFMName();
+                let usermodel = new userModel(id, uname, fname, mname, lname, email, phone, isResetPw, pwReset, rolesId, rolesName);                
                 usermodel.setFullName();
                 usermodel.setOrderNo(orderNo);
                 result.dataList.push(usermodel);
@@ -78,8 +77,7 @@ export async function setDelete(id, deletedValue) {
         "deletedValue": deletedValue
     };
 
-    await axios({ 
-        // Endpoint to send files 
+    await axios({
         url: "/users/delete", 
         method: "PUT", 
         headers: {   
@@ -100,33 +98,8 @@ export async function setDelete(id, deletedValue) {
 }
 
 export async function update(updateItem) {
-    /*
-    int userId;
-    String userName;
-    String fName;
-    String mName;
-    String lName;
-    String email;
-    String phone;
-    String roles;
-
-        this.id = id;
-      this.uName = uname;
-      this.fName = fname;
-      this.mName = mname;
-      this.fmName = "";
-      this.fullName = "";
-      this.lName = lname;
-      this.email = email;
-      this.phone = phone;
-      this.isResetPw = is_reset_pw;
-      this.pwReset = pw_reset;
-      this.roles_id = roles_id; 
-      this.roles_name = roles_name;
-    */
     let result = "";
     let token = localStorage.getItem(constants.token_string);
-    console.log(updateItem.fName, updateItem.mName, updateItem.lName);
     const requestItem = {
         "userId": updateItem.id,
         "userName": updateItem.uName,
@@ -151,7 +124,6 @@ export async function update(updateItem) {
     .then((res) => {
         if (res.data.code === constants.api_code_success){
             result = res.data.result;
-            console.log(result);
         }
     }) 
     .catch((err) => {
