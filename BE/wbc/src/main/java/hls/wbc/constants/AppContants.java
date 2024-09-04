@@ -20,6 +20,7 @@ public class AppContants {
         public static final String HasRoleAdmin = "hasRole('Admin')";
         public static final String JWTClaimsSetIssuer = "hls.com";
         public static final String RoleTokenPrefix = "ROLE_";
+        public static  final int ResetPwLength = 6;
     }
 
     public static class UtilitiesValues {
@@ -67,6 +68,10 @@ public class AppContants {
         public static final String User = "User";
         public static final String RoleAdmin = "ROLE_Admin";
         public static final String RoleUser = "ROLE_User";
+    }
+
+    public static class Messages {
+        public static final String ChangePwSuccess = "Thay đổi password thành công";
     }
 
     public static class Paging{

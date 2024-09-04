@@ -40,13 +40,16 @@ export default function LoginComponent() {
                 localStorage.setItem(constants.token_fullName, decoded.fullName);
                 localStorage.setItem(constants.token_userId, decoded.userId);               
                 setMessage(res.data.message);
-                setSuccess(false);
+                setSuccess(true);
                 navigate(constants.page_home);
             })
             .catch(error => {
-                console.log("Error: ", error.response.data.message);
                 setMessage(error.response.data.message);
                 setSuccess(false);
+                let errCode = parseInt(error.response.data.code);
+                if (errCode === constants.api_code_changePw){
+                    navigate(constants.page_changepw);
+                }
             });
         }
     };
@@ -71,7 +74,10 @@ export default function LoginComponent() {
                     
                     <div className="nomember">
                         <p className="text-center">
-                            <Link to="/register">{constants.linkText_createAccount}</Link>
+                            <Link to={constants.page_register}>{constants.linkText_createAccount}</Link>                            
+                        </p>
+                        <p className="text-center">
+                            <Link to={constants.page_changepw}>{constants.linkText_changePwUser}</Link>
                         </p>
                     </div>                                           
                 </div>

@@ -35,6 +35,7 @@ export const page_courses_info = "/coursesinfo";
 export const page_announcement_info = "/announcement";
 export const page_home_user = "/userhome";
 export const page_home_admin = "/adminhome";
+export const page_changepw = "/changepw";
 
 export const page_admin_courses = "/admin/courses";
 export const page_admin_marks = "/admin/marks";
@@ -52,6 +53,7 @@ export const linkText_login = "Login";
 export const linkText_logout = "Logout";
 export const linkText_register = "Đăng ký";
 export const linkText_createAccount = "Tạo mới tài khoản";
+export const linkText_changePwUser = "Đổi Password";
 export const linkText_contactus = "Liên hệ";
 export const linkText_courses_info = "Thông tin khóa học";
 export const linkText_announcement_info = "Thông báo";
@@ -69,6 +71,7 @@ export const linkText_user_message = "Thông báo";
 
 export const text_User_Signin = "Đăng nhập";
 export const text_User_Register = "Đăng ký";
+export const text_User_ChangePw = "Thay đổi Password";
 export const text_Intro_Addr = "Địa chỉ: ";
 export const text_Intro_Phone_No = "Số điện thoại: ";
 export const text_Intro_Email = "Email: ";
@@ -78,12 +81,16 @@ export const api_introduce = "/introduce";
 export const api_auth_token = "/auth/token";
 export const api_auth_logout = "/auth/logout";
 export const api_register_user = "/users";
+export const api_changePw_user = "/users/changepw";
 export const api_get_latest_announcement = "/news/latest";
 export const api_get_file_content_pdf = "/news/file";
 export const api_code_success = 1000;
+export const api_code_changePw = 1019;
 
-export const page_list_public = [page_home, page_login, page_register, page_contactus, page_courses_info, page_announcement_info];
+export const page_list_public = [page_home, page_login, page_register, page_contactus, page_courses_info, page_announcement_info, page_changepw];
+
 export const page_list_user = [page_home_user, page_user_changepw, page_user_info, page_user_courses, page_user_marks, page_user_messages];
+
 export const page_list_admin = [page_home_user, page_user_changepw, page_user_info, page_user_courses, page_user_marks, page_user_messages, page_home_admin, page_admin_courses, page_admin_marks, page_admin_messages, page_admin_users];
 
 export const load_Intro_Info_By_Local = 1;

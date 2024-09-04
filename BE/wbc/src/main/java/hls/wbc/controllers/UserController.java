@@ -3,9 +3,7 @@ package hls.wbc.controllers;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jwt.SignedJWT;
 import hls.wbc.dto.requests.*;
-import hls.wbc.dto.responses.ApiResponse;
-import hls.wbc.dto.responses.PagingResponse;
-import hls.wbc.dto.responses.UserResponse;
+import hls.wbc.dto.responses.*;
 import hls.wbc.services.AuthenticationService;
 import hls.wbc.services.UserService;
 import hls.wbc.utilities.SecuritiesUtils;
@@ -25,6 +23,7 @@ import java.text.ParseException;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -72,7 +71,22 @@ public class UserController {
                 .build();
     }
 
-    @PutMapping("/delete")
+    @PutMapping("/changepw")
+    ApiResponse<UserChangePwResponse> changePw(@RequestBody @Valid UserChangePwRequest request) {
+        userService.changePwUser(request);
+        return ApiResponse.<UserChangePwResponse>builder()
+                .build();
+    }
+
+    @PostMapping("/admin/list")
+    ApiResponse<PagingResponse> getUserList(@RequestBody  @Valid UserListRequest request){
+        PagingResponse res = userService.getUserList(request);
+        return ApiResponse.<PagingResponse>builder()
+                .result(res)
+                .build();
+    }
+
+    @PutMapping("/admin/delete")
     ApiResponse<String> deleteUser(@RequestBody @Valid DeletingRequest request) throws ParseException, JOSEException {
         userService.deleteUser(request.getId(), request.isDeletedValue());
         return ApiResponse.<String>builder()
@@ -80,18 +94,17 @@ public class UserController {
                 .build();
     }
 
-    @PutMapping("/update")
+    @PutMapping("/admin/update")
     ApiResponse<UserResponse> updateUser(@RequestBody @Valid UserUpdateRequest request) throws ParseException, JOSEException {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateUser(request))
                 .build();
     }
 
-    @PostMapping("/list")
-    ApiResponse<PagingResponse> getUserList(@RequestBody  @Valid UserListRequest request){
-        PagingResponse res = userService.getUserList(request);
-        return ApiResponse.<PagingResponse>builder()
-                .result(res)
+    @PutMapping("/admin/resetpw")
+    ApiResponse<UserResetPwResponse> ResetPwAdmin(@RequestBody @Valid UserResetPwRequest request) throws ParseException, JOSEException {
+        return ApiResponse.<UserResetPwResponse>builder()
+                .result(userService.ResetPwAdmin(request))
                 .build();
     }
 

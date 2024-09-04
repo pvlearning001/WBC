@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.category: ~1 rows (approximately)
+-- Dumping data for table wbc.category: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.configs
 CREATE TABLE IF NOT EXISTS `configs` (
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `configs` (
 
 -- Dumping data for table wbc.configs: ~1 rows (approximately)
 REPLACE INTO `configs` (`id`, `guid`, `page_size`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, 'e8c42cc8-6a8b-11ef-992a-509a4cb5cc32', 10, NULL, b'0', '2024-09-04 07:04:20.000000', 1, '2024-09-04 07:04:20.000000', 1);
+	(1, '06384746-6aae-11ef-992a-509a4cb5cc32', 10, NULL, b'0', '2024-09-04 11:08:33.000000', 1, '2024-09-04 11:08:33.000000', 1);
 
 -- Dumping structure for table wbc.course
 CREATE TABLE IF NOT EXISTS `course` (
@@ -211,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `introduce` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.introduce: ~0 rows (approximately)
+-- Dumping data for table wbc.introduce: ~1 rows (approximately)
 REPLACE INTO `introduce` (`id`, `guid`, `history`, `hierarchy_map`, `info_01`, `info_02`, `info_03`, `info_04`, `info_05`, `info_06`, `info_07`, `info_08`, `info_09`, `info_10`, `info_11`, `info_12`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`, `name`) VALUES
 	(1, '607d9ef3-4ce1-11ef-b622-509a4cb5cc32', NULL, NULL, 'TRUNG TÂM BỒI DƯỠNG NGHIỆP VỤ CẤP NƯỚC', 'Tháng 02/2002, Trung tâm bồi dưỡng cán bộ Thuế (tiền thân của Trường Nghiệp vụ Thuế) được thành lập theo Quyết định số 36/2002/QĐ-BTC ngày 20/03/2002 của Bộ trưởng Bộ Tài chính.', 'Hiện nay, chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trường Nghiệp vụ Thuế được quy định tại Quyết định số 2157/QĐ-BTC ngày 15/11/2018 của Bộ trưởng Bộ Tài chính. Theo đó, Trường Nghiệp vụ Thuế là đơn vị thuộc Tổng cục thuế, Bộ Tài chính, có trụ', 'Quận Tân Bình - TP.HCM', '0909.111.111', 'wbc@hcm.uit.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0', '2024-07-28 13:00:34', 1, '2024-07-28 13:00:34', 1, NULL);
 
@@ -416,7 +416,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.role: ~2 rows (approximately)
+-- Dumping data for table wbc.role: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.role_permission
 CREATE TABLE IF NOT EXISTS `role_permission` (
@@ -920,7 +920,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user: ~255 rows (approximately)
+-- Dumping data for table wbc.user: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.user_ext
 CREATE TABLE IF NOT EXISTS `user_ext` (
@@ -944,7 +944,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_ext: ~255 rows (approximately)
+-- Dumping data for table wbc.user_ext: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.user_role
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -965,7 +965,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_role: ~262 rows (approximately)
+-- Dumping data for table wbc.user_role: ~0 rows (approximately)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

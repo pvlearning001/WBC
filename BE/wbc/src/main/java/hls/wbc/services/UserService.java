@@ -2,19 +2,18 @@ package hls.wbc.services;
 
 import com.nimbusds.jose.JOSEException;
 import hls.wbc.constants.AppContants;
-import hls.wbc.dto.requests.UserCreationRequest;
-import hls.wbc.dto.requests.UserListRequest;
-import hls.wbc.dto.requests.UserUpdateRequest;
+import hls.wbc.dto.requests.*;
 import hls.wbc.dto.responses.PagingResponse;
+import hls.wbc.dto.responses.UserChangePwResponse;
+import hls.wbc.dto.responses.UserResetPwResponse;
 import hls.wbc.dto.responses.UserResponse;
 import hls.wbc.entities.User;
 import hls.wbc.enums.Roles;
+import hls.wbc.enums.WordTypes;
 import hls.wbc.exceptions.AppException;
 import hls.wbc.exceptions.ErrorCode;
 import hls.wbc.mappers.UserMapper;
 import hls.wbc.repositories.JdbcUserRepository;
-import hls.wbc.repositories.RoleRepository;
-import hls.wbc.repositories.UserExtRepository;
 import hls.wbc.repositories.UserRepository;
 import hls.wbc.utilities.AppUtils;
 import hls.wbc.utilities.SecuritiesUtils;
@@ -29,7 +28,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -45,23 +43,18 @@ public class UserService {
     @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
 
-    UserRepository userRepository;
-    UserExtRepository userExtRepository;
-    RoleRepository roleRepository;
-
+    UserRepository repository;
     JdbcUserRepository jdbcUserRepository;
-
     UserMapper userMapper;
-    PasswordEncoder passwordEncoder;
 
 
     public UserResponse createUser(UserCreationRequest request){
         log.info("Service: Create User");
         String userRoleId = String.valueOf(Roles.User.getId());
-        String pw = passwordEncoder.encode(request.getPassword());
+        String pw = SecuritiesUtils.toEncodeBCrypt(request.getPassword());
 
-        int userId = userRepository.save(0, 0, request.getUserName(), pw, request.getFirstName(), request.getMiddleName(), request.getLastName(), request.getEmail(), request.getPhone(), userRoleId);
-        Optional<User> userSave = userRepository.findById(userId);
+        int userId = repository.save(0, 0, request.getUserName(), pw, request.getFirstName(), request.getMiddleName(), request.getLastName(), request.getEmail(), request.getPhone(), userRoleId);
+        Optional<User> userSave = repository.findById(userId);
         UserResponse result = UserResponse.builder().build();
         if (userSave.isPresent()){
             result = userMapper.toResponse(userSave.get());
@@ -72,23 +65,21 @@ public class UserService {
                 result.setEmail(request.getEmail());
                 result.setPhone(request.getPhone());
             }
-
         }
-
         return result;
     }
 
     public UserResponse getMyInfo(){
         var context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        User user = userRepository.findByUserName(name).orElseThrow(
+        User user = repository.findByUserName(name).orElseThrow(
                 () -> new AppException(ErrorCode.USER_NOT_EXISTED));
         return userMapper.toResponse(user);
     }
 
     public UserResponse updateUser(UserUpdateRequest request) throws ParseException, JOSEException {
         int userIdChanged = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
-        int userId = userRepository.save(request.getUserId()
+        int userId = repository.save(request.getUserId()
                 , userIdChanged
                 , request.getUserName()
                 , null
@@ -98,7 +89,7 @@ public class UserService {
                 , request.getEmail()
                 , request.getPhone()
                 , request.getRoles());
-        Optional<User> userSave = userRepository.findById(userId);
+        Optional<User> userSave = repository.findById(userId);
         UserResponse result = UserResponse.builder().build();
         if (userSave.isPresent()){
             result = userMapper.toResponse(userSave.get());
@@ -113,34 +104,78 @@ public class UserService {
         return result;
     }
 
+    public UserChangePwResponse changePwUser(UserChangePwRequest request) {
+        var user = repository.findByUserName(request.getUserName())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        boolean authenticated = SecuritiesUtils.isMatchesBCrypt(request.getPwOld(), user.getPassword());
+
+        if (!authenticated)
+            throw new AppException(ErrorCode.WRONG_PW);
+
+        String newPwHash = SecuritiesUtils.toEncodeBCrypt(request.getPwNew());
+        user.setResetPw(false);
+        user.setPwReset(null);
+        user.setPassword(newPwHash);
+        user.setTraceUpdate(user.getId(), null);
+        repository.save(user);
+
+        return UserChangePwResponse.builder()
+                .userName(request.getUserName())
+                .message(AppContants.Messages.ChangePwSuccess)
+                .build();
+    }
+
+    @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
+    public UserResetPwResponse ResetPwAdmin(UserResetPwRequest request) throws ParseException, JOSEException {
+        int userIdChanged = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
+        String newPw = AppContants.StringValues.Empty;
+        Optional<User> userOption = repository.findById(request.getUserId());
+        if (userOption.isPresent()){
+            newPw = AppUtils.getRandomWord(AppContants.SecuritiesValues.ResetPwLength, WordTypes.UPPER);
+            String newPwHash = SecuritiesUtils.toEncodeBCrypt(newPw);
+            User user = userOption.get();
+            user.setResetPw(true);
+            user.setPwReset(newPw);
+            user.setPassword(newPwHash);
+            user.setTraceUpdate(userIdChanged, null);
+            repository.save(user);
+        }
+        return UserResetPwResponse.builder()
+                .userId(request.getUserId())
+                .pwReset(newPw)
+                .build();
+    }
+
+    @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
     public void deleteUser(int userId, boolean deleteValue) throws ParseException, JOSEException {
         int userChanged = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
-        userRepository.setDeleted(userId, userChanged, deleteValue);
+        repository.setDeleted(userId, userChanged, deleteValue);
     }
 
     @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
     public List<UserResponse> getUsers(){
         log.info("In method get Users");
-        return userRepository.findAll().stream()
+        return repository.findAll().stream()
                 .map(userMapper::toResponse).toList();
     }
 
     @PostAuthorize("returnObject.userName == authentication.name")
     public UserResponse getUser(int id){
         log.info("In method get user by Id");
-        return userMapper.toResponse(userRepository.findById(id)
+        return userMapper.toResponse(repository.findById(id)
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
     }
 
     @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
     public PagingResponse getUserList(UserListRequest request){
-        return userRepository.getUserList(request.getFindText(), request.getSort(), request.getSortType(), request.getPageIndex());
+        return repository.getUserList(request.getFindText(), request.getSort(), request.getSortType(), request.getPageIndex());
     }
 
     //  Testing function
     public List<UserResponse> getUserByRole(int roleId){
         List<UserResponse> result = new ArrayList<>();
-        List<User> list = userRepository.getUserByRole(roleId);
+        List<User> list = repository.getUserByRole(roleId);
         for(User item:list){
             UserResponse resultItem = userMapper.toResponse(item);
             result.add(resultItem);
@@ -148,6 +183,7 @@ public class UserService {
         return result;
     }
 
+    //  Testing function
     public List<Object> getUsersRoles(int userIdIndex) throws SQLException {
         List<Object> result = new ArrayList<>();
         Map<String, Object> test = jdbcUserRepository.getData(userIdIndex);
@@ -160,13 +196,13 @@ public class UserService {
         */
 
         //return result;
-        return userRepository.getUsersRoles(userIdIndex);
+        return repository.getUsersRoles(userIdIndex);
     }
 
     //  Testing function
     public PagingResponse getUserPaging(int pageIndex){
 
-        int totalPage = AppUtils.getTotalPage(userRepository.getTotalRecord());
+        int totalPage = AppUtils.getTotalPage(repository.getTotalRecord());
         Sort sort = Sort.by("id").descending();
         /*
         List<UserResponse> resultList = new ArrayList<>();
@@ -183,7 +219,7 @@ public class UserService {
                 .pageResult(resultList)
                 .build();
          */
-        List<Object> objList = userRepository.getAllUserDetailsPaging(PageRequest.of(pageIndex, AppContants.Paging.PageSize, sort));
+        List<Object> objList = repository.getAllUserDetailsPaging(PageRequest.of(pageIndex, AppContants.Paging.PageSize, sort));
         return PagingResponse.<Object>builder()
                 .pageIndex(pageIndex)
                 .pageTotal(totalPage)

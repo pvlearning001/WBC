@@ -66,9 +66,12 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request){
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         var user = userRepository.findByUserName(request.getUserName())
                 .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
+        if (user.isResetPw()){
+            throw new AppException(ErrorCode.USER_NEED_RESET_PW);
+        }
 
         boolean authenticated = SecuritiesUtils.isMatchesBCrypt(request.getPassword(), user.getPassword());
 

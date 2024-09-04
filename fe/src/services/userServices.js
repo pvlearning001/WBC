@@ -16,7 +16,7 @@ export async function getList(findText, sort, sortType, pageIndex) {
 
     await axios({ 
         // Endpoint to send files 
-        url: "/users/list", 
+        url: "/users/admin/list", 
         method: "POST", 
         headers: {   
             "Authorization" : `Bearer ${token}`
@@ -78,7 +78,7 @@ export async function setDelete(id, deletedValue) {
     };
 
     await axios({
-        url: "/users/delete", 
+        url: "/users/admin/delete", 
         method: "PUT", 
         headers: {   
             "Authorization" : `Bearer ${token}`
@@ -111,9 +111,35 @@ export async function update(updateItem) {
         "roles": updateItem.roles_id
     };
 
-    await axios({ 
-        // Endpoint to send files 
-        url: "/users/update", 
+    await axios({
+        url: "/users/admin/update", 
+        method: "PUT", 
+        headers: {   
+            "Authorization" : `Bearer ${token}`
+        }, 
+        
+        data: requestItem, 
+    }) 
+    .then((res) => {
+        if (res.data.code === constants.api_code_success){
+            result = res.data.result;
+        }
+    }) 
+    .catch((err) => {
+        console.log("Error: ", err);
+    })
+    return result;
+}
+
+export async function resetPwAdmin(userId) {
+    let result = "";
+    let token = localStorage.getItem(constants.token_string);
+    const requestItem = {
+        "userId": userId
+    };
+
+    await axios({
+        url: "/users/admin/resetpw", 
         method: "PUT", 
         headers: {   
             "Authorization" : `Bearer ${token}`

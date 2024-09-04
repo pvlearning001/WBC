@@ -19,7 +19,9 @@ public class SecurityConfig {
 
     private final String[] PUBLIC_ENDPOINTS_GET = {"/", "/welcome", "/introduce", "/news/latest"};
 
-    private final String[] PUBLIC_ENDPOINTS_POST = {"/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh", "/upload/images", "/upload/documents", "/news/file", "/users/test/role", "/users/test/userrole", "users/test/userp"
+    private final String[] PUBLIC_ENDPOINTS_POST = {"/users", "/auth/token", "/auth/introspect", "/auth/logout", "/auth/refresh", "/upload/images", "/upload/documents", "/news/file", "/users/changepw", "/users/test/role", "/users/test/userrole", "users/test/userp"
+    };
+    private final String[] PUBLIC_ENDPOINTS_PUT = {"/users/changepw"
     };
 
     @Autowired
@@ -32,6 +34,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, PUBLIC_ENDPOINTS_GET)
                         .permitAll()
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS_POST)
+                        .permitAll()
+                        .requestMatchers(HttpMethod.PUT, PUBLIC_ENDPOINTS_PUT)
                         .permitAll()
                         .anyRequest()
                         .authenticated()

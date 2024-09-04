@@ -51,6 +51,8 @@ export default function AdminMngtUserComponent(props){
     const [dataList, setDataList] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [showConfirmResetPwModal, setShowConfirmResetPwModal] = useState(false);
+    const [pwReset, setPwReset] = useState("");
     const findText = useRef("");
     const isFirstTime = useRef(true);
     const sort = useRef(defaultSort);
@@ -153,8 +155,10 @@ export default function AdminMngtUserComponent(props){
 
     function doEdit(id){
         curUser.current = userServices.findItemInList(dataList, id);
-        if (curUser.current != null)
+        if (curUser.current != null){
+            setPwReset(curUser.current.pwReset);
             setShowEditModal(true);
+        }            
     }
 
     function doDelete(id){
@@ -162,8 +166,16 @@ export default function AdminMngtUserComponent(props){
         setShowDeleteModal(true);
     }
 
+    function doResetPw(){
+        setShowConfirmResetPwModal(true);
+    }
+
     function handleCloseDeleteModal(){
         setShowDeleteModal(false);
+    }
+
+    function handleCloseConfirmResetPwModal(){
+        setShowConfirmResetPwModal(false);
     }
 
     function handleCloseEditModal(){
@@ -179,6 +191,19 @@ export default function AdminMngtUserComponent(props){
     function editUser(){
         userServices.update(curUser.current);
         handleCloseEditModal();
+    }
+
+    function resetPw(){
+        let userId = curUser.current.id;
+        let info = userServices.resetPwAdmin(userId);        
+        info.then((result) => {
+            if (!utils.isNullOrEmpty(result.pwReset)){
+                setPwReset(result.pwReset);
+                curUser.current.pwReset = result.pwReset;
+                curUser.current.isResetPw = true;
+            }
+        });
+        handleCloseConfirmResetPwModal();
     }
 
     const parseName = (text) => {
@@ -296,6 +321,21 @@ export default function AdminMngtUserComponent(props){
                     Xóa
                 </Button>
                 </Modal.Footer>
+            </Modal>            
+
+            <Modal show={showConfirmResetPwModal} onHide={handleCloseDeleteModal}>
+                <Modal.Header closeButton>
+                <Modal.Title style={textModal}>Reset Password</Modal.Title>
+                </Modal.Header>
+                <Modal.Body style={textModal}>Bạn có chắc chắn muốn reset password của user này không</Modal.Body>
+                <Modal.Footer>
+                <Button variant="secondary" onClick={handleCloseConfirmResetPwModal}>
+                    Đóng
+                </Button>
+                <Button variant="primary" className="btn btn-danger" onClick={resetPw}>
+                    Reset Password
+                </Button>
+                </Modal.Footer>
             </Modal>
 
             <Modal show={showEditModal} fullscreen={true} onHide={handleCloseEditModal} dialogClassName="modal-90w main hero section  dark-background"
@@ -344,7 +384,7 @@ export default function AdminMngtUserComponent(props){
                                 </div>                                
                             </div>
                             <div className='col-md-9'>
-                                {curUser.current.pwReset}
+                                {pwReset}
                             </div>
                         </div>
                         <div className="row">
@@ -366,6 +406,9 @@ export default function AdminMngtUserComponent(props){
                 </Button>
                 <Button variant="primary" className="btn btn-danger" onClick={editUser}>
                     Sửa
+                </Button>
+                <Button variant="primary" className="btn btn-danger" onClick={doResetPw}>
+                    Reset Password
                 </Button>
                 </Modal.Footer>
             </Modal>

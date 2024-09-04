@@ -7,6 +7,7 @@ import hls.wbc.repositories.CategoryRepository;
 import hls.wbc.repositories.RoleRepository;
 import hls.wbc.repositories.UserExtRepository;
 import hls.wbc.repositories.UserRepository;
+import hls.wbc.utilities.SecuritiesUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -28,7 +29,6 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class ApplicationInitConfig {
-    PasswordEncoder passwordEncoder;
 
     private void initRoles(RoleRepository roleRepo, String roleName, String remark){
         String roleNameLower = AppContants.StringValues.Empty;
@@ -54,7 +54,7 @@ public class ApplicationInitConfig {
                 userRepos.setDeleted(AppContants.SecuritiesValues.AdminId, AppContants.SecuritiesValues.AdminId, false);
             }
             else {
-                userRepos.save(0, AppContants.SecuritiesValues.AdminId, userName, passwordEncoder.encode("pw1"), "WBC", null, "Admin", "admin@wbc.com", "0903.123456", "1,2");
+                userRepos.save(0, AppContants.SecuritiesValues.AdminId, userName, SecuritiesUtils.toEncodeBCrypt("pw1"), "WBC", null, "Admin", "admin@wbc.com", "0903.123456", "1,2");
             }
             log.info("admin user has been created with default password: admin, please change it");
         }
@@ -65,7 +65,7 @@ public class ApplicationInitConfig {
         if (firstUser.isEmpty()) {
             String uNamePrefix = "user";
             String uName = "";
-            String pw = passwordEncoder.encode("pw1");
+            String pw = SecuritiesUtils.toEncodeBCrypt("pw1");
             String fName = "WBC";
             String lNamePrefix = "User";
             String lName = "";

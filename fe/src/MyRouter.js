@@ -4,6 +4,7 @@ import './App.css';
 import * as constants from './jscode/constants';
 import Layout from './Layout';
 import AnnouncementPage from './pages/AnnouncementPage';
+import ChangePwUserPage from './pages/ChangePwUserPage';
 import ContactUsPage from './pages/ContactUsPage';
 import CoursesInfoPage from './pages/CoursesInfoPage';
 import HomeAdminPage from './pages/HomeAdminPage';
@@ -38,6 +39,7 @@ class MyRouter extends Component {
             <Route path= {constants.page_home_admin} element={<HomeAdminPage />} />
             <Route path= {constants.page_courses_info} element={<CoursesInfoPage />} />
             <Route path= {constants.page_announcement_info} element={<AnnouncementPage />} />
+            <Route path= {constants.page_changepw} element={<ChangePwUserPage />} />            
             
             <Route path= {constants.page_admin_courses} element={<AdminMgmtCourses />} />
             <Route path= {constants.page_admin_marks} element={<AdminMgmtMarks />} />
