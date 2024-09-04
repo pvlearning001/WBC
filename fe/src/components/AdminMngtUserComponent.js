@@ -83,9 +83,9 @@ export default function AdminMngtUserComponent(props){
         if (pageIndexParam != null 
             && pageIndexParam !== undefined 
             && pageIndex > 0) {
-            pageIndexParamValue = parseInt(pageIndexParam);
-            doSearchByPage(pageIndexParamValue); 
-            setPageIndex(pageIndexParamValue);                                  
+            pageIndexParamValue = parseInt(pageIndexParam); 
+            setPageIndex(pageIndexParamValue);   
+            doSearchByPage(pageIndexParamValue);                               
         }
         else{
             if (pageIndex > 0){ 
@@ -122,6 +122,7 @@ export default function AdminMngtUserComponent(props){
             for (let dataItem of result.dataList) {
                 setDataList(prevState => [...prevState, dataItem]);
             }
+            //console.log(result.dataList);
         });
     }
     
@@ -231,7 +232,6 @@ export default function AdminMngtUserComponent(props){
         if (curUser.current.roles_id != null
             && curUser.current.roles_id !== undefined){
             let rolesId = curUser.current.roles_id.toString();
-            console.log("", rolesId);
             let result = rolesId.includes(constants.role_id_admin.toString());
             return result;
         }        
