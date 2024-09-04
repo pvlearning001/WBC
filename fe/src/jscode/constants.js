@@ -16,10 +16,14 @@ export const token_expTime = "expTime";
 export const token_fullName = "fullName";
 export const token_userId = "userId";
 
+export const role_id_user = 1;
+export const role_id_admin = 2;
 export const role_user = "ROLE_User";
 export const role_admin = "ROLE_Admin";
 export const role_list_public = "";
 export const role_list_admin_user = "ROLE_Admin ROLE_User";
+export const role_id_list_user = "1";
+export const role_id_list_admin = "1,2";
 
 
 export const page_home = "/";

@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `configs` (
 
 -- Dumping data for table wbc.configs: ~1 rows (approximately)
 REPLACE INTO `configs` (`id`, `guid`, `page_size`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, 'f965dd8e-69e5-11ef-983c-509a4cb5cc32', 10, NULL, b'0', '2024-09-03 11:16:32.000000', 1, '2024-09-03 11:16:32.000000', 1);
+	(1, 'e8c42cc8-6a8b-11ef-992a-509a4cb5cc32', 10, NULL, b'0', '2024-09-04 07:04:20.000000', 1, '2024-09-04 07:04:20.000000', 1);
 
 -- Dumping structure for table wbc.course
 CREATE TABLE IF NOT EXISTS `course` (
@@ -123,7 +123,7 @@ BEGIN
 	SET result = 0;
 	SET @rolesIdAssigned = (SELECT GROUP_CONCAT(role_id SEPARATOR ',')
 	FROM user_role
-	WHERE user_id = userid
+	WHERE user_id = userid AND is_deleted = 0
 	ORDER BY role_id);
 	SET result = STRCMP(@rolesIdAssigned, rolesId);
 	RETURN result;
@@ -691,7 +691,7 @@ BEGIN
 	';
 	
 	SET stmWhere = '
-	WHERE (u.is_deleted = 0) AND (u.id > 1)
+	WHERE (u.is_deleted = 0) AND (ue.is_deleted = 0) AND (u.id > 1)
 	';
 
 	IF (findText IS NOT NULL AND findText <> '') THEN
@@ -757,7 +757,6 @@ CREATE PROCEDURE `sp_UserSave`(
 	OUT `outid` INT
 )
 BEGIN
-	SELECT UTC_TIMESTAMP() INTO @curTime;
 	SELECT fn_GetRolesName(roles_id) INTO @roles_name;
 	SELECT fn_CheckSameRoles(userid, roles_id) INTO @isDiffRoles;
 	IF (userid = 0 OR userid IS NULL) THEN #INSERT NEW
@@ -776,9 +775,9 @@ BEGIN
 			, pw
 			, roles_id
 			, @roles_name
-			, @curTime
+			, UTC_TIMESTAMP()
 			, userChanged
-			, @curTime
+			, UTC_TIMESTAMP()
 			, userChanged
 		);
 			
@@ -788,9 +787,9 @@ BEGIN
 		IF (userChanged = 0) THEN
 			SET userChanged = userid;
 			UPDATE user SET
-				ins_at = @curTime
+				ins_at = UTC_TIMESTAMP()
 				, ins_by = userChanged
-				, upd_at = @curTime
+				, upd_at = UTC_TIMESTAMP()
 				, upd_by = userChanged
 			WHERE id = userid;
 		END IF;
@@ -799,7 +798,8 @@ BEGIN
 			user_id
 			, f_name
 			, m_name
-			, l_name, email
+			, l_name
+			, email
 			, phone01
 			, ins_at
 			, ins_by	
@@ -813,9 +813,9 @@ BEGIN
 			, lName
 			, email
 			, phone
-			, @curTime
+			, UTC_TIMESTAMP()
 			, userChanged
-			, @curTime
+			, UTC_TIMESTAMP()
 			, userChanged
 		);
 		
@@ -829,27 +829,38 @@ BEGIN
 		)
 		SELECT userid AS user_id
 			, r.id AS role_id
-			, @curTime AS ins_at
-			, @userChanged AS ins_by
-			, @curTime AS upd_at
-			, @userChanged AS upd_by
+			, UTC_TIMESTAMP() AS ins_at
+			, userChanged AS ins_by
+			, UTC_TIMESTAMP() AS upd_at
+			, userChanged AS upd_by
 		FROM role r
 		WHERE FIND_IN_SET(r.id, roles_id);
 	
 	ELSE #UPDATE
 		SET outid = userid;
+		
+		UPDATE user SET
+			user_name = uName
+			, upd_at = UTC_TIMESTAMP()
+			, upd_by = userChanged
+		WHERE id = userid;
+		
 		UPDATE user_ext SET
 			f_name = fName
 			, m_name = mName
 			, l_name = lName
 			, email = email
 			, phone01 = phone
+			, upd_at = UTC_TIMESTAMP()
+			, upd_by = userChanged
 		WHERE user_id = userid;
 		
 		IF (@isDiffRoles <> 0) THEN
 			UPDATE user SET
 				roles_id = roles_id
 				, roles_name = @roles_name
+				, upd_at = UTC_TIMESTAMP()
+				, upd_by = userChanged
 			WHERE id = userid;
 			
 			CALL sp_TableRelationSetDelete('user_role', 'user_id', userid, userChanged, 1);
@@ -864,10 +875,10 @@ BEGIN
 			)
 			SELECT userid AS user_id
 				, r.id AS role_id
-				, @curTime AS ins_at
-				, @userChanged AS ins_by
-				, @curTime AS upd_at
-				, @userChanged AS upd_by
+				, UTC_TIMESTAMP() AS ins_at
+				, userChanged AS ins_by
+				, UTC_TIMESTAMP() AS upd_at
+				, userChanged AS upd_by
 			FROM role r
 			WHERE FIND_IN_SET(r.id, roles_id);			
 		END IF;			
@@ -909,7 +920,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user: ~256 rows (approximately)
+-- Dumping data for table wbc.user: ~255 rows (approximately)
 
 -- Dumping structure for table wbc.user_ext
 CREATE TABLE IF NOT EXISTS `user_ext` (
@@ -933,7 +944,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_ext: ~256 rows (approximately)
+-- Dumping data for table wbc.user_ext: ~255 rows (approximately)
 
 -- Dumping structure for table wbc.user_role
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -954,7 +965,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_role: ~257 rows (approximately)
+-- Dumping data for table wbc.user_role: ~262 rows (approximately)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

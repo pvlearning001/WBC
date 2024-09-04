@@ -118,6 +118,16 @@ body {
   margin-right: 200px;
 }
 
+.admin-edit-user-form-control {
+  width: 30rem;
+  height: 2.2rem;
+  position: relative;
+  border-radius: 5px;
+  background-color: #ccffee;
+  margin-bottom: 20px;
+  margin-right: 100px;
+}
+
 /*support google chrome*/
 .register-form-control::-webkit-input-placeholder {
   color: #00000036;

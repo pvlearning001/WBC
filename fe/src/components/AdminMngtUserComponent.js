@@ -34,7 +34,15 @@ export default function AdminMngtUserComponent(props){
 
     const textModal = {
         color: "white",
-    }
+    }    
+
+    const resetPwStyles = {
+        marginBottom: "20px"
+    };
+
+    const checkboxStyles = {
+        marginLeft: "20px",
+    };
     
     const defaultSort =  "u.id";
     const lNameSort =  "ue.l_name";
@@ -190,6 +198,28 @@ export default function AdminMngtUserComponent(props){
         curUser.current.phone = text;
     }
 
+    const setUserName = (text) => {
+        curUser.current.uName = text;
+    }
+
+    const isAdmin = () => {        
+        if (curUser.current.roles_id != null
+            && curUser.current.roles_id !== undefined){
+            let rolesId = curUser.current.roles_id.toString();
+            console.log("", rolesId);
+            let result = rolesId.includes(constants.role_id_admin.toString());
+            return result;
+        }        
+        return false;
+    }
+
+    const handleAdminChange = (event) => {
+        if (event.target.checked)
+            curUser.current.roles_id = constants.role_id_list_admin;
+        else
+            curUser.current.roles_id = constants.role_id_list_user;
+    }
+
     return(
         <main className="main hero section dark-background">
             <div className="container-fluid">
@@ -280,7 +310,15 @@ export default function AdminMngtUserComponent(props){
                                 Họ và tên:
                             </div>
                             <div className='col-md-9'>
-                                <input className="register-form-control border-0" type="text" name="fullName" defaultValue={curUser.current.fullName}  onChange={(e) => parseName(e.target.value)} />
+                                <input className="admin-edit-user-form-control border-0" type="text" name="fullName" defaultValue={curUser.current.fullName}  onChange={(e) => parseName(e.target.value)} />
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className='col-md-3'>
+                                User name:
+                            </div>
+                            <div className='col-md-9'>
+                                <input className="admin-edit-user-form-control border-0" type="text" name="email" defaultValue={curUser.current.uName}  onChange={(e) => setUserName(e.target.value)} />
                             </div>
                         </div>
                         <div className="row">
@@ -288,7 +326,7 @@ export default function AdminMngtUserComponent(props){
                                 Email:
                             </div>
                             <div className='col-md-9'>
-                                <input className="register-form-control border-0" type="text" name="email" defaultValue={curUser.current.email}  onChange={(e) => setUserEmail(e.target.value)} />
+                                <input className="admin-edit-user-form-control border-0" type="text" name="email" defaultValue={curUser.current.email}  onChange={(e) => setUserEmail(e.target.value)} />
                             </div>
                         </div>
                         <div className="row">
@@ -296,7 +334,28 @@ export default function AdminMngtUserComponent(props){
                                 Phone:
                             </div>
                             <div className='col-md-9'>
-                                <input className="register-form-control border-0" type="text" name="email" defaultValue={curUser.current.phone}  onChange={(e) => setUserPhone(e.target.value)} />
+                                <input className="admin-edit-user-form-control border-0" type="text" name="email" defaultValue={curUser.current.phone}  onChange={(e) => setUserPhone(e.target.value)} />
+                            </div>
+                        </div>
+                        <div className="row">                        
+                            <div className='col-md-3'>
+                                <div style={resetPwStyles}>
+                                    Password Reset:
+                                </div>                                
+                            </div>
+                            <div className='col-md-9'>
+                                {curUser.current.pwReset}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className='col-md-3'>
+                                Phân quyền:
+                            </div>
+                            <div className='col-md-9'>
+                                <input type="checkbox" id="chkUser" name="chkUser" value={1} disabled={true} checked/>
+                                    Role User
+                                <input type="checkbox" id="chkAdmin" name="chkAdmin" value={2} style={checkboxStyles} defaultChecked={isAdmin()} onChange={(event) => handleAdminChange(event)}/>
+                                    Role Admin
                             </div>
                         </div>
                     </div>
