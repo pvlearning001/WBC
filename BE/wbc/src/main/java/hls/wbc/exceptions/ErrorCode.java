@@ -28,6 +28,7 @@ public enum ErrorCode  {
     CATEGORY_NOT_EXISTED(1017, "Category is not existed", HttpStatus.BAD_REQUEST),
     NEWS_NOT_EXISTED(1018, "News is not existed", HttpStatus.BAD_REQUEST),
     USER_NEED_RESET_PW(1019, "User need reset pw", HttpStatus.BAD_REQUEST),
+    NOT_PDF_FILE(1020, "File is not pdf file", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {

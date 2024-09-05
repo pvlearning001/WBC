@@ -120,4 +120,37 @@ public class AppContants {
         public static final String paramOutId = "outid";
 
     }
+
+    public static class SP_NewsGetList {
+        public static final String storeName = "sp_NewsGetList";
+        public static final String exeQuery = "CALL sp_NewsGetList(:cateId, :findText, :sort, :sortType, :pageIndex);";
+        public static final String paramCateId = "cateId";
+    }
+
+    public static class SP_NewsSetDelete {
+        public static final String storeName = "sp_NewsSetDelete";
+        public static final String exeQuery = "CALL sp_NewsSetDelete(:id, :userChanged, :deletedValue);";
+        public static final String paramId = "id";
+        public static final String paramUserChanged = "userChanged";
+        public static final String paramDeletedValue = "deletedValue";
+    }
+
+    public static class SP_NewsSave {
+        public static final String storeName = "SP_NewsSave";
+        public static final String exeQuery = "CALL SP_NewsSave(:id, :userChanged, :cateId, :subject, :content, :contentEx01, :contentEx02, :contentEx03, :contentEx04, :contentEx05, :contentEx06, :filesId);";
+        public static final String paramId = "id";
+        public static final String paramUserChanged = "userChanged";
+        public static final String paramCateId = "cateId";
+        public static final String paramSubject = "subject";
+        public static final String paramContent = "content";
+        public static final String paramContentEx01 = "contentEx01";
+        public static final String paramContentEx02 = "contentEx02";
+        public static final String paramContentEx03 = "contentEx03";
+        public static final String paramContentEx04 = "contentEx04";
+        public static final String paramContentEx05 = "contentEx05";
+        public static final String paramContentEx06 = "contentEx06";
+        public static final String paramFilesId = "filesId";
+        public static final String paramOutId = "outid";
+
+    }
 }

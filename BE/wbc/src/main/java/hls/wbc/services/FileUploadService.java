@@ -117,7 +117,7 @@ public class FileUploadService {
     public List<FileUploadResponse> uploadFilePdf(FileUploadRequest request) throws IOException, NoSuchAlgorithmException, ParseException, JOSEException {
         String uploadDirPath = AppContants.FilePaths.DocumentsMessage;
         List<String> fileTypes = List.of(AppContants.UtilitiesValues.FileContentTypePdf);
-        return uploadFiles(request, uploadDirPath, AppContants.UtilitiesValues.FileSizeMaxImage, fileTypes, ErrorCode.NOT_IMAGE_FILE);
+        return uploadFiles(request, uploadDirPath, AppContants.UtilitiesValues.FileSizeMaxImage, fileTypes, ErrorCode.NOT_PDF_FILE);
     }
 
     public FileUploadResponse getById(int id){

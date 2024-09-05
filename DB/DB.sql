@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `configs` (
 
 -- Dumping data for table wbc.configs: ~1 rows (approximately)
 REPLACE INTO `configs` (`id`, `guid`, `page_size`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, '06384746-6aae-11ef-992a-509a4cb5cc32', 10, NULL, b'0', '2024-09-04 11:08:33.000000', 1, '2024-09-04 11:08:33.000000', 1);
+	(1, 'a1359484-6b70-11ef-9127-509a4cb5cc32', 10, NULL, b'0', '2024-09-05 10:21:35.000000', 1, '2024-09-05 10:21:35.000000', 1);
 
 -- Dumping structure for table wbc.course
 CREATE TABLE IF NOT EXISTS `course` (
@@ -211,7 +211,7 @@ CREATE TABLE IF NOT EXISTS `introduce` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.introduce: ~1 rows (approximately)
+-- Dumping data for table wbc.introduce: ~0 rows (approximately)
 REPLACE INTO `introduce` (`id`, `guid`, `history`, `hierarchy_map`, `info_01`, `info_02`, `info_03`, `info_04`, `info_05`, `info_06`, `info_07`, `info_08`, `info_09`, `info_10`, `info_11`, `info_12`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`, `name`) VALUES
 	(1, '607d9ef3-4ce1-11ef-b622-509a4cb5cc32', NULL, NULL, 'TRUNG TÂM BỒI DƯỠNG NGHIỆP VỤ CẤP NƯỚC', 'Tháng 02/2002, Trung tâm bồi dưỡng cán bộ Thuế (tiền thân của Trường Nghiệp vụ Thuế) được thành lập theo Quyết định số 36/2002/QĐ-BTC ngày 20/03/2002 của Bộ trưởng Bộ Tài chính.', 'Hiện nay, chức năng, nhiệm vụ, quyền hạn và cơ cấu tổ chức của Trường Nghiệp vụ Thuế được quy định tại Quyết định số 2157/QĐ-BTC ngày 15/11/2018 của Bộ trưởng Bộ Tài chính. Theo đó, Trường Nghiệp vụ Thuế là đơn vị thuộc Tổng cục thuế, Bộ Tài chính, có trụ', 'Quận Tân Bình - TP.HCM', '0909.111.111', 'wbc@hcm.uit.com', NULL, NULL, NULL, NULL, NULL, NULL, NULL, b'0', '2024-07-28 13:00:34', 1, '2024-07-28 13:00:34', 1, NULL);
 
@@ -328,6 +328,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   `content_ex_04` varchar(1024) DEFAULT NULL,
   `content_ex_05` varchar(1024) DEFAULT NULL,
   `content_ex_06` varchar(1024) DEFAULT NULL,
+  `files_id` varchar(1024) DEFAULT NULL,
   `remark` varchar(1028) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
   `ins_at` datetime DEFAULT utc_timestamp(),
@@ -345,6 +346,7 @@ CREATE TABLE IF NOT EXISTS `news_file_upload` (
   `guid` varchar(255) DEFAULT NULL,
   `news_id` int(11) DEFAULT NULL,
   `file_upload_id` int(11) DEFAULT NULL,
+  `is_disabled` bit(1) NOT NULL DEFAULT b'0',
   `remark` varchar(1028) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
   `ins_at` datetime DEFAULT utc_timestamp(),
@@ -416,7 +418,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.role: ~0 rows (approximately)
+-- Dumping data for table wbc.role: ~2 rows (approximately)
 
 -- Dumping structure for table wbc.role_permission
 CREATE TABLE IF NOT EXISTS `role_permission` (
@@ -467,6 +469,222 @@ BEGIN
 	ALTER TABLE configs AUTO_INCREMENT = 1;
 	
 	INSERT INTO configs(page_size) VALUES(10);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure wbc.sp_NewsGetList
+DELIMITER //
+CREATE PROCEDURE `sp_NewsGetList`(
+	IN `cateId` INT,
+	IN `findText` VARCHAR(1024),
+	IN `sort` VARCHAR(50),
+	IN `sortType` VARCHAR(10),
+	IN `pageIndex` INT,
+	OUT `pageTotal` INT
+)
+    SQL SECURITY INVOKER
+BEGIN
+	DECLARE startIndex INT;
+	DECLARE totalRecord INT;
+	DECLARE pageSize INT;
+	
+	DECLARE stmSelectCount VARCHAR(1024);
+	DECLARE stmSelectColumn VARCHAR(2048);
+	DECLARE stmFrom VARCHAR(1024);
+	DECLARE stmWhere VARCHAR(2048); 
+	DECLARE stmSort VARCHAR(512);
+	DECLARE stmLimit VARCHAR(512);
+		
+	DECLARE findValue VARCHAR(512);
+	DECLARE findCondition VARCHAR(1024);
+	
+	SET stmSelectCount = 'SELECT COUNT(id) INTO @totalRecord';
+	SET stmSelectColumn = '
+		SELECT id AS id
+		, subject
+		, SUBSTRING(IF(ISNULL(content), "", content), 1, 100)
+		, files_id';
+		
+	SET stmFrom = '
+	FROM news
+	';
+	
+	SET stmWhere = '
+	WHERE (is_deleted = 0)
+	';
+	
+	IF (cateId IS NOT NULL) THEN
+		SET stmWhere = CONCAT(stmWhere, ' AND (cate_id = ', CONVERT(cateId, VARCHAR(12)), ')');
+	END IF;
+
+	IF (findText IS NOT NULL AND findText <> '') THEN
+		SET findValue = CONCAT('\'%', findText, '%\'');
+		SET findCondition = CONCAT(' 
+		AND((subject LIKE ', findValue, ')
+			OR (content LIKE ',  findValue, ')
+			OR (content_ex_01 LIKE ', findValue, ')
+			OR (content_ex_02 LIKE ', findValue, ')
+			OR (content_ex_03 LIKE ', findValue, ')
+			OR (content_ex_04 LIKE ', findValue, ')
+			OR (content_ex_05 LIKE ', findValue, ')
+			OR (content_ex_06 LIKE ', findValue, '))');
+	ELSE
+		SET findCondition = ' AND(1=1)';
+	END IF;
+	
+	IF (sort IS NULL) THEN
+		SET sort = 'id';
+	END IF;
+	
+	IF (sortType IS NULL) THEN
+		SET sortType = 'desc';
+	END IF;
+	
+	SET stmSort = CONCAT('
+	ORDER BY ', sort, ' ', sortType);
+	
+	SET stmWhere = CONCAT(stmWhere, findCondition);
+	
+	SET @sqlCount = CONCAT(stmSelectCount, stmFrom, stmWhere, ';');
+	
+	PREPARE stm FROM @sqlCount;
+ 	EXECUTE stm;
+ 	
+ 	SELECT @totalRecord INTO totalRecord;
+	
+	SELECT fn_GetPageSize() INTO pageSize;	
+	SELECT fn_GetPageTotal(totalRecord, pageSize) INTO pageTotal;
+	SET startIndex = (pageIndex - 1) * pageSize;	
+	
+	SET stmLimit = CONCAT('
+	LIMIT ', startIndex, ', ', pageSize);
+	
+	SET @sqlColumn = CONCAT(stmSelectColumn, stmFrom, stmWhere, stmSort, stmLimit, ';');
+	
+	PREPARE stm FROM @sqlColumn;
+ 	EXECUTE stm;
+ 	DEALLOCATE PREPARE stm;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure wbc.sp_NewsSave
+DELIMITER //
+CREATE PROCEDURE `sp_NewsSave`(
+	IN `id` INT,
+	IN `userChanged` INT,
+	IN `cateId` INT,
+	IN `subject` VARCHAR(512),
+	IN `content` VARCHAR(1028),
+	IN `contentEx01` VARCHAR(1024),
+	IN `contentEx02` VARCHAR(1024),
+	IN `contentEx03` VARCHAR(1024),
+	IN `contentEx04` VARCHAR(1024),
+	IN `contentEx05` VARCHAR(1024),
+	IN `contentEx06` VARCHAR(1024),
+	IN `filesId` VARCHAR(512),
+	OUT `outid` INT
+)
+BEGIN
+	SELECT * FROM user LIMIT 10;
+	IF (id = 0 OR id IS NULL) THEN #INSERT NEW
+		INSERT INTO news(
+			cate_id
+			, subject
+			, content
+			, content_ex_01
+			, content_ex_02
+			, content_ex_03
+			, content_ex_04
+			, content_ex_04
+			, content_ex_05
+			, content_ex_06
+			, files_id
+			, ins_at
+			, ins_by	
+			, upd_at		
+			, upd_by
+		) VALUES(
+			cateId
+			, subject
+			, content
+			, contentEx01
+			, contentEx02
+			, contentEx03
+			, contentEx04
+			, contentEx05
+			, contentEx06
+			, filesId
+			, UTC_TIMESTAMP()
+			, userChanged
+			, UTC_TIMESTAMP()
+			, userChanged
+		);
+		SELECT LAST_INSERT_ID() INTO id;
+		SET outid = id;
+	
+	ELSE #UPDATE
+		SET outid = id;
+		
+		UPDATE news SET
+			cate_id = cateId
+			, subject = subject
+			, content = content
+			, content_ex_01 = contentEx01
+			, content_ex_02 = contentEx02
+			, content_ex_03 = contentEx03
+			, content_ex_04 = contentEx04
+			, content_ex_05 = contentEx05
+			, content_ex_06 = contentEx06
+			, files_id = filesId
+			, upd_at = UTC_TIMESTAMP()
+			, upd_by = userChanged
+		WHERE id = id;	
+		
+	END IF;
+	
+		
+	IF (filesId IS NOT NULL AND filesId <> '') THEN
+		UPDATE news_file_upload 
+		SET is_disabled = 1
+		WHERE news_id = id;
+		
+		INSERT INTO news_file_upload(
+			news_id
+			, file_upload_id
+			, ins_at
+			, ins_by
+			, upd_at
+			, upd_by
+		) 
+		SELECT id AS news_id
+			, f.id AS file_upload_id
+			, UTC_TIMESTAMP() AS ins_at
+			, userChanged AS ins_by
+			, UTC_TIMESTAMP() AS upd_at
+			, userChanged AS upd_by
+		FROM file_upload f
+		WHERE FIND_IN_SET(f.id, filesId);
+	END IF;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure wbc.sp_NewsSetDelete
+DELIMITER //
+CREATE PROCEDURE `sp_NewsSetDelete`(
+	IN `newsid` INT,
+	IN `userChanged` INT,
+	IN `deletedValue` BIT
+)
+BEGIN
+	CALL sp_TableSetDelete('news', newsid, userChanged, deletedValue);
+	
+	UPDATE file_upload SET 
+		is_deleted = 1
+		, upd_by = userChanged
+		, upd_at = utc_timestamp()
+	WHERE id IN (SELECT file_upload_id FROM news_file_upload WHERE news_id = newsid);
+		
+	CALL sp_TableRelationSetDelete('news_file_upload', 'news_id', newsid, userChanged, deletedValue);
 END//
 DELIMITER ;
 
@@ -920,7 +1138,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user: ~0 rows (approximately)
+-- Dumping data for table wbc.user: ~255 rows (approximately)
 
 -- Dumping structure for table wbc.user_ext
 CREATE TABLE IF NOT EXISTS `user_ext` (
@@ -944,7 +1162,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_ext: ~0 rows (approximately)
+-- Dumping data for table wbc.user_ext: ~255 rows (approximately)
 
 -- Dumping structure for table wbc.user_role
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -965,7 +1183,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_role: ~0 rows (approximately)
+-- Dumping data for table wbc.user_role: ~256 rows (approximately)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -2,6 +2,7 @@ package hls.wbc.RepositoriesCustom;
 
 import hls.wbc.constants.AppContants;
 import hls.wbc.dto.responses.PagingResponse;
+import hls.wbc.enums.SQLTypes;
 import jakarta.persistence.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,7 +12,7 @@ import java.util.List;
 @Repository
 public class BaseCustomRepositoryImpl implements BaseCustomRepository {
     @PersistenceContext
-    EntityManager entityManager;
+    protected EntityManager entityManager;
     @Override
     public List<Object> baseCustomGetDataBySql(String sql) {
         TypedQuery<Object> query = entityManager.createQuery(sql, Object.class);
@@ -88,9 +89,51 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
         return obj;
     }
 
+    public void addMoreInParams(StoredProcedureQuery query, List<String> paramsExtName, List<SQLTypes> paramsExtType, List<Object> paramsExtValue){
+        if (paramsExtName != null && paramsExtName.size() > 0){
+            for(int i = 0; i < paramsExtName.size(); i++){
+                if (paramsExtType.get(i) == SQLTypes.Int){
+                    int paramValue = (Integer) paramsExtValue.get(i);
+                    query.registerStoredProcedureParameter(paramsExtName.get(i), Integer.class, ParameterMode.IN);
+                    query.setParameter(paramsExtName.get(i), paramValue);
+                }
+                else if (paramsExtType.get(i) == SQLTypes.String) {
+                    String paramValue = paramsExtValue.get(i).toString();
+                    query.registerStoredProcedureParameter(paramsExtName.get(i), String.class, ParameterMode.IN);
+                    query.setParameter(paramsExtName.get(i), paramValue);
+                }
+                else {
+                    Boolean paramValue = (Boolean) paramsExtValue.get(i);
+                    query.registerStoredProcedureParameter(paramsExtName.get(i), Boolean.class, ParameterMode.IN);
+                    query.setParameter(paramsExtName.get(i), paramValue);
+                }
+            }
+        }
+    }
+
+    public void addMoreOutParams(StoredProcedureQuery query, List<String> paramsExtName, List<SQLTypes> paramsExtType, List<Object> paramsExtValue){
+        if (paramsExtName != null && paramsExtName.size() > 0){
+            for(int i = 0; i < paramsExtName.size(); i++){
+                if (paramsExtType.get(i) == SQLTypes.Int){
+                    int paramValue = (Integer) paramsExtValue.get(i);
+                    query.registerStoredProcedureParameter(paramsExtName.get(i), Integer.class, ParameterMode.OUT);
+                }
+                else if (paramsExtType.get(i) == SQLTypes.String) {
+                    String paramValue = paramsExtValue.get(i).toString();
+                    query.registerStoredProcedureParameter(paramsExtName.get(i), String.class, ParameterMode.OUT);
+                }
+                else {
+                    Boolean paramValue = (Boolean) paramsExtValue.get(i);
+                    query.registerStoredProcedureParameter(paramsExtName.get(i), Boolean.class, ParameterMode.OUT);
+                }
+            }
+        }
+    }
+
     @Override
     @Transactional
-    public PagingResponse<Object> getDataPagingList(String storeName, String findText, String sort, String sortType, int pageIndex){
+    public PagingResponse<Object> getDataPagingList(String storeName, String findText, String sort, String sortType, int pageIndex, List<String> paramsExtInName, List<SQLTypes> paramsExtInType, List<Object> paramsExtInValue, List<String> paramsExtOutName, List<SQLTypes> paramsExtOutType, List<Object> paramsExtOutValue){
+
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(storeName);
 
         query.registerStoredProcedureParameter(AppContants.SP_PagingList.paramFindText, String.class, ParameterMode.IN);
@@ -107,7 +150,11 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
         query.registerStoredProcedureParameter(AppContants.SP_PagingList.paramPageIndex, Integer.class, ParameterMode.IN);
         query.setParameter(AppContants.SP_PagingList.paramPageIndex, pageIndex);
 
+        addMoreInParams(query, paramsExtInName, paramsExtInType, paramsExtInValue);
+
         query.registerStoredProcedureParameter(AppContants.SP_PagingList.paramPageTotal, Integer.class, ParameterMode.OUT);
+
+        addMoreOutParams(query, paramsExtOutName, paramsExtOutType, paramsExtOutValue);
 
         int pageTotal = Integer.parseInt(query.getOutputParameterValue(AppContants.SP_PagingList.paramPageTotal).toString());
         query.execute();

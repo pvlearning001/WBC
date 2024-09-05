@@ -1,6 +1,7 @@
 package hls.wbc.services;
 
 import com.nimbusds.jose.JOSEException;
+import hls.wbc.constants.AppContants;
 import hls.wbc.dto.requests.CategoryRequest;
 import hls.wbc.dto.requests.FileUploadRequest;
 import hls.wbc.dto.requests.NewsFileUploadRequest;
@@ -26,6 +27,7 @@ import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -33,6 +35,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.StringJoiner;
 
 @Service
 @RequiredArgsConstructor
@@ -52,6 +55,16 @@ public class NewsService {
     NewsFileUploadService newsFileUploadService;
 
     public NewsResponse createEntity(NewsRequest request) throws ParseException, JOSEException, IOException, NoSuchAlgorithmException {
+        List<FileUploadResponse> fileList = new ArrayList<FileUploadResponse>();
+
+        if (request.getFiles() != null){
+            FileUploadRequest fileUploadRequest = FileUploadRequest
+                    .builder()
+                    .files(request.getFiles())
+                    .build();
+            fileList = fileUploadService.uploadFilePdf(fileUploadRequest);
+        }
+
         News entity = News.builder()
                 .cateId(request.getCateId())
                 .subject(request.getSubject())
@@ -62,6 +75,7 @@ public class NewsService {
                 .contentEx04(request.getContentEx04())
                 .contentEx05(request.getContentEx05())
                 .contentEx06(request.getContentEx06())
+                .filesId(buildFilesId(fileList))
                 .build();
         int userId = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
         entity.setTraceNew(userId, null);
@@ -69,20 +83,28 @@ public class NewsService {
         NewsResponse result = mapper.toResponse(saveEntity);
         MapToResponse(saveEntity, result);
         result.setId(saveEntity.getId());
-        var listFile = request.getFiles();
 
-        if (listFile != null){
-            FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
-                    .files(request.getFiles())
-                    .build();
-            List<FileUploadResponse> fileList = fileUploadService.uploadFilePdf(fileUploadRequest);
+        if (fileList != null && !fileList.isEmpty()){
             saveFileList(result.getId(), fileList);
             result.setFiles(fileList);
         }
+
         return result;
     }
 
     public NewsResponse updateEntity(NewsRequest request) throws ParseException, JOSEException, IOException, NoSuchAlgorithmException {
+        List<FileUploadResponse> fileList = new ArrayList<FileUploadResponse>();
+        if (!request.getFiles().isEmpty()){
+            newsFileUploadService.DeleteByNewsId(request.getId());
+            FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
+                    .files(request.getFiles())
+                    .build();
+            fileList = fileUploadService.uploadFilePdf(fileUploadRequest);
+        }
+        else{
+            fileList = getFileList(request.getId());
+        }
+
         Optional<News> entityOptional = repository.findById(request.getId());
         if (entityOptional.isEmpty())
             throw new AppException(ErrorCode.NEWS_NOT_EXISTED);
@@ -95,25 +117,23 @@ public class NewsService {
         entity.setContentEx04(request.getContentEx04());
         entity.setContentEx05(request.getContentEx05());
         entity.setContentEx06(request.getContentEx06());
+        entity.setFilesId(buildFilesId(fileList));
 
         int userId = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
         entity.setTraceUpdate(userId, request.getRemark());
         News saveEntity = repository.save(entity);
         NewsResponse result = mapper.toResponse(saveEntity);
         MapToResponse(saveEntity, result);
+
         if (!request.getFiles().isEmpty()){
-            newsFileUploadService.DeleteByNewsId(request.getId());
-            FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
-                    .files(request.getFiles())
-                    .build();
-            List<FileUploadResponse> fileList = fileUploadService.uploadFilePdf(fileUploadRequest);
             saveFileList(result.getId(), fileList);
             result.setFiles(fileList);
         }
         else{
-            List<FileUploadResponse> fileList = getFileList(request.getId());
+            fileList = getFileList(request.getId());
             result.setFiles(fileList);
         }
+
         return result;
     }
 
@@ -177,6 +197,16 @@ public class NewsService {
         response.setInsBy(entity.getInsBy());
         response.setUpdAt(entity.getUpdAt());
         response.setUpdBy(entity.getUpdBy());
+    }
+
+    public String buildFilesId(List<FileUploadResponse> fileList){
+        StringJoiner stringJoiner = new StringJoiner(AppContants.StringValues.Comma);
+        if (fileList != null && !fileList.isEmpty()){
+            fileList.forEach(file -> {
+                stringJoiner.add(String.valueOf(file.getId()));
+            });
+        }
+        return stringJoiner.toString();
     }
 
 }
