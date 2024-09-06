@@ -3,21 +3,15 @@ package hls.wbc.services;
 import com.nimbusds.jose.JOSEException;
 import hls.wbc.RepositoriesCustom.SPResult;
 import hls.wbc.constants.AppContants;
-import hls.wbc.dto.requests.CategoryRequest;
-import hls.wbc.dto.requests.FileUploadRequest;
-import hls.wbc.dto.requests.NewsFileUploadRequest;
-import hls.wbc.dto.requests.NewsRequest;
-import hls.wbc.dto.responses.CategoryResponse;
+import hls.wbc.dto.requests.*;
 import hls.wbc.dto.responses.FileUploadResponse;
 import hls.wbc.dto.responses.NewsResponse;
-import hls.wbc.entities.Category;
+import hls.wbc.dto.responses.PagingResponse;
 import hls.wbc.entities.News;
 import hls.wbc.entities.NewsFileUpload;
-import hls.wbc.enums.Categories;
 import hls.wbc.exceptions.AppException;
 import hls.wbc.exceptions.ErrorCode;
 import hls.wbc.mappers.NewsMapper;
-import hls.wbc.repositories.FileUploadRepository;
 import hls.wbc.repositories.NewsFileUploadRepository;
 import hls.wbc.repositories.NewsRepository;
 import hls.wbc.utilities.SecuritiesUtils;
@@ -27,8 +21,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
@@ -107,7 +101,7 @@ public class NewsService {
     public NewsResponse updateEntity(NewsRequest request) throws ParseException, JOSEException, IOException, NoSuchAlgorithmException {
         List<FileUploadResponse> fileList = new ArrayList<FileUploadResponse>();
         if (!request.getFiles().isEmpty()){
-            newsFileUploadService.DeleteByNewsId(request.getId());
+            newsFileUploadService.DeletePhysicalFilesByNewsId(request.getId());
             FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
                     .files(request.getFiles())
                     .build();
@@ -146,6 +140,109 @@ public class NewsService {
         return result;
     }
 
+    @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
+    public PagingResponse<Object> getList(NewsListRequest request){
+        return repository.getList(request.getCateId(), request.getFindText(), request.getSort(), request.getSortType(), request.getPageIndex());
+    }
+
+    private NewsResponse getNewsResponse(SPResult spResult){
+        Object idObj = spResult.getOutValue(AppContants.SP_NewsGetById.paramOutId);
+        int outId = (idObj != null) ? (Integer) idObj : 0;
+
+        Object cateIdObj = spResult.getOutValue(AppContants.SP_NewsGetById.paramCateId);
+        int cateId = (cateIdObj != null) ? (Integer) cateIdObj : 0;
+
+        Object subjectObj = spResult.getOutValue(AppContants.SP_NewsGetById.paramSubject);
+        String subject = (subjectObj != null) ? cateIdObj.toString() : null;
+
+        Object contentObj = spResult.getOutValue(AppContants.SP_NewsGetById.paramContent);
+        String content = (contentObj != null) ? contentObj.toString() : null;
+
+        Object contentEx01Obj = spResult.getOutValue(AppContants.SP_NewsGetById.paramContentEx01);
+        String contentEx01 = (contentEx01Obj != null) ? contentEx01Obj.toString() : null;
+
+        Object contentEx02Obj = spResult.getOutValue(AppContants.SP_NewsGetById.paramContentEx02);
+        String contentEx02 = (contentEx02Obj != null) ? contentEx02Obj.toString() : null;
+
+        Object contentEx03Obj = spResult.getOutValue(AppContants.SP_NewsGetById.paramContentEx03);
+        String contentEx03 = (contentEx03Obj != null) ? contentEx03Obj.toString() : null;
+
+        Object contentEx04Obj = spResult.getOutValue(AppContants.SP_NewsGetById.paramContentEx04);
+        String contentEx04 = (contentEx04Obj != null) ? contentEx04Obj.toString() : null;
+
+        Object contentEx05Obj = spResult.getOutValue(AppContants.SP_NewsGetById.paramContentEx05);
+        String contentEx05 = (contentEx05Obj != null) ? contentEx05Obj.toString() : null;
+
+        Object contentEx06Obj = spResult.getOutValue(AppContants.SP_NewsGetById.paramContentEx06);
+        String contentEx06 = (contentEx06Obj != null) ? contentEx06Obj.toString() : null;
+
+        Object isShowObj = spResult.getOutValue(AppContants.SP_NewsGetById.paramIsShow);
+        boolean isShow = (isShowObj != null) ? (Boolean) isShowObj : false;
+
+        List<FileUploadResponse> fileList = new ArrayList<FileUploadResponse>();
+        if (!spResult.getTable().isEmpty()){
+            for(var rowObj:spResult.getTable()){
+                List<Object> row = (List<Object>) rowObj;
+                int fileId = (Integer) row.get(0);
+                String name = row.get(1).toString();
+                String path = row.get(2).toString();
+                String extName = row.get(3).toString();
+                String uniqueName = row.get(4).toString();
+                String contentType = row.get(5).toString();
+                String descriptions = row.get(6).toString();
+                boolean isDisabled = (boolean) row.get(7);
+
+                FileUploadResponse fur = FileUploadResponse.builder()
+                        .id(fileId)
+                        .name(name)
+                        .path(path)
+                        .extName(extName)
+                        .uniqueName(uniqueName)
+                        .contentType(contentType)
+                        .descriptions(descriptions)
+                        .isDisabled(isDisabled)
+                        .build();
+                fileList.add(fur);
+            }
+        }
+
+        if (outId >0){
+            NewsResponse result = NewsResponse.builder()
+                    .id(outId)
+                    .cateId(cateId)
+                    .subject(subject)
+                    .content(content)
+                    .contentEx01(contentEx01)
+                    .contentEx02(contentEx02)
+                    .contentEx03(contentEx03)
+                    .contentEx04(contentEx04)
+                    .contentEx05(contentEx05)
+                    .contentEx06(contentEx06)
+                    .isShow(isShow)
+                    .build();
+            result.setFiles(fileList);
+
+            return result;
+        }
+        return null;
+    }
+    public NewsResponse getById(int id) {
+        SPResult spResult = repository.getById(id);
+        return getNewsResponse(spResult);
+    }
+
+    public NewsResponse getShowLatest(int cateId) {
+        SPResult spResult = repository.getLatestShow(cateId);
+        return getNewsResponse(spResult);
+    }
+
+    @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
+    public void setDeleted(int id, boolean deleteValue) throws ParseException, JOSEException, IOException {
+        int userChanged = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
+        newsFileUploadService.DeletePhysicalFilesByNewsId(id);
+        repository.setDeleted(id, userChanged, deleteValue);
+    }
+
     public List<FileUploadResponse> getFileList(int newsId){
         List<FileUploadResponse> result = new ArrayList<>();
         List<NewsFileUpload> newsFilesEntityList = newsFileUploadRepository.findAllByNewsId(newsId);
@@ -158,7 +255,7 @@ public class NewsService {
         return result;
     }
 
-    public NewsResponse getResponseById(int id){
+    public NewsResponse findById(int id){
         NewsResponse result = NewsResponse.builder().build();
         Optional<News> entityOptinal = repository.findById(id);
         if (entityOptinal.isPresent()){

@@ -19,9 +19,10 @@ public class FileUploadResponse extends BaseResponse {
     String contentType;
     String hashContent;
     String descriptions;
+    boolean isDisabled;
 
     @Builder
-    public FileUploadResponse(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String name, String path, String extName, String uniqueName, String contentType, String hashContent, String descriptions){
+    public FileUploadResponse(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, String name, String path, String extName, String uniqueName, String contentType, String hashContent, String descriptions, boolean isDisabled){
         super(id, guid, remark, isDeleted, insAt, insBy, updAt, updBy);
         this.name = name;
         this.path = path;
@@ -30,5 +31,6 @@ public class FileUploadResponse extends BaseResponse {
         this.contentType = contentType;
         this.hashContent = hashContent;
         this.descriptions = descriptions;
+        this.isDisabled = isDisabled;
     }
 }

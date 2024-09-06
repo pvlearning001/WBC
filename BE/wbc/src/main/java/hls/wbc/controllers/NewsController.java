@@ -53,7 +53,7 @@ public class NewsController {
     @GetMapping("/latest")
     ApiResponse<NewsResponse> getLatest() {
         return ApiResponse.<NewsResponse>builder()
-                .result(service.getResponseLatest())
+                .result(service.getShowLatest(1))
                 .build();
     }
 

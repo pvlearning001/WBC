@@ -1,20 +1,12 @@
 package hls.wbc.services;
 
 import com.nimbusds.jose.JOSEException;
-import hls.wbc.dto.requests.FileUploadRequest;
 import hls.wbc.dto.requests.NewsFileUploadRequest;
-import hls.wbc.dto.requests.NewsRequest;
-import hls.wbc.dto.responses.FileUploadResponse;
 import hls.wbc.dto.responses.NewsFileUploadResponse;
-import hls.wbc.dto.responses.NewsResponse;
-import hls.wbc.entities.News;
 import hls.wbc.entities.NewsFileUpload;
-import hls.wbc.enums.Categories;
 import hls.wbc.mappers.FileUploadMapper;
 import hls.wbc.mappers.NewsFileUploadMapper;
-import hls.wbc.mappers.NewsMapper;
 import hls.wbc.repositories.NewsFileUploadRepository;
-import hls.wbc.repositories.NewsRepository;
 import hls.wbc.utilities.SecuritiesUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,13 +48,12 @@ public class NewsFileUploadService {
         return mapper.toResponse(saveEntity);
     }
 
-    public void DeleteByNewsId(int newId) throws IOException {
+    public void DeletePhysicalFilesByNewsId(int newId) throws IOException {
         List<Integer> fileIdList = new ArrayList<Integer>();
         List<NewsFileUpload> list = repository.findAllByNewsId(newId);
         for(NewsFileUpload item: list){
             fileIdList.add(item.getFileUploadId());
         }
-        repository.deleteAll(list);
-        fileUploadService.deleteFileList(fileIdList);
+        fileUploadService.deletePhysicalFiles(fileIdList);
     }
 }

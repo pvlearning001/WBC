@@ -153,4 +153,41 @@ public class AppContants {
         public static final String paramOutId = "outid";
 
     }
+
+    public static class SP_NewsGetById {
+        public static final String spName = "SP_NewsGetById";
+        public static final String exeQuery = "CALL SP_NewsGetById(:id);";
+        public static final String paramId = "id";
+        public static final String paramOutId = "outid";
+        public static final String paramCateId = "cateId";
+        public static final String paramSubject = "subject";
+        public static final String paramContent = "content";
+        public static final String paramContentEx01 = "contentEx01";
+        public static final String paramContentEx02 = "contentEx02";
+        public static final String paramContentEx03 = "contentEx03";
+        public static final String paramContentEx04 = "contentEx04";
+        public static final String paramContentEx05 = "contentEx05";
+        public static final String paramContentEx06 = "contentEx06";
+        public static final String paramFilesId = "filesId";
+        public static final String paramIsShow = "isShow";
+
+    }
+
+    public static class SP_NewsGetLatestShow {
+        public static final String spName = "SP_NewsGetLatestShow";
+        public static final String exeQuery = "CALL SP_NewsGetLatestShow(:cateId);";
+        public static final String paramCateId = "cateId";
+        public static final String paramOutId = "outid";
+        public static final String paramOutCateId = "outCateId";
+        public static final String paramSubject = "subject";
+        public static final String paramContent = "content";
+        public static final String paramContentEx01 = "contentEx01";
+        public static final String paramContentEx02 = "contentEx02";
+        public static final String paramContentEx03 = "contentEx03";
+        public static final String paramContentEx04 = "contentEx04";
+        public static final String paramContentEx05 = "contentEx05";
+        public static final String paramContentEx06 = "contentEx06";
+        public static final String paramFilesId = "filesId";
+
+    }
 }

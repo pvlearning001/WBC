@@ -94,7 +94,7 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
     @Override
     @Transactional
     public SPResult execSP(String storeName, List<SPParameter> parameters, boolean isGetTable){
-        SPResult result = SPResult.builder().build();
+        SPResult result = new SPResult();
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(storeName);
         parameters.forEach(param -> param.addToQuery(query));
         List<SPParameter> outValues = new ArrayList<SPParameter>();

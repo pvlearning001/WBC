@@ -128,7 +128,7 @@ public class FileUploadService {
         return FileUploadResponse.builder().build();
     }
 
-    public void deleteFileList(List<Integer> ids) throws IOException {
+    public void deletePhysicalFiles(List<Integer> ids) throws IOException {
         for(int id:ids){
             Optional<FileUpload> fileOpt = repository.findById(id);
             if (fileOpt.isPresent()){
@@ -137,7 +137,6 @@ public class FileUploadService {
                 Files.deleteIfExists(path);
             }
         }
-        repository.deleteAllById(ids);
     }
 
     public FileAttachmentResponse getBinaryArray(int id) throws IOException {

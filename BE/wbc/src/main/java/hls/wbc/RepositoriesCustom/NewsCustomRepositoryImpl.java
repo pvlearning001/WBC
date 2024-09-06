@@ -153,4 +153,168 @@ public class NewsCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
 
         return execSP(AppContants.SP_NewsSave.spName, paramList, true);
     }
+
+    public SPResult getById(@Param(AppContants.SP_NewsSave.paramId) int id){
+        List<SPParameter> paramList = new ArrayList<SPParameter>();
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramId)
+                .mode(ParameterMode.IN)
+                .type(SQLTypes.Int)
+                .value(id)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramOutId)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.Int)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramCateId)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.Int)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramSubject)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramContent)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramContentEx01)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramContentEx02)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramContentEx03)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramContentEx04)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramContentEx05)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramContentEx06)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramFilesId)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramIsShow)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.Boolean)
+                .build());
+
+        return execSP(AppContants.SP_NewsGetById.spName, paramList, true);
+    }
+
+    public SPResult getLatestShow(@Param(AppContants.SP_NewsSave.paramId) int cateId){
+        List<SPParameter> paramList = new ArrayList<SPParameter>();
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramCateId)
+                .mode(ParameterMode.IN)
+                .type(SQLTypes.Int)
+                .value(cateId)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramOutId)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.Int)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramOutCateId)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.Int)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramSubject)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramContent)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramContentEx01)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramContentEx02)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramContentEx03)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramContentEx04)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramContentEx05)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramContentEx06)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramFilesId)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        return execSP(AppContants.SP_NewsGetLatestShow.spName, paramList, true);
+    }
 }

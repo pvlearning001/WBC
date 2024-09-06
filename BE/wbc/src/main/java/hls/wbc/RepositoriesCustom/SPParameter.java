@@ -1,8 +1,6 @@
 package hls.wbc.RepositoriesCustom;
 
-import hls.wbc.constants.AppContants;
 import hls.wbc.enums.SQLTypes;
-import jakarta.persistence.Entity;
 import jakarta.persistence.ParameterMode;
 import jakarta.persistence.StoredProcedureQuery;
 import lombok.*;
@@ -20,34 +18,45 @@ public class SPParameter {
     Object value;
     ParameterMode mode;
 
-    StoredProcedureQuery addToQuery(StoredProcedureQuery query){
+    void addToQuery(StoredProcedureQuery query){
         switch (this.type){
             case SQLTypes.Int:
-                int valueInt = (Integer) this.value;
                 query.registerStoredProcedureParameter(name, Integer.class, this.mode);
-                if (this.mode != ParameterMode.OUT)
+                if (this.mode != ParameterMode.OUT) {
+                    int valueInt = (this.value != null)
+                            ? (Integer) this.value
+                            : 0;
                     query.setParameter(name, valueInt);
+                }
                 break;
             case SQLTypes.Boolean:
-                boolean valueBoolean = (Boolean) this.value;
                 query.registerStoredProcedureParameter(name, Boolean.class, this.mode);
-                if (this.mode != ParameterMode.OUT)
+                if (this.mode != ParameterMode.OUT) {
+                    boolean valueBoolean = (this.value != null)
+                            ? (Boolean) this.value
+                            : false;
                     query.setParameter(name, valueBoolean);
+                }
                 break;
             case SQLTypes.Float:
-                float valueFloat = (Float) this.value;
                 query.registerStoredProcedureParameter(name, Float.class, this.mode);
-                if (this.mode != ParameterMode.OUT)
+                if (this.mode != ParameterMode.OUT) {
+                    float valueFloat = (this.value != null)
+                            ? (Float) this.value
+                            : 0;
                     query.setParameter(name, valueFloat);
+                }
                 break;
             default:
-                String valueString = this.value.toString();
                 query.registerStoredProcedureParameter(name, String.class, this.mode);
-                if (this.mode != ParameterMode.OUT)
+                if (this.mode != ParameterMode.OUT) {
+                    String valueString = (this.value != null)
+                            ? this.value.toString()
+                            : null;
                     query.setParameter(name, valueString);
+                }
                 break;
         }
-        return query;
     }
 
     public Object getOutValue(StoredProcedureQuery query){

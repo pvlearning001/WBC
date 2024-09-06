@@ -8,23 +8,32 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SPResult {
     boolean execResult;
     List<SPParameter> outValues = new ArrayList<SPParameter>();
     List<Object> table = new ArrayList<Object>();
 
+    public SPResult(){
+        execResult = false;
+        outValues = new ArrayList<SPParameter>();
+        table = new ArrayList<Object>();
+    }
+
     public void addOutValue(SPParameter outValue){
         outValues.add(outValue);
     }
     public void addOutValueList(List<SPParameter> outValueList){
-        this.outValues.addAll(outValueList);
+        if (this.outValues == null)
+            outValues = new ArrayList<SPParameter>();
+        if (outValueList != null)
+            this.outValues.addAll(outValueList);
     }
     public void addTableData(List<Object> tableData){
-        this.table.addAll(tableData);
+        if (this.table == null)
+            table = new ArrayList<Object>();
+        if (tableData != null)
+            this.table.addAll(tableData);
     }
 
     public Object getOutValue(String paramName){
