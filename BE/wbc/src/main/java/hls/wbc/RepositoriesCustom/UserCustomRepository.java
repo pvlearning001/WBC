@@ -19,12 +19,12 @@ public interface UserCustomRepository {
     User customUpdate(Object t);
     User customDelete(int id);
 
-    PagingResponse getUserList(String findText, String sort,
+    PagingResponse<Object> getUserList(String findText, String sort,
     String sortType, int pageIndex);
 
-    boolean setDeleted(int userId, int userChanged, boolean deletedValue);
+    SPResult setDeleted(int userId, int userChanged, boolean deletedValue);
 
-    int save(int userId, int userChanged, String uName, String pw, String fName, String mName, String lName, String email, String phone, String rolesId);
+    SPResult save(int userId, int userChanged, String uName, String pw, String fName, String mName, String lName, String email, String phone, String rolesId);
 
     List<Object> getUsersRoles(int userIdIndex);
 

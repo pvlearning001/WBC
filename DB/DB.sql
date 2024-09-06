@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `configs` (
 
 -- Dumping data for table wbc.configs: ~1 rows (approximately)
 REPLACE INTO `configs` (`id`, `guid`, `page_size`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, 'a1359484-6b70-11ef-9127-509a4cb5cc32', 10, NULL, b'0', '2024-09-05 10:21:35.000000', 1, '2024-09-05 10:21:35.000000', 1);
+	(1, '74c237df-6c18-11ef-96f2-509a4cb5cc32', 10, NULL, b'0', '2024-09-06 06:22:56.000000', 1, '2024-09-06 06:22:56.000000', 1);
 
 -- Dumping structure for table wbc.course
 CREATE TABLE IF NOT EXISTS `course` (
@@ -126,6 +126,20 @@ BEGIN
 	WHERE user_id = userid AND is_deleted = 0
 	ORDER BY role_id);
 	SET result = STRCMP(@rolesIdAssigned, rolesId);
+	RETURN result;
+END//
+DELIMITER ;
+
+-- Dumping structure for function wbc.fn_GetFilesDisabled
+DELIMITER //
+CREATE FUNCTION `fn_GetFilesDisabled`(`newsid` INT
+) RETURNS varchar(1500) CHARSET utf8mb4 COLLATE utf8mb4_general_ci
+BEGIN
+	DECLARE result VARCHAR(1500);
+	SET result = (SELECT GROUP_CONCAT(file_upload_id SEPARATOR ',')
+	FROM news_file_upload
+	WHERE (news_id = newsid) AND (is_disabled = 1) AND (is_deleted = 0)
+	ORDER BY file_upload_id);
 	RETURN result;
 END//
 DELIMITER ;
@@ -329,6 +343,8 @@ CREATE TABLE IF NOT EXISTS `news` (
   `content_ex_05` varchar(1024) DEFAULT NULL,
   `content_ex_06` varchar(1024) DEFAULT NULL,
   `files_id` varchar(1024) DEFAULT NULL,
+  `files_disabled` varchar(1024) DEFAULT NULL,
+  `is_show` bit(1) NOT NULL DEFAULT b'0',
   `remark` varchar(1028) DEFAULT NULL,
   `is_deleted` bit(1) NOT NULL DEFAULT b'0',
   `ins_at` datetime DEFAULT utc_timestamp(),
@@ -418,7 +434,7 @@ CREATE TABLE IF NOT EXISTS `role` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.role: ~2 rows (approximately)
+-- Dumping data for table wbc.role: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.role_permission
 CREATE TABLE IF NOT EXISTS `role_permission` (
@@ -469,6 +485,122 @@ BEGIN
 	ALTER TABLE configs AUTO_INCREMENT = 1;
 	
 	INSERT INTO configs(page_size) VALUES(10);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure wbc.sp_NewsGetById
+DELIMITER //
+CREATE PROCEDURE `sp_NewsGetById`(
+	IN `id` INT,
+	OUT `outid` INT,
+	OUT `cateId` INT,
+	OUT `subject` VARCHAR(512),
+	OUT `content` VARCHAR(1024),
+	OUT `contentEx01` VARCHAR(1024),
+	OUT `contentEx02` VARCHAR(1024),
+	OUT `contentEx03` VARCHAR(1024),
+	OUT `contentEx04` VARCHAR(1024),
+	OUT `contentEx05` VARCHAR(1024),
+	OUT `contentEx06` VARCHAR(1024),
+	OUT `filesId` VARCHAR(250),
+	OUT `filesDisabled` VARCHAR(250),
+	OUT `isShow` BIT
+)
+BEGIN
+	SELECT id
+		, cate_id 
+		, subject
+		, content
+		, content_ex_01
+		, content_ex_02
+		, content_ex_03
+		, content_ex_04
+		, content_ex_05
+		, content_ex_06
+		, files_id
+		, files_disabled
+		, is_show
+	INTO outid
+		, cateId 
+		, subject
+		, content
+		, contentEx01
+		, contentEx02
+		, contentEx03
+		, contentEx04
+		, contentEx05
+		, contentEx06
+		, filesId
+		, filesDisabled
+		, isShow
+	FROM news
+	WHERE (id = id) AND (is_deleted = 0);
+	
+	SELECT * FROM file_upload
+	WHERE ((is_deleted = 0) 
+		AND (id IN (SELECT file_upload_id FROM news_file_upload WHERE news_id = id)))
+	ORDER BY id DESC;
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure wbc.sp_NewsGetLatestShow
+DELIMITER //
+CREATE PROCEDURE `sp_NewsGetLatestShow`(
+	IN `cateId` INT,
+	OUT `outid` INT,
+	OUT `outCateId` INT,
+	OUT `subject` VARCHAR(512),
+	OUT `content` VARCHAR(1024),
+	OUT `contentEx01` VARCHAR(1024),
+	OUT `contentEx02` VARCHAR(1024),
+	OUT `contentEx03` VARCHAR(1024),
+	OUT `contentEx04` VARCHAR(1024),
+	OUT `contentEx05` VARCHAR(1024),
+	OUT `contentEx06` VARCHAR(1024),
+	OUT `filesId` VARCHAR(250),
+	OUT `filesDisabled` VARCHAR(250),
+	OUT `isShow` BIT
+)
+BEGIN
+	DECLARE maxId INT;
+	SET maxId = 0;
+	SELECT MAX(id) INTO maxId
+	FROM news 
+	WHERE cate_id = cateId;
+	
+	SELECT id
+		, cate_id 
+		, subject
+		, content
+		, content_ex_01
+		, content_ex_02
+		, content_ex_03
+		, content_ex_04
+		, content_ex_05
+		, content_ex_06
+		, files_id
+		, files_disabled
+		, is_show
+	INTO outid
+		, outCateId 
+		, subject
+		, content
+		, contentEx01
+		, contentEx02
+		, contentEx03
+		, contentEx04
+		, contentEx05
+		, contentEx06
+		, filesId
+		, filesDisabled
+		, isShow
+	FROM news
+	WHERE (id = maxId) AND (is_deleted = 0);
+	
+	SELECT * FROM file_upload
+	WHERE ((is_deleted = 0) 
+		AND (id IN (SELECT file_upload_id FROM news_file_upload WHERE news_id = id)))
+	ORDER BY id DESC;
 END//
 DELIMITER ;
 
@@ -635,7 +767,6 @@ BEGIN
 			, content_ex_04 = contentEx04
 			, content_ex_05 = contentEx05
 			, content_ex_06 = contentEx06
-			, files_id = filesId
 			, upd_at = UTC_TIMESTAMP()
 			, upd_by = userChanged
 		WHERE id = id;	
@@ -664,7 +795,20 @@ BEGIN
 			, userChanged AS upd_by
 		FROM file_upload f
 		WHERE FIND_IN_SET(f.id, filesId);
+		
+		SELECT fn_GetFilesDisabled(id) INTO @disableList;
+		
+		UPDATE news SET 
+			files_id = filesId
+			, files_disabled = @disableList 
+		WHERE id = outid;
+		
 	END IF;
+	
+	SELECT * FROM file_upload
+	WHERE ((is_deleted = 0) 
+		AND (id IN (SELECT file_upload_id FROM news_file_upload WHERE news_id = outid)))
+	ORDER BY id DESC;
 END//
 DELIMITER ;
 
@@ -685,6 +829,21 @@ BEGIN
 	WHERE id IN (SELECT file_upload_id FROM news_file_upload WHERE news_id = newsid);
 		
 	CALL sp_TableRelationSetDelete('news_file_upload', 'news_id', newsid, userChanged, deletedValue);
+END//
+DELIMITER ;
+
+-- Dumping structure for procedure wbc.sp_NewsSetShow
+DELIMITER //
+CREATE PROCEDURE `sp_NewsSetShow`(
+	IN `id` INT,
+	IN `cateId` INT
+)
+BEGIN
+	UPDATE news SET is_show = 0
+	WHERE (cate_id = cateId) AND (id <> id);
+	
+	UPDATE news SET is_show = 1
+	WHERE id = id;  
 END//
 DELIMITER ;
 
@@ -1138,7 +1297,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user: ~255 rows (approximately)
+-- Dumping data for table wbc.user: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.user_ext
 CREATE TABLE IF NOT EXISTS `user_ext` (
@@ -1162,7 +1321,7 @@ CREATE TABLE IF NOT EXISTS `user_ext` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_ext: ~255 rows (approximately)
+-- Dumping data for table wbc.user_ext: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.user_role
 CREATE TABLE IF NOT EXISTS `user_role` (
@@ -1183,7 +1342,7 @@ CREATE TABLE IF NOT EXISTS `user_role` (
   CONSTRAINT `FKa68196081fvovjhkek5m97n3y` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.user_role: ~256 rows (approximately)
+-- Dumping data for table wbc.user_role: ~0 rows (approximately)
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

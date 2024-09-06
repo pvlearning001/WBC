@@ -1,13 +1,9 @@
 package hls.wbc.enums;
 
 public enum SQLTypes {
-    Int("Int"),
-    String("String"),
-    Boolean("Boolean")
+    Int,
+    String,
+    Boolean,
+    Float
     ;
-
-    SQLTypes(String typeName) {
-        this.typeName = typeName;
-    }
-    private String typeName;
 }

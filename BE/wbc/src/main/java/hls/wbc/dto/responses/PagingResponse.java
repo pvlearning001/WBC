@@ -1,6 +1,7 @@
 package hls.wbc.dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import hls.wbc.RepositoriesCustom.SPParameter;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,7 +15,9 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PagingResponse<T> {
     @Builder.Default
-    private int pageIndex=0;
-    private int pageTotal;
-    private List<T> pageResult;
+    int pageIndex=0;
+    int pageTotal;
+    boolean execResult;
+    List<T> pageResult;
+    List<SPParameter> outValues;
 }

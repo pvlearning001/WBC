@@ -92,12 +92,12 @@ public class AppContants {
     }
 
     public static class SP_UserGetList {
-        public static final String storeName = "sp_UserGetList";
+        public static final String spName = "sp_UserGetList";
         public static final String exeQuery = "CALL sp_UserGetList(:findText, :sort, :sortType, :pageIndex);";
     }
 
     public static class SP_UserSetDelete {
-        public static final String storeName = "sp_UserSetDelete";
+        public static final String spName = "sp_UserSetDelete";
         public static final String exeQuery = "CALL sp_UserSetDelete(:userid, :userChanged, :deletedValue);";
         public static final String paramUserId = "userid";
         public static final String paramUserChanged = "userChanged";
@@ -105,7 +105,7 @@ public class AppContants {
     }
 
     public static class SP_UserSave {
-        public static final String storeName = "sp_UserSave";
+        public static final String spName = "sp_UserSave";
         public static final String exeQuery = "CALL sp_UserSave(:userid, :userChanged, :uName, :pw, :fName, :mName, :lName, :email, :phone);";
         public static final String paramUserId = "userid";
         public static final String paramUserChanged = "userChanged";
@@ -122,13 +122,13 @@ public class AppContants {
     }
 
     public static class SP_NewsGetList {
-        public static final String storeName = "sp_NewsGetList";
+        public static final String spName = "sp_NewsGetList";
         public static final String exeQuery = "CALL sp_NewsGetList(:cateId, :findText, :sort, :sortType, :pageIndex);";
         public static final String paramCateId = "cateId";
     }
 
     public static class SP_NewsSetDelete {
-        public static final String storeName = "sp_NewsSetDelete";
+        public static final String spName = "sp_NewsSetDelete";
         public static final String exeQuery = "CALL sp_NewsSetDelete(:id, :userChanged, :deletedValue);";
         public static final String paramId = "id";
         public static final String paramUserChanged = "userChanged";
@@ -136,7 +136,7 @@ public class AppContants {
     }
 
     public static class SP_NewsSave {
-        public static final String storeName = "SP_NewsSave";
+        public static final String spName = "SP_NewsSave";
         public static final String exeQuery = "CALL SP_NewsSave(:id, :userChanged, :cateId, :subject, :content, :contentEx01, :contentEx02, :contentEx03, :contentEx04, :contentEx05, :contentEx06, :filesId);";
         public static final String paramId = "id";
         public static final String paramUserChanged = "userChanged";

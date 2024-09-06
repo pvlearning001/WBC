@@ -1,6 +1,7 @@
 package hls.wbc.services;
 
 import com.nimbusds.jose.JOSEException;
+import hls.wbc.RepositoriesCustom.SPResult;
 import hls.wbc.constants.AppContants;
 import hls.wbc.dto.requests.*;
 import hls.wbc.dto.responses.PagingResponse;
@@ -47,13 +48,24 @@ public class UserService {
     JdbcUserRepository jdbcUserRepository;
     UserMapper userMapper;
 
+    private int getIdFromSPResult(SPResult spResult){
+        int result = 0;
+        Object resultObj = spResult.getOutValue(AppContants.SP_UserSave.paramOutId);
+        if (resultObj != null)
+            result = (Integer) resultObj;
+        return result;
+    }
+
 
     public UserResponse createUser(UserCreationRequest request){
         log.info("Service: Create User");
         String userRoleId = String.valueOf(Roles.User.getId());
         String pw = SecuritiesUtils.toEncodeBCrypt(request.getPassword());
 
-        int userId = repository.save(0, 0, request.getUserName(), pw, request.getFirstName(), request.getMiddleName(), request.getLastName(), request.getEmail(), request.getPhone(), userRoleId);
+        SPResult spResult = repository.save(0, 0, request.getUserName(), pw, request.getFirstName(), request.getMiddleName(), request.getLastName(), request.getEmail(), request.getPhone(), userRoleId);
+
+        int userId = getIdFromSPResult(spResult);
+
         Optional<User> userSave = repository.findById(userId);
         UserResponse result = UserResponse.builder().build();
         if (userSave.isPresent()){
@@ -79,7 +91,7 @@ public class UserService {
 
     public UserResponse updateUser(UserUpdateRequest request) throws ParseException, JOSEException {
         int userIdChanged = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
-        int userId = repository.save(request.getUserId()
+        SPResult spResult = repository.save(request.getUserId()
                 , userIdChanged
                 , request.getUserName()
                 , null
@@ -89,6 +101,9 @@ public class UserService {
                 , request.getEmail()
                 , request.getPhone()
                 , request.getRoles());
+
+        int userId = getIdFromSPResult(spResult);
+
         Optional<User> userSave = repository.findById(userId);
         UserResponse result = UserResponse.builder().build();
         if (userSave.isPresent()){
@@ -168,7 +183,7 @@ public class UserService {
     }
 
     @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
-    public PagingResponse getUserList(UserListRequest request){
+    public PagingResponse<Object> getUserList(UserListRequest request){
         return repository.getUserList(request.getFindText(), request.getSort(), request.getSortType(), request.getPageIndex());
     }
 

@@ -45,11 +45,17 @@ public class News extends BaseEntity {
     @Column(name = "content_ex_06", length = 1024)
     String contentEx06;
 
-    @Column(name = "files_id", length = 1024)
+    @Column(name = "files_id", length = 250)
     String filesId;
 
+    @Column(name = "files_disabled", length = 250)
+    String filesDisabled;
+
+    @Column(name = "is_how")
+    boolean isShow;
+
     @Builder
-    public News(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, int cateId, String subject, String content, String contentEx01, String contentEx02, String contentEx03, String contentEx04, String contentEx05, String contentEx06, String filesId){
+    public News(int id, String guid, String remark, boolean isDeleted, Instant insAt, int insBy, Instant updAt, int updBy, int cateId, String subject, String content, String contentEx01, String contentEx02, String contentEx03, String contentEx04, String contentEx05, String contentEx06, String filesId, String filesDisabled, boolean isShow){
         super(id, guid, remark, isDeleted, insAt, insBy, updAt, updBy);
         this.cateId = cateId;
         this.subject = subject;
@@ -61,5 +67,7 @@ public class News extends BaseEntity {
         this.contentEx05 = contentEx05;
         this.contentEx06 = contentEx06;
         this.filesId = filesId;
+        this.filesDisabled = filesDisabled;
+        this.isShow = isShow;
     }
 }

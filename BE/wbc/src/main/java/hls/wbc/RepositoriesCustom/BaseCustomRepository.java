@@ -1,7 +1,6 @@
 package hls.wbc.RepositoriesCustom;
 
 import hls.wbc.dto.responses.PagingResponse;
-import hls.wbc.enums.SQLTypes;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Pageable;
@@ -23,5 +22,8 @@ public interface BaseCustomRepository {
     Object baseCustomDelete(int id);
 
     @Transactional
-    PagingResponse<Object> getDataPagingList(String storeName, String findText, String sort, String sortType, int pageIndex, List<String> paramsExtName, List<SQLTypes> paramsExtType, List<Object> paramsExtValue, List<String> paramsExtOutName, List<SQLTypes> paramsExtOutType, List<Object> paramsExtOutValue);
+    SPResult execSP(String spName, List<SPParameter> parameters, boolean isGetTable);
+
+    @Transactional
+    PagingResponse<Object> getDataPaging(String spName, String findText, String sort, String sortType, int pageIndex, List<SPParameter> paramsExt);
 }

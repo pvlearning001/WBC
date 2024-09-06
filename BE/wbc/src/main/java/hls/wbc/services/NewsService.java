@@ -1,6 +1,7 @@
 package hls.wbc.services;
 
 import com.nimbusds.jose.JOSEException;
+import hls.wbc.RepositoriesCustom.SPResult;
 import hls.wbc.constants.AppContants;
 import hls.wbc.dto.requests.CategoryRequest;
 import hls.wbc.dto.requests.FileUploadRequest;
@@ -48,11 +49,17 @@ public class NewsService {
 
     NewsRepository repository;
     NewsMapper mapper;
-
     FileUploadService fileUploadService;
-
     NewsFileUploadRepository newsFileUploadRepository;
     NewsFileUploadService newsFileUploadService;
+
+    private int getIdFromSPResult(SPResult spResult){
+        int result = 0;
+        Object resultObj = spResult.getOutValue(AppContants.SP_NewsSave.paramOutId);
+        if (resultObj != null)
+            result = (Integer) resultObj;
+        return result;
+    }
 
     public NewsResponse createEntity(NewsRequest request) throws ParseException, JOSEException, IOException, NoSuchAlgorithmException {
         List<FileUploadResponse> fileList = new ArrayList<FileUploadResponse>();
@@ -64,28 +71,33 @@ public class NewsService {
                     .build();
             fileList = fileUploadService.uploadFilePdf(fileUploadRequest);
         }
+        String filesId = buildFilesId(fileList);
 
-        News entity = News.builder()
-                .cateId(request.getCateId())
-                .subject(request.getSubject())
-                .content(request.getContent())
-                .contentEx01(request.getContentEx01())
-                .contentEx02(request.getContentEx02())
-                .contentEx03(request.getContentEx03())
-                .contentEx04(request.getContentEx04())
-                .contentEx05(request.getContentEx05())
-                .contentEx06(request.getContentEx06())
-                .filesId(buildFilesId(fileList))
-                .build();
-        int userId = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
-        entity.setTraceNew(userId, null);
-        News saveEntity = repository.save(entity);
+        int userChanged = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
+
+        SPResult spResult = repository.save(0
+                , userChanged
+                , request.getCateId()
+                , request.getSubject()
+                , request.getContent()
+                , request.getContentEx01()
+                , request.getContentEx02()
+                , request.getContentEx03()
+                , request.getContentEx04()
+                , request.getContentEx05()
+                , request.getContentEx06()
+                , filesId);
+
+        int id = getIdFromSPResult(spResult);
+        News saveEntity = repository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.NEWS_NOT_EXISTED));
+        saveEntity.setFilesId(filesId);
+
         NewsResponse result = mapper.toResponse(saveEntity);
         MapToResponse(saveEntity, result);
         result.setId(saveEntity.getId());
 
         if (fileList != null && !fileList.isEmpty()){
-            saveFileList(result.getId(), fileList);
             result.setFiles(fileList);
         }
 
@@ -101,36 +113,33 @@ public class NewsService {
                     .build();
             fileList = fileUploadService.uploadFilePdf(fileUploadRequest);
         }
-        else{
-            fileList = getFileList(request.getId());
-        }
 
-        Optional<News> entityOptional = repository.findById(request.getId());
-        if (entityOptional.isEmpty())
-            throw new AppException(ErrorCode.NEWS_NOT_EXISTED);
-        News entity = entityOptional.get();
-        entity.setSubject(request.getSubject());
-        entity.setContent(request.getContent());
-        entity.setContentEx01(request.getContentEx01());
-        entity.setContentEx02(request.getContentEx02());
-        entity.setContentEx03(request.getContentEx03());
-        entity.setContentEx04(request.getContentEx04());
-        entity.setContentEx05(request.getContentEx05());
-        entity.setContentEx06(request.getContentEx06());
-        entity.setFilesId(buildFilesId(fileList));
+        String filesId = buildFilesId(fileList);
+        int userChanged = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
+        SPResult spResult = repository.save(
+                request.getId()
+                , userChanged
+                , request.getCateId()
+                , request.getSubject()
+                , request.getContent()
+                , request.getContentEx01()
+                , request.getContentEx02()
+                , request.getContentEx03()
+                , request.getContentEx04()
+                , request.getContentEx05()
+                , request.getContentEx06()
+                , filesId);
 
-        int userId = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
-        entity.setTraceUpdate(userId, request.getRemark());
-        News saveEntity = repository.save(entity);
+        int id = getIdFromSPResult(spResult);
+        News saveEntity = repository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.NEWS_NOT_EXISTED));
+        saveEntity.setFilesId(filesId);
+
         NewsResponse result = mapper.toResponse(saveEntity);
         MapToResponse(saveEntity, result);
+        result.setId(saveEntity.getId());
 
-        if (!request.getFiles().isEmpty()){
-            saveFileList(result.getId(), fileList);
-            result.setFiles(fileList);
-        }
-        else{
-            fileList = getFileList(request.getId());
+        if (fileList != null && !fileList.isEmpty()){
             result.setFiles(fileList);
         }
 
@@ -147,18 +156,6 @@ public class NewsService {
             }
         }
         return result;
-    }
-
-    public void saveFileList(int id, List<FileUploadResponse> fileList) throws ParseException, JOSEException {
-        if (!fileList.isEmpty()) {
-            for (FileUploadResponse file : fileList) {
-                NewsFileUploadRequest newsFileUploadRequest = NewsFileUploadRequest.builder()
-                        .newsId(id)
-                        .fileUploadId(file.getId())
-                        .build();
-                newsFileUploadService.createEntity(newsFileUploadRequest);
-            }
-        }
     }
 
     public NewsResponse getResponseById(int id){
@@ -199,7 +196,7 @@ public class NewsService {
         response.setUpdBy(entity.getUpdBy());
     }
 
-    public String buildFilesId(List<FileUploadResponse> fileList){
+    private String buildFilesId(List<FileUploadResponse> fileList){
         StringJoiner stringJoiner = new StringJoiner(AppContants.StringValues.Comma);
         if (fileList != null && !fileList.isEmpty()){
             fileList.forEach(file -> {
