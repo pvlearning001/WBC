@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
 @Repository
 public class BaseCustomRepositoryImpl implements BaseCustomRepository {
     @PersistenceContext
@@ -97,6 +99,10 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
         SPResult result = new SPResult();
         StoredProcedureQuery query = entityManager.createStoredProcedureQuery(storeName);
         parameters.forEach(param -> param.addToQuery(query));
+
+        boolean execResult = query.execute();
+
+        result.setExecResult(execResult);
         List<SPParameter> outValues = new ArrayList<SPParameter>();
         parameters.forEach(param -> {
             if (param.getMode() == ParameterMode.OUT) {
@@ -105,11 +111,10 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
                 outValues.add(param);
             }
         });
-        boolean execResult = query.execute();
-        result.setExecResult(execResult);
+
         result.addOutValueList(outValues);
         if (isGetTable) {
-            List<Object> table = query.getResultList();
+            List table = query.getResultList();
             result.addTableData(table);
         }
         return result;
@@ -117,7 +122,7 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
 
     @Override
     @Transactional
-    public PagingResponse<Object> getDataPaging(String spName, String findText, String sort, String sortType, int pageIndex, List<SPParameter> paramsExt){
+    public PagingResponse<List<Object>> getDataPaging(String spName, String findText, String sort, String sortType, int pageIndex, List<SPParameter> paramsExt){
 
         if (pageIndex == 0)
             pageIndex = 1;
@@ -157,8 +162,8 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
                 .mode(ParameterMode.OUT)
                 .type(SQLTypes.Int)
                 .build());
-
-        paramList.addAll(paramsExt);
+        if (paramsExt != null && !paramsExt.isEmpty())
+            paramList.addAll(paramsExt);
         SPResult spResult = execSP(spName, paramList, true);
 
         int pageTotal = 0;
@@ -166,7 +171,7 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
         if (pageTotalObj != null)
             pageTotal = Integer.parseInt(pageTotalObj.toString());
 
-        return PagingResponse.<Object>builder()
+        return PagingResponse.<List<Object>>builder()
                 .pageIndex(pageIndex)
                 .pageTotal(pageTotal)
                 .execResult(spResult.isExecResult())

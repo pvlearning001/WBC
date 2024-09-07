@@ -4,7 +4,6 @@ import hls.wbc.constants.AppContants;
 import hls.wbc.dto.responses.PagingResponse;
 import hls.wbc.enums.SQLTypes;
 import jakarta.persistence.ParameterMode;
-import jakarta.persistence.StoredProcedureQuery;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -14,7 +13,7 @@ import java.util.List;
 public class NewsCustomRepositoryImpl extends BaseCustomRepositoryImpl implements NewsCustomRepository {
 
     @Query(value = AppContants.SP_NewsGetList.exeQuery, nativeQuery = true)
-    public PagingResponse<Object> getList(@Param(AppContants.SP_NewsGetList.paramCateId) int cateId, @Param(AppContants.SP_PagingList.paramFindText) String findText, @Param(AppContants.SP_PagingList.paramSort) String sort, @Param(AppContants.SP_PagingList.paramSortType) String sortType, @Param(AppContants.SP_PagingList.paramPageIndex) int pageIndex){
+    public PagingResponse<List<Object>> getList(@Param(AppContants.SP_NewsGetList.paramCateId) int cateId, @Param(AppContants.SP_PagingList.paramFindText) String findText, @Param(AppContants.SP_PagingList.paramSort) String sort, @Param(AppContants.SP_PagingList.paramSortType) String sortType, @Param(AppContants.SP_PagingList.paramPageIndex) int pageIndex){
 
         List<SPParameter> paramExtList = new ArrayList<SPParameter>();
 
@@ -171,7 +170,7 @@ public class NewsCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
                 .build());
 
         paramList.add(SPParameter.builder()
-                .name(AppContants.SP_NewsGetById.paramCateId)
+                .name(AppContants.SP_NewsGetById.paramOutCateId)
                 .mode(ParameterMode.OUT)
                 .type(SQLTypes.Int)
                 .build());
@@ -313,6 +312,18 @@ public class NewsCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
                 .name(AppContants.SP_NewsGetLatestShow.paramFilesId)
                 .mode(ParameterMode.OUT)
                 .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramFilesDisabled)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetLatestShow.paramIsShow)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.Boolean)
                 .build());
 
         return execSP(AppContants.SP_NewsGetLatestShow.spName, paramList, true);

@@ -159,7 +159,7 @@ public class AppContants {
         public static final String exeQuery = "CALL SP_NewsGetById(:id);";
         public static final String paramId = "id";
         public static final String paramOutId = "outid";
-        public static final String paramCateId = "cateId";
+        public static final String paramOutCateId = "outCateId";
         public static final String paramSubject = "subject";
         public static final String paramContent = "content";
         public static final String paramContentEx01 = "contentEx01";
@@ -188,6 +188,8 @@ public class AppContants {
         public static final String paramContentEx05 = "contentEx05";
         public static final String paramContentEx06 = "contentEx06";
         public static final String paramFilesId = "filesId";
+        public static final String paramFilesDisabled = "filesDisabled";
+        public static final String paramIsShow = "isShow";
 
     }
 }

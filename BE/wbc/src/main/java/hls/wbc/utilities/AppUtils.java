@@ -3,6 +3,7 @@ package hls.wbc.utilities;
 import hls.wbc.constants.AppContants;
 import hls.wbc.enums.WordTypes;
 
+import java.util.List;
 import java.util.Random;
 
 public class AppUtils {

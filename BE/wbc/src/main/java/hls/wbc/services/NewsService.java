@@ -14,7 +14,9 @@ import hls.wbc.exceptions.ErrorCode;
 import hls.wbc.mappers.NewsMapper;
 import hls.wbc.repositories.NewsFileUploadRepository;
 import hls.wbc.repositories.NewsRepository;
+import hls.wbc.utilities.AppUtils;
 import hls.wbc.utilities.SecuritiesUtils;
+import hls.wbc.utilities.TableUtils;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -27,10 +29,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -83,14 +82,13 @@ public class NewsService {
                 , filesId);
 
         int id = getIdFromSPResult(spResult);
+
         News saveEntity = repository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.NEWS_NOT_EXISTED));
         saveEntity.setFilesId(filesId);
-
         NewsResponse result = mapper.toResponse(saveEntity);
         MapToResponse(saveEntity, result);
         result.setId(saveEntity.getId());
-
         if (fileList != null && !fileList.isEmpty()){
             result.setFiles(fileList);
         }
@@ -141,7 +139,7 @@ public class NewsService {
     }
 
     @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
-    public PagingResponse<Object> getList(NewsListRequest request){
+    public PagingResponse<List<Object>> getList(NewsListRequest request){
         return repository.getList(request.getCateId(), request.getFindText(), request.getSort(), request.getSortType(), request.getPageIndex());
     }
 
@@ -149,11 +147,11 @@ public class NewsService {
         Object idObj = spResult.getOutValue(AppContants.SP_NewsGetById.paramOutId);
         int outId = (idObj != null) ? (Integer) idObj : 0;
 
-        Object cateIdObj = spResult.getOutValue(AppContants.SP_NewsGetById.paramCateId);
+        Object cateIdObj = spResult.getOutValue(AppContants.SP_NewsGetById.paramOutCateId);
         int cateId = (cateIdObj != null) ? (Integer) cateIdObj : 0;
 
         Object subjectObj = spResult.getOutValue(AppContants.SP_NewsGetById.paramSubject);
-        String subject = (subjectObj != null) ? cateIdObj.toString() : null;
+        String subject = (subjectObj != null) ? subjectObj.toString() : null;
 
         Object contentObj = spResult.getOutValue(AppContants.SP_NewsGetById.paramContent);
         String content = (contentObj != null) ? contentObj.toString() : null;
@@ -181,17 +179,16 @@ public class NewsService {
 
         List<FileUploadResponse> fileList = new ArrayList<FileUploadResponse>();
         if (!spResult.getTable().isEmpty()){
-            for(var rowObj:spResult.getTable()){
-                List<Object> row = (List<Object>) rowObj;
-                int fileId = (Integer) row.get(0);
-                String name = row.get(1).toString();
-                String path = row.get(2).toString();
-                String extName = row.get(3).toString();
-                String uniqueName = row.get(4).toString();
-                String contentType = row.get(5).toString();
-                String descriptions = row.get(6).toString();
-                boolean isDisabled = (boolean) row.get(7);
-
+            List<Object[]> table = spResult.getTable();
+            for(Object[] row: table){
+                int fileId = TableUtils.getValueCellInt(row, 0, 0);
+                String name = TableUtils.getValueCellString(row, 1);
+                String path = TableUtils.getValueCellString(row, 2);
+                String extName = TableUtils.getValueCellString(row, 3);
+                String uniqueName = TableUtils.getValueCellString(row, 4);
+                String contentType = TableUtils.getValueCellString(row, 5);
+                String descriptions = TableUtils.getValueCellString(row, 6);
+                boolean isDisabled = TableUtils.getValueCellBoolean(row, 7, true);
                 FileUploadResponse fur = FileUploadResponse.builder()
                         .id(fileId)
                         .name(name)

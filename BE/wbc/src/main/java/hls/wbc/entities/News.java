@@ -51,7 +51,7 @@ public class News extends BaseEntity {
     @Column(name = "files_disabled", length = 250)
     String filesDisabled;
 
-    @Column(name = "is_how")
+    @Column(name = "is_show")
     boolean isShow;
 
     @Builder

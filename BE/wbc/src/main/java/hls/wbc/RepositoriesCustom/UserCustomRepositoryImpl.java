@@ -77,7 +77,7 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
     }
 
     @Query(value = AppContants.SP_UserGetList.exeQuery, nativeQuery = true)
-    public PagingResponse<Object> getUserList(@Param(AppContants.SP_PagingList.paramFindText) String findText, @Param(AppContants.SP_PagingList.paramSort) String sort, @Param(AppContants.SP_PagingList.paramSortType) String sortType, @Param(AppContants.SP_PagingList.paramPageIndex) int pageIndex){
+    public PagingResponse<List<Object>> getUserList(@Param(AppContants.SP_PagingList.paramFindText) String findText, @Param(AppContants.SP_PagingList.paramSort) String sort, @Param(AppContants.SP_PagingList.paramSortType) String sortType, @Param(AppContants.SP_PagingList.paramPageIndex) int pageIndex){
         return getDataPaging(AppContants.SP_UserGetList.spName, findText, sort, sortType, pageIndex, null);
     }
     @Query(value = AppContants.SP_UserSetDelete.exeQuery, nativeQuery = true)
@@ -102,7 +102,7 @@ public class UserCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
         paramList.add(SPParameter.builder()
                 .name(AppContants.SP_UserSetDelete.paramDeletedValue)
                 .mode(ParameterMode.IN)
-                .type(SQLTypes.Int)
+                .type(SQLTypes.Boolean)
                 .value(deletedValue)
                 .build());
 

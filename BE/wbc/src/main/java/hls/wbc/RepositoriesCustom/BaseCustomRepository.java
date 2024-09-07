@@ -10,7 +10,6 @@ import java.util.List;
 @Repository
 public interface BaseCustomRepository {
     List<Object> baseCustomGetDataBySql(String sql);
-
     List<Object> baseCustomGetDataBySqlPaging(String sql, Pageable pageable);
     List<Object> baseCustomGetDataByTableName(String tableName);
     List<Object> baseCustomGetActiveDataByTableName(String tableName, boolean isDeleted);
@@ -25,5 +24,5 @@ public interface BaseCustomRepository {
     SPResult execSP(String spName, List<SPParameter> parameters, boolean isGetTable);
 
     @Transactional
-    PagingResponse<Object> getDataPaging(String spName, String findText, String sort, String sortType, int pageIndex, List<SPParameter> paramsExt);
+    PagingResponse<List<Object>> getDataPaging(String spName, String findText, String sort, String sortType, int pageIndex, List<SPParameter> paramsExt);
 }

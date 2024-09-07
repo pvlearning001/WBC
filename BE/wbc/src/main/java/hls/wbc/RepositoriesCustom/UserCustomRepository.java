@@ -19,7 +19,7 @@ public interface UserCustomRepository {
     User customUpdate(Object t);
     User customDelete(int id);
 
-    PagingResponse<Object> getUserList(String findText, String sort,
+    PagingResponse<List<Object>> getUserList(String findText, String sort,
     String sortType, int pageIndex);
 
     SPResult setDeleted(int userId, int userChanged, boolean deletedValue);

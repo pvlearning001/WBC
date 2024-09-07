@@ -183,7 +183,7 @@ public class UserService {
     }
 
     @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
-    public PagingResponse<Object> getUserList(UserListRequest request){
+    public PagingResponse<List<Object>> getUserList(UserListRequest request){
         return repository.getUserList(request.getFindText(), request.getSort(), request.getSortType(), request.getPageIndex());
     }
 
