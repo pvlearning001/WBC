@@ -49,12 +49,42 @@ public class NewsCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
         paramList.add(SPParameter.builder()
                 .name(AppContants.SP_NewsSetDelete.paramDeletedValue)
                 .mode(ParameterMode.IN)
-                .type(SQLTypes.Int)
+                .type(SQLTypes.Boolean)
                 .value(deletedValue)
                 .build());
 
         return execSP(AppContants.SP_NewsSetDelete.spName, paramList, false);
     }
+
+    @Query(value = AppContants.SP_NewsSetShow.exeQuery, nativeQuery = true)
+    public SPResult setShow(@Param(AppContants.SP_NewsSetShow.paramId) int id, @Param(AppContants.SP_NewsSetShow.paramUserChanged)  int userChanged, @Param(AppContants.SP_NewsSetShow.paramCateId)  int cateId){
+
+        List<SPParameter> paramList = new ArrayList<SPParameter>();
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsSetShow.paramId)
+                .mode(ParameterMode.IN)
+                .type(SQLTypes.Int)
+                .value(id)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsSetShow.paramUserChanged)
+                .mode(ParameterMode.IN)
+                .type(SQLTypes.Int)
+                .value(userChanged)
+                .build());
+
+        paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsSetShow.paramCateId)
+                .mode(ParameterMode.IN)
+                .type(SQLTypes.Int)
+                .value(cateId)
+                .build());
+
+        return execSP(AppContants.SP_NewsSetShow.spName, paramList, false);
+    }
+
     @Query(value = AppContants.SP_NewsSave.exeQuery, nativeQuery = true)
     public SPResult save(@Param(AppContants.SP_NewsSave.paramId) int id, @Param(AppContants.SP_NewsSave.paramUserChanged)  int userChanged, @Param(AppContants.SP_NewsSave.paramCateId) int cateId, @Param(AppContants.SP_NewsSave.paramSubject) String subject, @Param(AppContants.SP_NewsSave.paramContent) String content, @Param(AppContants.SP_NewsSave.paramContentEx01) String contentEx01, @Param(AppContants.SP_NewsSave.paramContentEx02) String contentEx02, @Param(AppContants.SP_NewsSave.paramContentEx03) String contentEx03, @Param(AppContants.SP_NewsSave.paramContentEx04) String contentEx04, @Param(AppContants.SP_NewsSave.paramContentEx05) String contentEx05, @Param(AppContants.SP_NewsSave.paramContentEx06) String contentEx06, @Param(AppContants.SP_NewsSave.paramFilesId) String filesId){
 

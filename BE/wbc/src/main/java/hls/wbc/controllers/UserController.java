@@ -78,7 +78,7 @@ public class UserController {
                 .build();
     }
 
-    @PostMapping("/admin/list")
+    @GetMapping("/admin/list")
     ApiResponse<PagingResponse> getUserList(@RequestBody  @Valid UserListRequest request){
         PagingResponse res = userService.getUserList(request);
         return ApiResponse.<PagingResponse>builder()

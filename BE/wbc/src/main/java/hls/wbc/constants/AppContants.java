@@ -135,6 +135,14 @@ public class AppContants {
         public static final String paramDeletedValue = "deletedValue";
     }
 
+    public static class SP_NewsSetShow {
+        public static final String spName = "sp_NewsSetShow";
+        public static final String exeQuery = "CALL sp_NewsSetShow(:id, :userChanged, :cateId);";
+        public static final String paramId = "id";
+        public static final String paramUserChanged = "userChanged";
+        public static final String paramCateId = "cateId";
+    }
+
     public static class SP_NewsSave {
         public static final String spName = "SP_NewsSave";
         public static final String exeQuery = "CALL SP_NewsSave(:id, :userChanged, :cateId, :subject, :content, :contentEx01, :contentEx02, :contentEx03, :contentEx04, :contentEx05, :contentEx06, :filesId);";

@@ -17,7 +17,7 @@ export async function getList(findText, sort, sortType, pageIndex) {
     await axios({ 
         // Endpoint to send files 
         url: "/users/admin/list", 
-        method: "POST", 
+        method: "GET", 
         headers: {   
             "Authorization" : `Bearer ${token}`
         }, 

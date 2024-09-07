@@ -67,19 +67,16 @@ export function AdminMgmtMessagesComponent(props){
         if (filesUpload != null && filesUpload.length > 0) {
             for (const file of filesUpload)
                 formData.append('files', file);
-        }
+        }        
         
-        //formData.append("files", filesUpload);
-        // make a POST request to the File Upload API with the FormData object and Rapid API headers
         axios({ 
-            // Endpoint to send files 
-            url: "/news/create", 
+            
+            url: constants.api_news_create, 
             method: "POST", 
             headers: {   
                 "Authorization" : `Bearer ${token}`,             
                 "Content-Type": "multipart/form-data"
-            }, 
-            // Attaching the form data 
+            },
             data: formData, 
           }) 
             .then((res) => {
@@ -87,11 +84,11 @@ export function AdminMgmtMessagesComponent(props){
                     setMessage('Them moi thanh cong');
                     setSuccess(true);
                 }
-            }) // Handle the response from backend here 
+            })
             .catch((err) => {
                 setMessage(err);
                 setSuccess(false);
-            }); // Catch errors if any
+            }); 
         }   
 
     return(

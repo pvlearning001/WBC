@@ -49,9 +49,9 @@ CREATE TABLE IF NOT EXISTS `configs` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.configs: ~2 rows (approximately)
+-- Dumping data for table wbc.configs: ~1 rows (approximately)
 REPLACE INTO `configs` (`id`, `guid`, `page_size`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, '42d5d99e-6cea-11ef-8964-509a4cb5cc32', 10, NULL, b'0', '2024-09-07 07:24:47.000000', 1, '2024-09-07 07:24:47.000000', 1);
+	(1, 'b1cea937-6d29-11ef-8964-509a4cb5cc32', 10, NULL, b'0', '2024-09-07 14:58:51.000000', 1, '2024-09-07 14:58:51.000000', 1);
 
 -- Dumping structure for table wbc.course
 CREATE TABLE IF NOT EXISTS `course` (
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `file_upload` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.file_upload: ~4 rows (approximately)
+-- Dumping data for table wbc.file_upload: ~3 rows (approximately)
 
 -- Dumping structure for function wbc.fn_CheckSameRoles
 DELIMITER //
@@ -354,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.news: ~0 rows (approximately)
+-- Dumping data for table wbc.news: ~255 rows (approximately)
 
 -- Dumping structure for table wbc.news_file_upload
 CREATE TABLE IF NOT EXISTS `news_file_upload` (
@@ -372,7 +372,7 @@ CREATE TABLE IF NOT EXISTS `news_file_upload` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.news_file_upload: ~4 rows (approximately)
+-- Dumping data for table wbc.news_file_upload: ~765 rows (approximately)
 
 -- Dumping structure for table wbc.permission
 CREATE TABLE IF NOT EXISTS `permission` (
@@ -576,7 +576,9 @@ BEGIN
 	SET maxId = 0;
 	SELECT MAX(id) INTO maxId
 	FROM news 
-	WHERE (cate_id = cateId) AND (is_deleted = 0);
+	WHERE (cate_id = cateId) 
+		AND (is_show = 1) 
+		AND (is_deleted = 0);
 	
 	SELECT n.id
 		, n.cate_id 
@@ -796,6 +798,8 @@ BEGIN
 	IF (filesId IS NOT NULL AND filesId <> '') THEN
 		UPDATE news_file_upload 
 		SET is_disabled = 1
+			, upd_at = UTC_TIMESTAMP()
+			, upd_by = userChanged
 		WHERE news_id = id;
 		
 		INSERT INTO news_file_upload(
@@ -819,7 +823,9 @@ BEGIN
 		
 		UPDATE news SET 
 			files_id = filesId
-			, files_disabled = @disableList 
+			, files_disabled = @disableList
+			, upd_at = UTC_TIMESTAMP()
+			, upd_by = userChanged 
 		WHERE id = outid;
 		
 	END IF;	
@@ -856,14 +862,21 @@ DELIMITER ;
 DELIMITER //
 CREATE PROCEDURE `sp_NewsSetShow`(
 	IN `id` INT,
+	IN `userChanged` INT,
 	IN `cateId` INT
 )
 BEGIN
-	UPDATE news SET is_show = 0
-	WHERE (cate_id = cateId) AND (id <> id);
+	UPDATE news n 
+	SET n.is_show = 0
+		, n.upd_at = UTC_TIMESTAMP()
+		, n.upd_by = userChanged	
+	WHERE (n.cate_id = cateId) AND (n.id <> id);
 	
-	UPDATE news SET is_show = 1
-	WHERE id = id;  
+	UPDATE news n 
+	SET n.is_show = 1
+		, n.upd_at = UTC_TIMESTAMP()
+		, n.upd_by = userChanged	
+	WHERE n.id = id;  
 END//
 DELIMITER ;
 

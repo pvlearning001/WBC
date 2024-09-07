@@ -15,7 +15,8 @@ import java.util.Map;
 
 @Repository
 public class BaseCustomRepositoryImpl implements BaseCustomRepository {
-    @PersistenceContext
+    //@PersistenceContext
+    @PersistenceContext(type = PersistenceContextType.EXTENDED)
     protected EntityManager entityManager;
     @Override
     public List<Object> baseCustomGetDataBySql(String sql) {
@@ -129,6 +130,9 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
 
         List<SPParameter> paramList = new ArrayList<SPParameter>();
 
+        if (paramsExt != null && !paramsExt.isEmpty())
+            paramList.addAll(paramsExt);
+
         paramList.add(SPParameter.builder()
                         .name(AppContants.SP_PagingList.paramFindText)
                         .mode(ParameterMode.IN)
@@ -162,8 +166,7 @@ public class BaseCustomRepositoryImpl implements BaseCustomRepository {
                 .mode(ParameterMode.OUT)
                 .type(SQLTypes.Int)
                 .build());
-        if (paramsExt != null && !paramsExt.isEmpty())
-            paramList.addAll(paramsExt);
+
         SPResult spResult = execSP(spName, paramList, true);
 
         int pageTotal = 0;

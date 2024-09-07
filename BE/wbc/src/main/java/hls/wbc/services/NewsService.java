@@ -203,25 +203,22 @@ public class NewsService {
             }
         }
 
-        if (outId >0){
-            NewsResponse result = NewsResponse.builder()
-                    .id(outId)
-                    .cateId(cateId)
-                    .subject(subject)
-                    .content(content)
-                    .contentEx01(contentEx01)
-                    .contentEx02(contentEx02)
-                    .contentEx03(contentEx03)
-                    .contentEx04(contentEx04)
-                    .contentEx05(contentEx05)
-                    .contentEx06(contentEx06)
-                    .isShow(isShow)
-                    .build();
-            result.setFiles(fileList);
+        NewsResponse result = NewsResponse.builder()
+                .id(outId)
+                .cateId(cateId)
+                .subject(subject)
+                .content(content)
+                .contentEx01(contentEx01)
+                .contentEx02(contentEx02)
+                .contentEx03(contentEx03)
+                .contentEx04(contentEx04)
+                .contentEx05(contentEx05)
+                .contentEx06(contentEx06)
+                .isShow(isShow)
+                .build();
+        result.setFiles(fileList);
 
-            return result;
-        }
-        return null;
+        return result;
     }
     public NewsResponse getById(int id) {
         SPResult spResult = repository.getById(id);
@@ -234,10 +231,18 @@ public class NewsService {
     }
 
     @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
-    public void setDeleted(int id, boolean deleteValue) throws ParseException, JOSEException, IOException {
+    public int setDeleted(int id, boolean deleteValue) throws ParseException, JOSEException, IOException {
         int userChanged = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
         newsFileUploadService.DeletePhysicalFilesByNewsId(id);
         repository.setDeleted(id, userChanged, deleteValue);
+        return id;
+    }
+
+    @PreAuthorize(AppContants.SecuritiesValues.HasRoleAdmin)
+    public int setShow(int id, int cateId) throws ParseException, JOSEException {
+        int userChanged = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
+        repository.setShow(id, userChanged, cateId);
+        return id;
     }
 
     public List<FileUploadResponse> getFileList(int newsId){

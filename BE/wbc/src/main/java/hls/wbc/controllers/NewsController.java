@@ -1,13 +1,9 @@
 package hls.wbc.controllers;
 
 import com.nimbusds.jose.JOSEException;
-import hls.wbc.dto.requests.FileAttachmentRequest;
-import hls.wbc.dto.requests.NewsRequest;
-import hls.wbc.dto.requests.UserCreationRequest;
-import hls.wbc.dto.responses.ApiResponse;
-import hls.wbc.dto.responses.FileAttachmentResponse;
-import hls.wbc.dto.responses.NewsResponse;
-import hls.wbc.dto.responses.UserResponse;
+import hls.wbc.RepositoriesCustom.SPResult;
+import hls.wbc.dto.requests.*;
+import hls.wbc.dto.responses.*;
 import hls.wbc.services.AuthenticationService;
 import hls.wbc.services.FileUploadService;
 import hls.wbc.services.NewsService;
@@ -34,7 +30,7 @@ public class NewsController {
     NewsService service;
     FileUploadService fileUploadService;
 
-    @PostMapping("/create")
+    @PostMapping("/admin/create")
     ApiResponse<NewsResponse> create(@ModelAttribute @Valid NewsRequest request) throws ParseException, IOException, NoSuchAlgorithmException, JOSEException {
         log.info("Controller: create News");
         return ApiResponse.<NewsResponse>builder()
@@ -42,11 +38,36 @@ public class NewsController {
                 .build();
     }
 
-    @PostMapping("/update")
+    @PostMapping("/admin/update")
     ApiResponse<NewsResponse> update(@ModelAttribute @Valid NewsRequest request) throws ParseException, IOException, NoSuchAlgorithmException, JOSEException {
         log.info("Controller: update News");
         return ApiResponse.<NewsResponse>builder()
                 .result(service.updateEntity(request))
+                .build();
+    }
+
+    @PutMapping("/admin/setdeleted")
+    ApiResponse<Integer> setDeleted(@RequestBody  @Valid NewsDeleteRequest request) throws ParseException, IOException, NoSuchAlgorithmException, JOSEException {
+        log.info("Controller: update News");
+        Integer saveResult = service.setDeleted(request.getId(), request.isDeletedValue());
+        return ApiResponse.<Integer>builder()
+                .result(saveResult)
+                .build();
+    }
+
+    @PutMapping("/admin/setshow")
+    ApiResponse<Integer> setShow(@RequestBody  @Valid NewsShowRequest request) throws ParseException, IOException, NoSuchAlgorithmException, JOSEException {
+        Integer saveResult = service.setShow(request.getId(), request.getCateId());
+        return ApiResponse.<Integer>builder()
+                .result(saveResult)
+                .build();
+    }
+
+    @GetMapping("/admin/list")
+    ApiResponse<PagingResponse> getList(@RequestBody  @Valid NewsListRequest request){
+        PagingResponse res = service.getList(request);
+        return ApiResponse.<PagingResponse>builder()
+                .result(res)
                 .build();
     }
 
