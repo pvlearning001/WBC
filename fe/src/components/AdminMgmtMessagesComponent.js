@@ -1,9 +1,9 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import '../assets/css/page.css';
 import * as constants from '../jscode/constants';
+import * as newsServices from '../services/newsServices';
 import { MessageComponent } from './MessageComponent';
 
 
@@ -32,8 +32,7 @@ export function AdminMgmtMessagesComponent(props){
     const [content, setContent] = useState(constants.string_empty); 
     const [contentEx01, setContentEx01] = useState(constants.string_empty); 
 
-    const [files, setFiles] = useState(null); 
-    const token = localStorage.getItem(constants.token_string);
+    const [files, setFiles] = useState(null);
 
     const [message, setMessage] = useState(constants.string_empty);
     const [success, setSuccess] = useState(true);
@@ -45,51 +44,31 @@ export function AdminMgmtMessagesComponent(props){
     }
 
     function openModel(event) {
-        setMessage(constants.string_empty)
+        setMessage(constants.string_empty);
+        /*
+        let list = newsServices.getList(null, null, null, 1);        
+        list.then((result) => {
+            console.log(result);
+        });
+        */
+        let latest = newsServices.getLatestAnnouncement();
         setShowModal(true);
     }
 
-    function handleCloseModal(event){
+    function closeModal(event){
         setShowModal(false);
     }
 
-    function handleFileUpload(event) {
+    function createAnnouncement(event) {
         setSuccess(true);
         setMessage(constants.string_empty);
-        // get the selected file from the input
-        const filesUpload = files;
-        // create a new FormData object and append the file to it
-        const formData = new FormData();
-        formData.append('cateId', 1);
-        formData.append('subject', title);
-        formData.append('content', content);
-        formData.append('contentEx01', contentEx01);
-        if (filesUpload != null && filesUpload.length > 0) {
-            for (const file of filesUpload)
-                formData.append('files', file);
-        }        
-        
-        axios({ 
-            
-            url: constants.api_news_create, 
-            method: "POST", 
-            headers: {   
-                "Authorization" : `Bearer ${token}`,             
-                "Content-Type": "multipart/form-data"
-            },
-            data: formData, 
-          }) 
-            .then((res) => {
-                if (res.data.code === constants.api_code_success){
-                    setMessage('Them moi thanh cong');
-                    setSuccess(true);
-                }
-            })
-            .catch((err) => {
-                setMessage(err);
-                setSuccess(false);
-            }); 
-        }   
+        let saveRes = newsServices.createNew(files, constants.cateid_announcement, title, content, contentEx01);
+        saveRes.then((result) => {
+            console.log(result);
+            setMessage(result.message);
+            setSuccess(result.execResult);
+        });
+    }   
 
     return(
         <main className="main hero section dark-background">
@@ -156,10 +135,10 @@ export function AdminMgmtMessagesComponent(props){
 
                                     <div className="row ">
                                         <div style={addNewPopupButton} className="col-xxl-12 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                                            <button style={popupButton} className="btn btn-primary" onClick={(e) => handleFileUpload(e)}>
+                                            <button style={popupButton} className="btn btn-primary" onClick={(e) => createAnnouncement(e)}>
                                                 Thêm mới thông báo
                                             </button> 
-                                            <button style={popupButton} className="btn btn-primary" onClick={(e) => handleCloseModal(e)}>
+                                            <button style={popupButton} className="btn btn-primary" onClick={(e) => closeModal(e)}>
                                                 Đóng
                                             </button> 
                                         </div>

@@ -63,7 +63,7 @@ public class NewsController {
                 .build();
     }
 
-    @GetMapping("/admin/list")
+    @PostMapping("/admin/list")
     ApiResponse<PagingResponse> getList(@RequestBody  @Valid NewsListRequest request){
         PagingResponse res = service.getList(request);
         return ApiResponse.<PagingResponse>builder()

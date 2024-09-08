@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.category: ~1 rows (approximately)
+-- Dumping data for table wbc.category: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.configs
 CREATE TABLE IF NOT EXISTS `configs` (
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `configs` (
 
 -- Dumping data for table wbc.configs: ~1 rows (approximately)
 REPLACE INTO `configs` (`id`, `guid`, `page_size`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, 'b1cea937-6d29-11ef-8964-509a4cb5cc32', 10, NULL, b'0', '2024-09-07 14:58:51.000000', 1, '2024-09-07 14:58:51.000000', 1);
+	(1, 'b0b244fc-6dad-11ef-8d11-509a4cb5cc32', 10, NULL, b'0', '2024-09-08 06:43:45.000000', 1, '2024-09-08 06:43:45.000000', 1);
 
 -- Dumping structure for table wbc.course
 CREATE TABLE IF NOT EXISTS `course` (
@@ -243,7 +243,7 @@ CREATE TABLE IF NOT EXISTS `invalidated_token` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.invalidated_token: ~0 rows (approximately)
+-- Dumping data for table wbc.invalidated_token: ~2 rows (approximately)
 
 -- Dumping structure for table wbc.mark_result
 CREATE TABLE IF NOT EXISTS `mark_result` (
@@ -354,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.news: ~255 rows (approximately)
+-- Dumping data for table wbc.news: ~267 rows (approximately)
 
 -- Dumping structure for table wbc.news_file_upload
 CREATE TABLE IF NOT EXISTS `news_file_upload` (
@@ -656,7 +656,13 @@ BEGIN
 	SET stmSelectColumn = '
 		SELECT id AS id
 		, subject
-		, SUBSTRING(IF(ISNULL(content), "", content), 1, 100)
+		, content
+		, content_ex_01
+		, content_ex_02
+		, content_ex_03
+		, content_ex_04
+		, content_ex_05
+		, content_ex_06
 		, is_show
 		, files_id';
 		

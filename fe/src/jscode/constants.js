@@ -119,5 +119,9 @@ export const page_session_default = 5;
 export const sort_type_asc = "asc";
 export const sort_type_desc = "desc";
 
+export const cateid_announcement = 1;
+
+export const mess_news_add_success = "Thêm mới thông báo thành công";
+
 
 

@@ -118,11 +118,10 @@ export default function AdminMngtUserComponent(props){
         let info = userServices.getList(findText.current, sort.current, sortType.current, pageValue); 
         info.then((result) => {
             setPageTotal(result.pageTotal);
-            dataList.splice(0,dataList.length);
+            setDataList([]);
             for (let dataItem of result.dataList) {
                 setDataList(prevState => [...prevState, dataItem]);
             }
-            //console.log(result.dataList);
         });
     }
     

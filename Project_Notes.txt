@@ -281,3 +281,12 @@ SELECT 256 AS userid,
 	r.id 
 FROM role r
 WHERE FIND_IN_SET(id,'1,2')
+
+git clone "https://github.com/pvlearning001/WBC" "C:\Users\minhp\WorkingC\WorkOutsources\WBC"
+rmdir /s /q mydir
+
+Announcement
+announcement
+
+announcementModel
+announcementListModel
