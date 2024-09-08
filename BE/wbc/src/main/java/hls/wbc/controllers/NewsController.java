@@ -78,6 +78,13 @@ public class NewsController {
                 .build();
     }
 
+    @PostMapping("/getbyid")
+    ApiResponse<NewsResponse> getById(@RequestBody  @Valid GetByIdRequest request) {
+        return ApiResponse.<NewsResponse>builder()
+                .result(service.getById(request.getId()))
+                .build();
+    }
+
     @PostMapping("/file")
     ApiResponse<FileAttachmentResponse> getFile(@RequestBody @Valid FileAttachmentRequest request) throws IOException  {
         FileAttachmentResponse fileResponse = fileUploadService.getBinaryArray(request.getId());

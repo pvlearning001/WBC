@@ -13,7 +13,6 @@ export async function getList(findText, sort, sortType, pageIndex) {
         "sortType": sortType,
         "pageIndex": pageIndex,
     };
-    console.log("get user list");
     await axios({ 
         url: "/users/admin/list", 
         method: "POST", 
@@ -77,7 +76,7 @@ export async function setDelete(id, deletedValue) {
     };
 
     await axios({
-        url: "/users/admin/delete", 
+        url: constants.api_news_delete, 
         method: "PUT", 
         headers: {   
             "Authorization" : `Bearer ${token}`

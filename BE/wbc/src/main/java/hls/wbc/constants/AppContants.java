@@ -177,6 +177,8 @@ public class AppContants {
         public static final String paramContentEx05 = "contentEx05";
         public static final String paramContentEx06 = "contentEx06";
         public static final String paramFilesId = "filesId";
+
+        public static final String paramFilesDisabled = "filesDisabled";
         public static final String paramIsShow = "isShow";
 
     }

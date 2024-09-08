@@ -182,10 +182,11 @@ export default function AdminMngtUserComponent(props){
         setShowEditModal(false);
     }
 
-    function deleteUser(){        
-        userServices.setDelete(curId.current, true);
-        handleCloseDeleteModal();
-        doSearch();
+    const deleteUser = async() => {        
+        await userServices.setDelete(curId.current, true).then((result) => {
+            handleCloseDeleteModal();
+            doSearch();
+        });        
     }
 
     function editUser(){
@@ -268,7 +269,7 @@ export default function AdminMngtUserComponent(props){
                             <table className="table">
                                 <thead>
                                     <tr>
-                                        <th onClick={() => doSort("u.id")}>#</th>
+                                        <th onClick={() => doSort(defaultSort)}>#</th>
                                         <th onClick={() => doSort("ue.f_name")}>Họ và tên lót</th>
                                         <th onClick={() => doSort("ue.l_name")}>Tên</th>
                                         <th onClick={() => doSort("u.user_name")}>User name</th>

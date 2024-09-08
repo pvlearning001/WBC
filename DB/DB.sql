@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `configs` (
 
 -- Dumping data for table wbc.configs: ~1 rows (approximately)
 REPLACE INTO `configs` (`id`, `guid`, `page_size`, `remark`, `is_deleted`, `ins_at`, `ins_by`, `upd_at`, `upd_by`) VALUES
-	(1, 'b0b244fc-6dad-11ef-8d11-509a4cb5cc32', 10, NULL, b'0', '2024-09-08 06:43:45.000000', 1, '2024-09-08 06:43:45.000000', 1);
+	(1, '665c0ffa-6df2-11ef-b954-509a4cb5cc32', 10, NULL, b'0', '2024-09-08 14:55:33.000000', 1, '2024-09-08 14:55:33.000000', 1);
 
 -- Dumping structure for table wbc.course
 CREATE TABLE IF NOT EXISTS `course` (
@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `file_upload` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.file_upload: ~3 rows (approximately)
+-- Dumping data for table wbc.file_upload: ~4 rows (approximately)
 
 -- Dumping structure for function wbc.fn_CheckSameRoles
 DELIMITER //
@@ -243,7 +243,7 @@ CREATE TABLE IF NOT EXISTS `invalidated_token` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.invalidated_token: ~2 rows (approximately)
+-- Dumping data for table wbc.invalidated_token: ~0 rows (approximately)
 
 -- Dumping structure for table wbc.mark_result
 CREATE TABLE IF NOT EXISTS `mark_result` (
@@ -354,7 +354,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.news: ~267 rows (approximately)
+-- Dumping data for table wbc.news: ~258 rows (approximately)
 
 -- Dumping structure for table wbc.news_file_upload
 CREATE TABLE IF NOT EXISTS `news_file_upload` (
@@ -372,7 +372,7 @@ CREATE TABLE IF NOT EXISTS `news_file_upload` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci ROW_FORMAT=DYNAMIC;
 
--- Dumping data for table wbc.news_file_upload: ~765 rows (approximately)
+-- Dumping data for table wbc.news_file_upload: ~766 rows (approximately)
 
 -- Dumping structure for table wbc.permission
 CREATE TABLE IF NOT EXISTS `permission` (
@@ -784,19 +784,19 @@ BEGIN
 	ELSE #UPDATE
 		SET outid = id;
 		
-		UPDATE news SET
-			cate_id = cateId
-			, subject = subject
-			, content = content
-			, content_ex_01 = contentEx01
-			, content_ex_02 = contentEx02
-			, content_ex_03 = contentEx03
+		UPDATE news n SET
+			n.cate_id = cateId
+			, n.subject = subject
+			, n.content = content
+			, n.content_ex_01 = contentEx01
+			, n.content_ex_02 = contentEx02
+			, n.content_ex_03 = contentEx03
 			, content_ex_04 = contentEx04
 			, content_ex_05 = contentEx05
-			, content_ex_06 = contentEx06
-			, upd_at = UTC_TIMESTAMP()
-			, upd_by = userChanged
-		WHERE id = id;	
+			, n.content_ex_06 = contentEx06
+			, n.upd_at = UTC_TIMESTAMP()
+			, n.upd_by = userChanged
+		WHERE n.id = id;	
 		
 	END IF;
 	
@@ -827,12 +827,12 @@ BEGIN
 		
 		SELECT fn_GetFilesDisabled(id) INTO @disableList;
 		
-		UPDATE news SET 
-			files_id = filesId
-			, files_disabled = @disableList
-			, upd_at = UTC_TIMESTAMP()
-			, upd_by = userChanged 
-		WHERE id = outid;
+		UPDATE news n SET 
+			n.files_id = filesId
+			, n.files_disabled = @disableList
+			, n.upd_at = UTC_TIMESTAMP()
+			, n.upd_by = userChanged 
+		WHERE n.id = outid;
 		
 	END IF;	
 	

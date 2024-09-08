@@ -84,10 +84,11 @@ export const api_register_user = "/users";
 export const api_changePw_user = "/users/changepw";
 export const api_news_create = "/news/admin/create";
 export const api_news_update = "/news/admin/update";
-export const api_news_setShow = "/news/admin/show";
-export const api_news_delete = "/news/admin/delete";
+export const api_news_setShow = "/news/admin/setshow";
+export const api_news_delete = "/news/admin/setdeleted";
 export const api_news_list = "/news/admin/list";
-export const api_get_latest_announcement = "/news/latest";
+export const api_news_latest_show_announcement = "/news/latest";
+export const api_news_get_by_id = "/news/getbyid";
 export const api_get_file_content_pdf = "/news/file";
 export const api_code_success = 1000;
 export const api_code_changePw = 1019;
@@ -122,6 +123,6 @@ export const sort_type_desc = "desc";
 export const cateid_announcement = 1;
 
 export const mess_news_add_success = "Thêm mới thông báo thành công";
-
+export const mess_news_edit_success = "Cập nhật thông báo thành công";
 
 

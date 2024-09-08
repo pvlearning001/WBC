@@ -260,6 +260,12 @@ public class NewsCustomRepositoryImpl extends BaseCustomRepositoryImpl implement
                 .build());
 
         paramList.add(SPParameter.builder()
+                .name(AppContants.SP_NewsGetById.paramFilesDisabled)
+                .mode(ParameterMode.OUT)
+                .type(SQLTypes.String)
+                .build());
+
+        paramList.add(SPParameter.builder()
                 .name(AppContants.SP_NewsGetById.paramIsShow)
                 .mode(ParameterMode.OUT)
                 .type(SQLTypes.Boolean)

@@ -12,7 +12,7 @@ export default function AnnouncementComponent() {
     const getAnnouncement = async () => {
         await newsServices.getLatestAnnouncement()
         .then((result) => {
-            setAnnouncement(result);            
+            setAnnouncement(result);      
             if (result.files.length > 0) {
                 setAttTitle("Xin xem thêm file đính kèm bên dưới:"); 
                 setFiles([]);
@@ -48,11 +48,21 @@ export default function AnnouncementComponent() {
             <div>{attTitle}</div>
             <div>
                 <ul>
-                    {files.map(item => (
-                        <li key={item.id}>
-                            <Link  onClick={() => clickAttachmentFile(item.id)}>{item.name}</Link>
-                        </li>
-                    ))}
+                    {
+                        files.map((item) => (
+                            (item.disabled)
+                            ? (
+                                <li key={item.id}>                            
+                                    <div>{item.name}</div> 
+                                </li>
+                            )
+                            : (
+                                <li key={item.id}>
+                                    <Link  onClick={() => clickAttachmentFile(item.id)}>{item.name}</Link>                            
+                                </li>
+                            )                        
+                        )
+                    )}
                 </ul>
             </div>
           </div>

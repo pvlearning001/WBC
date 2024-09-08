@@ -98,7 +98,8 @@ public class NewsService {
 
     public NewsResponse updateEntity(NewsRequest request) throws ParseException, JOSEException, IOException, NoSuchAlgorithmException {
         List<FileUploadResponse> fileList = new ArrayList<FileUploadResponse>();
-        if (!request.getFiles().isEmpty()){
+        if (request.getFiles() != null
+                && !request.getFiles().isEmpty()){
             newsFileUploadService.DeletePhysicalFilesByNewsId(request.getId());
             FileUploadRequest fileUploadRequest = FileUploadRequest.builder()
                     .files(request.getFiles())
