@@ -13,11 +13,10 @@ export async function getList(findText, sort, sortType, pageIndex) {
         "sortType": sortType,
         "pageIndex": pageIndex,
     };
-
+    console.log("get user list");
     await axios({ 
-        // Endpoint to send files 
         url: "/users/admin/list", 
-        method: "GET", 
+        method: "POST", 
         headers: {   
             "Authorization" : `Bearer ${token}`
         }, 

@@ -269,7 +269,7 @@ export default function AdminMngtUserComponent(props){
                             <table className="table">
                                 <thead>
                                     <tr>
-                                        <th>STT</th>
+                                        <th onClick={() => doSort("u.id")}>#</th>
                                         <th onClick={() => doSort("ue.f_name")}>Họ và tên lót</th>
                                         <th onClick={() => doSort("ue.l_name")}>Tên</th>
                                         <th onClick={() => doSort("u.user_name")}>User name</th>
