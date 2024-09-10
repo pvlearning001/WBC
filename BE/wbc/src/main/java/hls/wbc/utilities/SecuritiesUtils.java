@@ -1,17 +1,13 @@
 package hls.wbc.utilities;
-
 import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import hls.wbc.constants.AppContants;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import jakarta.xml.bind.DatatypeConverter;
@@ -20,6 +16,8 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import java.text.ParseException;
 
 public class SecuritiesUtils {
+    @Autowired
+    private static PasswordEncoder passwordEncoder;
     public static String toEncodeMD5(String text) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance(AppContants.SecuritiesValues.MD5);
         md.update(text.getBytes());
@@ -29,12 +27,14 @@ public class SecuritiesUtils {
     }
 
     public static String toEncodeBCrypt(String text) {
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(AppContants.SecuritiesValues.StrengBCrypt);
+        if (passwordEncoder == null)
+            passwordEncoder = new BCryptPasswordEncoder(AppContants.SecuritiesValues.StrengBCrypt);
         return passwordEncoder.encode(text);
     }
 
     public static boolean isMatchesBCrypt(String plainText, String enryptText){
-        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(AppContants.SecuritiesValues.StrengBCrypt);
+        if (passwordEncoder == null)
+            passwordEncoder = new BCryptPasswordEncoder(AppContants.SecuritiesValues.StrengBCrypt);
         return passwordEncoder.matches(plainText, enryptText);
     }
 
@@ -62,42 +62,25 @@ public class SecuritiesUtils {
         return result;
     }
 
-    public static SignedJWT getSignedJWT(String token, String signerKey) throws JOSEException, ParseException {
-        JWSVerifier verifier = new MACVerifier(signerKey.getBytes());
+    public static SignedJWT getSignedJWT(String signerKey) throws JOSEException, ParseException {
+        String token = getTokenString();
         return SignedJWT.parse(token);
     }
 
-    public static SignedJWT getSignedJWT(String signerKey) throws JOSEException, ParseException {
-        String token = getTokenString();
-        return getSignedJWT(token, signerKey);
-    }
-
-    public static Object getClaimsValue(String token, String signerKey, String claimsKey) throws ParseException, JOSEException {
-        if (!AppUtils.isNullOrEmptyString(token)) {
-            SignedJWT signedJWT = getSignedJWT(token, signerKey);
-            JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
-            if (jwtClaimsSet != null) {
-                return signedJWT.getJWTClaimsSet().getClaim(claimsKey);
-            }
+    public static Object getClaimsValue(String signerKey, String claimsKey) throws ParseException, JOSEException {
+        SignedJWT signedJWT = getSignedJWT(signerKey);
+        JWTClaimsSet jwtClaimsSet = signedJWT.getJWTClaimsSet();
+        if (jwtClaimsSet != null) {
+            return signedJWT.getJWTClaimsSet().getClaim(claimsKey);
         }
         return null;
     }
 
-    public static Object getClaimsValue(String signerKey, String claimsKey) throws ParseException, JOSEException {
-        String token = getTokenString();
-        return getClaimsValue(token, signerKey, claimsKey);
-    }
-
-    public static int getClaimsUserId(String token, String signerKey) throws ParseException, JOSEException {
+    public static int getClaimsUserId(String signerKey) throws ParseException, JOSEException {
         String claimsKey = AppContants.TokenKeyClaim.userId;
-        Object userIdObj = getClaimsValue(token, signerKey, claimsKey);
+        Object userIdObj = getClaimsValue(signerKey, claimsKey);
         if (userIdObj != null)
             return Integer.parseInt(userIdObj.toString());
         return AppContants.SecuritiesValues.AdminId;
-    }
-
-    public static int getClaimsUserId(String signerKey) throws ParseException, JOSEException {
-        String token = getTokenString();
-        return getClaimsUserId(token, signerKey);
     }
 }

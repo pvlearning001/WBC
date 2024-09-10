@@ -96,7 +96,7 @@ public class AuthenticationService {
                 .guid(jit)
                 .expiryTime(expiryTime.toInstant())
                 .build();
-        int userId = SecuritiesUtils.getClaimsUserId(request.getToken(), SIGNER_KEY);
+        int userId = SecuritiesUtils.getClaimsUserId(SIGNER_KEY);
         invalidatedToken.setTraceNew(userId, null);
         invalidatedTokenRepository.save(invalidatedToken);
     }
