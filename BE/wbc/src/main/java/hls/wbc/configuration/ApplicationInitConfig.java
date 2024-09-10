@@ -58,7 +58,7 @@ public class ApplicationInitConfig {
     }
 
     private void initUserList(UserRepository userRepos, RoleRepository roleRepos, UserExtRepository userExtRepos){
-        Optional<User> firstUser = userRepos.findByUserName("user002");
+        Optional<User> firstUser = userRepos.findByUserName("user02");
         if (firstUser.isEmpty()) {
             String uNamePrefix = "user";
             String uName = "";
@@ -71,7 +71,7 @@ public class ApplicationInitConfig {
             String phone = "0903.111111";
             String rolesId = "1";
             String index = "";
-            for (int i = 2; i < 256; i++) {
+            for (int i = 2; i < 10; i++) {
                 index =
                         (i < 10)
                         ? "00" + String.valueOf(i)
@@ -155,7 +155,7 @@ public class ApplicationInitConfig {
             if (userRepos.existsByUserName("admin")){
                 log.info("Admin user is exists");
             }
-            initNews(newsRepos, userRepos);
+            //initNews(newsRepos, userRepos);
             initUserList(userRepos, roleRepos, userExtRepos);
         };
     }
