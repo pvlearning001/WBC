@@ -87,8 +87,8 @@ public class AppUtils {
                 break;
         }
         return result;
-
     }
+
     public static String getRandomSentence(int length, int minWordLen, int maxWordLen, WordTypes workTypes){
         StringBuilder result = new StringBuilder();
         String word;
